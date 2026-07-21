@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triển Húc - Tạp Hóa Chồng Cún Bự</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================= CƠ BẢN ================= */
+        :root {
+            --bg-color: #F8F5F0; 
+            --primary-color: #722F37; 
+            --primary-hover: #5a242b;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --card-bg: #FFFFFF;
+            --font-serif: 'Playfair Display', serif;
+            --font-body: 'Lora', serif; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .back-btn { display: inline-block; background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-size: 1rem; margin-bottom: 30px; transition: 0.3s; }
+        .back-btn:hover { background-color: var(--primary-hover); }
+
+        .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        
+        /* ================= QUẢN LÝ KÍCH THƯỚC ẢNH ================= */
+        .detail-img, .story-images img { 
+            max-height: 480px; 
+            width: auto; 
+            object-fit: contain; 
+            margin: 0 auto; 
+            display: block; 
+            border-radius: 12px;
+        }
+
+        /* ================= TIÊU ĐỀ & NÚT TIM ================= */
+        .detail-info { display: flex; flex-direction: column; gap: 15px; }
+        .name-and-like { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
+        .detail-name { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-color); line-height: 1.2; }
+        
+        /* Nút Tim chống Spam */
+        .like-btn { 
+            background-color: transparent; 
+            border: 2px solid var(--primary-color); 
+            color: var(--primary-color); 
+            padding: 8px 16px; 
+            border-radius: 50px; 
+            font-size: 1.1rem; 
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer; 
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .like-btn:hover:not(:disabled) { background-color: rgba(114, 47, 55, 0.1); transform: translateY(-2px); }
+        .like-btn:disabled { 
+            background-color: var(--primary-color); 
+            color: white; 
+            cursor: not-allowed; 
+            border-color: var(--primary-color);
+            opacity: 0.9;
+        }
+
+        .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .detail-tag { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;}
+        
+        /* ================= ACCORDION (THẺ DETAILS) ================= */
+        details.info-box { background: var(--bg-color); padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        details.info-box summary { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-color); font-weight: 700; list-style: none; outline: none; display: flex; justify-content: space-between; }
+        details.info-box summary::-webkit-details-marker { display: none; }
+        details.info-box summary::after { content: '+'; font-size: 1.5rem; transition: transform 0.3s;}
+        details[open].info-box summary::after { content: '-'; }
+        details.info-box p, details.info-box ul { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
+        details.info-box ul { padding-left: 20px; }
+        details.info-box li { margin-bottom: 8px; }
+        .sys-text { color: #d6642d; font-weight: 600; font-family: monospace; font-size: 1rem;}
+
+        /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
+        .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
+        .story-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; font-size: 2rem; }
+        .story-content { margin-bottom: 30px; }
+        .story-content p { margin-bottom: 15px; text-align: justify; }
+        .story-images { margin-bottom: 30px; padding: 20px; background: var(--bg-color); border-radius: 12px;}
+
+        .external-links { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 15px; }
+        .ext-link-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: var(--font-body);
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+        }
+        .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
+
+        /* ================= CUSDIS BÌNH LUẬN ================= */
+        .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
+        .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
+        
+        /* Fix dãn tự động cho Cusdis */
+        #cusdis_thread {
+            width: 100%;
+            height: auto !important; 
+            min-height: 250px;
+            overflow: visible !important;
+        }
+        #cusdis_thread iframe {
+            width: 100% !important;
+            height: auto !important;
+            min-height: 250px;
+            overflow: hidden !important; 
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px);} to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">&#8592; Về trang chủ</a>
+    
+    <div class="detail-layout">
+        <!-- Cột trái: Ảnh nhân vật (Bạn tự chèn link vào src nhé) --> https://i.ibb.co/bMR7xgcq/229c14aef62a77742e3b.jpg
+        <div>
+            <img class="detail-img" src="" alt="Triển Húc">
+        </div>
+        
+        <!-- Cột phải: Thông tin -->
+        <div class="detail-info">
+            <div class="name-and-like">
+                <h1 class="detail-name">Triển Húc</h1>
+                
+                <!-- NÚT THẢ TIM (CHỐNG SPAM) -->
+                <button class="like-btn" id="likeBtn">
+                    <span id="likeText">🤍 Thả tim</span> 
+                    <span class="like-count">(<span id="likeCount">0</span>)</span>
+                </button>
+            </div>
+
+            <div class="detail-tags">
+                <span class="detail-tag">Thanh xuân vườn trường</span>
+                <span class="detail-tag">Hệ thống</span>
+                <span class="detail-tag">BL</span>
+                <span class="detail-tag">BG</span>
+            </div>
+            
+            <details class="info-box">
+                <summary>Thông tin cá nhân</summary>
+                <p><strong>Tuổi / Ngày sinh:</strong> 18 tuổi (05/01 - Cung Ma Kết)</p>
+                <p><strong>Thân phận:</strong> Học sinh lớp 12, trường THPT Minh Dương.</p>
+                <p><strong>Chiều cao:</strong> 188 cm</p>
+                <p><strong>Ngoại hình:</strong> Sở hữu vóc dáng cao ráo, săn chắc cùng bờ vai rộng. Làn da trắng lạnh nổi bật với mái tóc nhuộm đỏ rượu được cắt theo kiểu layer wolf cut hơi rối, tạo cảm giác bất cần nhưng cuốn hút. Đôi mắt hẹp, sắc và luôn mang vẻ lười biếng, thờ ơ như chẳng hứng thú với mọi thứ xung quanh. Đồng phục thường được mặc chỉnh tề nhưng hay khoác hờ áo ngoài, hai tay đút túi quần, toát lên khí chất học sinh cá biệt khó lại gần.</p>
+            </details>
+            
+            <details class="info-box">
+                <summary>📖 Hướng dẫn Hệ thống</summary>
+                <ul>
+                    <li>Hệ thống sẽ <strong>tự động kích hoạt</strong> sau tin nhắn đầu tiên.</li>
+                    <li>Dùng <strong>[Mở cửa hàng]</strong> để mở Cửa hàng.</li>
+                    <li>Dùng <strong>[Túi đồ]</strong> để xem vật phẩm đã sở hữu.</li>
+                    <li>Mọi nội dung trong <strong>[ ]</strong> là cuộc trò chuyện riêng với Hệ thống, chỉ bạn nhìn thấy.</li>
+                    <li>Mọi nội dung trong <strong>" "</strong> là hội thoại bình thường, tất cả nhân vật đều nghe được.</li>
+                </ul>
+  
+            </details>
+
+            <details class="info-box">
+                <summary>📌 Nhân vật phụ (NPC)</summary>
+                <ul>
+                    <li><strong>Lâm An Nhi:</strong> Hoa khôi trường Minh Dương. Dịu dàng, hòa đồng, học giỏi.</li>
+                    <li><strong>Tống Gia Kỳ:</strong> Bạn thân của Triển Húc. Hoạt bát, lắm mồm, hài hước.</li>
+                    <li><strong>Phó Nhật Minh:</strong> Chủ tịch Hội học sinh. Điềm đạm, lịch sự, trưởng thành và có trách nhiệm. Có thiện cảm với {{user}}.</li>
+                </ul>
+            </details>
+        </div>
+
+        <!-- Cảnh mở đầu & Liên kết -->
+        <div class="story-section">
+            <h2>Cảnh mở đầu (Opening Scene)</h2>
+            <div class="story-content">
+                <p class="sys-text">【✨ Hệ Thống Ghép Đôi đã kích hoạt thành công!】</p>
+                <p><strong>Tên:</strong> {{user}}<br>
+                <strong>Vai trò:</strong> NPC học sinh chuyển trường<br>
+                <strong>Nhiệm vụ:</strong> Tác hợp Triển Húc và Lâm An Nhi, giúp họ đến được với nhau để trở về thế giới ban đầu.</p>
+
+                <p class="sys-text">【Hệ thống】<br>
+                [Xin chào! Chào mừng đến với thế giới của tuyến truyện thanh xuân vườn trường!]<br>
+                [Mục tiêu của bạn rất đơn giản: khiến nam chính Triển Húc và nữ chính Lâm An Nhi yêu nhau. Hoàn thành nhiệm vụ, bạn sẽ được trở về thế giới thực.]<br>
+                [Nhiệm vụ đầu tiên: Hãy nhường chỗ ngồi cạnh Lâm An Nhi cho Triển Húc. Tình yêu bắt đầu từ khoảng cách gần, hiểu chứ?]</p>
+
+                <p>Tiếng chuông vào học vừa vang lên, lớp 12A3 nhanh chóng trở nên yên tĩnh. Giáo viên chủ nhiệm dẫn {{user}} bước vào lớp, giới thiệu ngắn gọn rồi chỉ về phía dãy bàn cuối cạnh cửa sổ.</p>
+                
+                <p>"Em mới chuyển đến đúng không? Tạm thời ngồi chỗ cuối lớp nhé."</p>
+                
+                <p>Nhớ đến lời dặn của Hệ thống, {{user}} đảo mắt nhìn quanh. Lâm An Nhi đang ngồi một mình ở dãy trong, bên cạnh vẫn còn một chỗ trống. Nếu mình xuống ngồi bàn cuối, vậy thì Triển Húc sẽ ngồi cạnh cô ấy... nghe có vẻ là một khởi đầu không tệ.</p>
+                
+                <p>Ngay lúc {{user}} vừa đặt cặp xuống bàn, cửa lớp cũng bị đẩy mở.</p>
+                
+                <p>Một nam sinh với mái tóc đỏ rượu chậm rãi bước vào. Hắn mặc đồng phục chỉnh tề nhưng cà vạt nới lỏng, hai tay đút túi quần, vẻ mặt lười biếng như thể chuyện gì trong lớp cũng chẳng liên quan đến mình. Dưới ánh nhìn đầy mong chờ của Hệ thống, hắn bình thản đi ngang qua chỗ trống cạnh Lâm An Nhi, tiếp tục bước xuống cuối lớp rồi kéo ghế ngồi ngay bên cạnh {{user}}.</p>
+                
+                <p>Triển Húc chống cằm nhìn ra ngoài cửa sổ, giọng nhàn nhạt.</p>
+                
+                <p>"Chỗ này mát. Với lại... giáo viên ít để ý."</p>
+            </div>
+            
+            <!-- Chỗ để chèn ảnh bối cảnh (nếu có) -->
+            <div class="story-images">
+                <img src="" alt="Bối cảnh Triển Húc">
+            </div>
+
+            <!-- Nút Link Sang GG AI STUDIO -->
+            <div class="external-links"> https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221yYU1bJL4HDPILzFehwOm_GjKQqFEurKm%22%5D,%22action%22:%22open%22,%22userId%22:%22108161815635416619104%22,%22resourceKeys%22:%7B%7D%7D
+                <a href="#" class="ext-link-btn" target="_blank">
+                    🔗 Trò chuyện cùng Triển Húc (Google AI Studio)
+                </a>
+            </div>
+        </div>
+
+        <!-- HỆ THỐNG BÌNH LUẬN CUSDIS -->
+        <div class="comment-section">
+            <h2>Bình luận</h2>
+            <div id="cusdis_thread"
+              data-host="https://cusdis.com"
+              data-app-id="e972c281-be11-4edb-97bb-b6b73a4e505a"
+              data-page-id="trien-huc"
+              data-page-url=""
+              data-page-title="Triển Húc">
+            </div>
+            <script>
+  window.addEventListener('message', function (e) {
+    if (e.data && e.data.target === 'cusdis') {
+      const iframe = document.querySelector('#cusdis_thread iframe');
+      if (iframe && e.data.data && e.data.data.height) {
+        iframe.style.height = (e.data.data.height + 20) + 'px';
+      }
+    }
+  });
+</script>
+            <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= SCRIPT THẢ TIM CHỐNG SPAM ================= -->
+<script>
+    const namespace = "taphoa_oc"; 
+    const key = "likes_trienhuc"; // Key riêng biệt cho Triển Húc
+    
+    const likeBtn = document.getElementById("likeBtn");
+    const likeText = document.getElementById("likeText");
+    const likeCountSpan = document.getElementById("likeCount");
+    
+    // 1. Kiểm tra LocalStorage xem user đã từng bấm tim nhân vật này chưa
+    let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
+    
+    // Nếu đã bấm rồi -> Khóa nút ngay từ đầu
+    if (isLikedLocally) {
+        likeBtn.disabled = true;
+        likeText.innerText = "💖 Đã thả tim";
+    }
+
+    // 2. Fetch số tim từ API
+    fetch(`https://api.counterapi.dev/v1/${namespace}/${key}`)
+        .then(response => response.json())
+        .then(data => {
+            const serverCount = data.count || 0;
+            likeCountSpan.innerText = serverCount; 
+        })
+        .catch(err => {
+            console.error("Lỗi tải API, dùng số mặc định.", err);
+        });
+
+    // 3. Xử lý khi người dùng Click thả tim
+    likeBtn.addEventListener("click", () => {
+        likeBtn.disabled = true;
+        
+        let currentCount = parseInt(likeCountSpan.innerText) || 0;
+        likeCountSpan.innerText = currentCount + 1;
+        
+        likeText.innerText = "💖 Đã thả tim";
+        localStorage.setItem(`isLiked_${key}`, 'true');
+
+        fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
+            .then(res => res.json())
+            .then(data => {
+                likeCountSpan.innerText = data.count;
+            })
+            .catch(err => {
+                console.error("Lỗi khi bắn API thả tim", err);
+            });
+    });
+</script>
+
+</body>
+</html>
