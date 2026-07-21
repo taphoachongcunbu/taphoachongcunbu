@@ -10,195 +10,122 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
+        /* ================= CƠ BẢN ================= */
         :root {
-            --bg-color: #F8F5F0;
-            --primary-color: #722F37;
+            --bg-color: #F8F5F0; 
+            --primary-color: #722F37; 
             --primary-hover: #5a242b;
             --text-dark: #333333;
             --text-light: #666666;
             --card-bg: #FFFFFF;
             --font-serif: 'Playfair Display', serif;
-            --font-body: 'Lora', serif;
+            --font-body: 'Lora', serif; 
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            font-family: var(--font-body);
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .back-btn {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 0.95rem;
-            margin-bottom: 25px;
-            transition: 0.3s;
-        }
+        .back-btn { display: inline-block; background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-size: 1rem; margin-bottom: 30px; transition: 0.3s; }
         .back-btn:hover { background-color: var(--primary-hover); }
 
-        .detail-layout {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        }
-
-        /* FIX LỖI 6: Khống chế kích thước ảnh không bị to tổ bố */
-        .image-wrapper {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .detail-img {
-            max-width: 100%;
-            max-height: 480px; /* Chiều cao vừa đẹp màn hình */
-            width: auto;
-            border-radius: 12px;
-            object-fit: contain;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        }
-
-        .detail-name {
-            font-family: var(--font-serif);
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .detail-tags {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
-        }
-        .detail-tag {
-            background: #f0e6e6;
-            color: var(--primary-color);
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        /* Style cho Accordion (Mục Đóng/Mở) */
-        details.info-box {
-            background: var(--bg-color);
-            border-radius: 8px;
-            padding: 12px 18px;
-            margin-bottom: 12px;
-            cursor: pointer;
-        }
-        details.info-box summary {
-            font-family: var(--font-serif);
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            list-style: none;
-            outline: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        details.info-box summary::-webkit-details-marker { display: none; }
-        details.info-box summary::after {
-            content: '+';
-            font-size: 1.3rem;
-            color: var(--primary-color);
-        }
-        details[open].info-box summary::after { content: '−'; }
+        .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
         
-        .info-content {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px dashed #ddd;
-            color: var(--text-dark);
-            font-size: 0.98rem;
+        /* ================= QUẢN LÝ KÍCH THƯỚC ẢNH ================= */
+        .detail-img, .story-images img { 
+            max-height: 480px; 
+            width: auto; 
+            object-fit: contain; 
+            margin: 0 auto; 
+            display: block; 
+            border-radius: 12px;
         }
 
-        /* Cảnh mở đầu */
-        .story-section {
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 2px solid var(--bg-color);
-        }
-        .story-section h2 {
-            font-family: var(--font-serif);
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            font-size: 1.8rem;
-        }
-        .story-content {
-            line-height: 1.8;
-            margin-bottom: 25px;
-        }
-
-        /* FIX LỖI 3: Khu vực Links GG AI */
-        .link-section {
-            margin: 25px 0;
-            text-align: center;
-        }
-        .link-btn {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            padding: 10px 22px;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: 0.3s;
-            margin: 5px;
-        }
-        .link-btn:hover { background-color: var(--primary-hover); }
-
-        /* Nút Tim */
-        .action-section {
-            text-align: center;
-            margin: 30px 0 10px;
-        }
-        .like-btn {
-            background-color: transparent;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-            padding: 10px 28px;
-            border-radius: 50px;
+        /* ================= TIÊU ĐỀ & NÚT TIM ================= */
+        .detail-info { display: flex; flex-direction: column; gap: 15px; }
+        .name-and-like { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
+        .detail-name { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-color); line-height: 1.2; }
+        
+        /* Nút Tim chống Spam */
+        .like-btn { 
+            background-color: transparent; 
+            border: 2px solid var(--primary-color); 
+            color: var(--primary-color); 
+            padding: 8px 16px; 
+            border-radius: 50px; 
+            font-size: 1.1rem; 
             font-family: var(--font-body);
-            font-size: 1rem;
             font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
+            cursor: pointer; 
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-        .like-btn:hover {
-            background-color: var(--primary-color);
-            color: white;
+        .like-btn:hover:not(:disabled) { background-color: rgba(114, 47, 55, 0.1); transform: translateY(-2px); }
+        .like-btn:disabled { 
+            background-color: var(--primary-color); 
+            color: white; 
+            cursor: not-allowed; 
+            border-color: var(--primary-color);
+            opacity: 0.9;
         }
 
-        /* FIX LỖI 5: Khung Comment cuộn tự nhiên không bị giật/kẹt */
-        .comment-section {
-            margin-top: 40px;
-            padding-top: 25px;
-            border-top: 1px solid #eee;
+        .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .detail-tag { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;}
+        
+        /* ================= ACCORDION (THẺ DETAILS) ================= */
+        details.info-box { background: var(--bg-color); padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        details.info-box summary { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-color); font-weight: 700; list-style: none; outline: none; display: flex; justify-content: space-between; }
+        details.info-box summary::-webkit-details-marker { display: none; }
+        details.info-box summary::after { content: '+'; font-size: 1.5rem; transition: transform 0.3s;}
+        details[open].info-box summary::after { content: '-'; }
+        details.info-box p, details.info-box ul { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
+        details.info-box ul { padding-left: 20px; }
+        details.info-box li { margin-bottom: 8px; }
+
+        /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
+        .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
+        .story-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; font-size: 2rem; }
+        .story-content { margin-bottom: 30px; }
+        .story-content p { margin-bottom: 15px; text-align: justify; }
+        .story-images { margin-bottom: 30px; padding: 20px; background: var(--bg-color); border-radius: 12px;}
+
+        .external-links { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 15px; }
+        .ext-link-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: var(--font-body);
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+        }
+        .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
+
+        /* ================= CUSDIS BÌNH LUẬN ================= */
+        .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
+        .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
+        
+        /* Fix dãn tự động cho Cusdis */
+        #cusdis_thread {
             width: 100%;
-            overflow: visible;
+            height: auto !important; 
+            min-height: 250px;
+            overflow: visible !important;
         }
-        #cusdis_thread, iframe {
+        #cusdis_thread iframe {
             width: 100% !important;
-            min-height: 450px !important;
-            border: none !important;
+            height: auto !important;
+            min-height: 250px;
+            overflow: hidden !important; 
         }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px);} to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -207,82 +134,84 @@
     <a href="index.html" class="back-btn">&#8592; Về trang chủ</a>
     
     <div class="detail-layout">
-        <!-- Ảnh Chân Dung Nhân Vật (Đã khống chế độ to) -->
-        <div class="image-wrapper">
+        <!-- Cột trái: Ảnh nhân vật (Đã fix max-height 480px) -->
+        <div>
             <img class="detail-img" src="https://i.ibb.co/JYRVxZV/c5f0dd92d21653480a07.jpg" alt="Hồ Tĩnh An">
         </div>
         
-        <h1 class="detail-name">Hồ Tĩnh An</h1>
-        
-        <div class="detail-tags">
-            <span class="detail-tag">Việt Nam xưa</span>
-            <span class="detail-tag">BL</span>
-            <span class="detail-tag">BG</span>
+        <!-- Cột phải: Thông tin -->
+        <div class="detail-info">
+            <div class="name-and-like">
+                <h1 class="detail-name">Hồ Tĩnh An</h1>
+                
+                <!-- NÚT THẢ TIM (CHỐNG SPAM) -->
+                <button class="like-btn" id="likeBtn">
+                    <span id="likeText">🤍 Thả tim</span> 
+                    <span class="like-count">(<span id="likeCount">12</span>)</span>
+                </button>
+            </div>
+
+            <div class="detail-tags">
+                <span class="detail-tag">Việt Nam xưa</span>
+                <span class="detail-tag">BL</span>
+                <span class="detail-tag">BG</span>
+            </div>
+            
+            <!-- THẺ ĐÓNG/MỞ: Tất cả mặc định ĐÓNG (Bỏ thuộc tính open) -->
+            <!-- Dọn dẹp Text: Dùng thẻ p, strong chuẩn HTML -->
+            <details class="info-box">
+                <summary>Thông tin cơ bản</summary>
+                <p><strong>Tuổi:</strong> 27 tuổi</p>
+                <p><strong>Ngoại hình:</strong> Mái tóc đen tuyền, phía trước cắt ngắn rẽ ngôi giữa, mái bên trái dài hơn che khuất một phần gương mặt. Đằng sau có một nhúm tóc dài mỏng thường được buộc gọn gàng. Trên nửa bên trái khuôn mặt có một vết bớt màu xám đen kéo dài từ trán xuống gần mắt. Đôi mắt đen trầm tĩnh, sống mũi cao, môi mỏng, vóc người cao gầy. Quần áo thường ngày giản dị, đa phần là trường sam hoặc áo dài ngũ thân màu tối. Trên người luôn phảng phất mùi thảo dược thanh sạch do quanh năm tiếp xúc với thuốc Bắc, thuốc Nam. Cao 185cm.</p>
+                <p><strong>Tính cách:</strong> Hồ Tĩnh An nổi tiếng là người trầm ổn, kiệm lời và luôn giữ lễ nghĩa trong từng cử chỉ. Khi hành nghề, anh tuyệt đối nghiêm túc, xem việc cứu người là bổn phận. Dẫu đối đãi với ai cũng nhã nhặn, anh hiếm khi bộc lộ cảm xúc hay xen vào chuyện thị phi của người khác. Bởi vậy, người trong vùng đều kính trọng tài y và nhân phẩm của anh, song cũng ngại ngần vì vẻ ngoài lạnh lùng, xa cách.</p>
+            </details>
+            
+            <details class="info-box">
+                <summary>Bối cảnh</summary>
+                <p>Làng An Hòa, Nam Kỳ Lục Tỉnh vào những năm giao thời cuối thế kỷ XIX. Nơi lưu giữ những nét văn hóa truyền thống đan xen cùng sự chuyển giao thời đại.</p>
+            </details>
+
+            <details class="info-box">
+                <summary>Nhân vật phụ</summary>
+                <ul>
+                    <li><strong>Ông bà Lớn:</strong> Cha má của {{user}}, quyền lực nhưng vô cùng thương con.</li>
+                    <li><strong>Anh Hai & Chị Ba:</strong> Hết mực yêu thương, cưng chiều đứa em út như báu vật trong nhà.</li>
+                </ul>
+            </details>
         </div>
 
-        <!-- FIX LỖI 2: Đã bỏ thuộc tính 'open' để mặc định ĐÓNG lại -->
-        
-        <details class="info-box">
-            <summary>Thông tin cơ bản</summary>
-            <div class="info-content">
-                <strong>Tuổi:</strong> 27 tuổi<br>
-                <strong>Ngoại hình:</strong> Mái tóc đen tuyền, phía trước cắt ngắn rẽ ngôi giữa, mái bên trái dài hơn che khuất một phần gương mặt. Đằng sau có một nhúm tóc dài mỏng thường được buộc gọn gàng. Trên nửa bên trái khuôn mặt có một vết bớt màu xám đen kéo dài từ trán xuống gần mắt. Đôi mắt đen trầm tĩnh, sống mũi cao, môi mỏng, vóc người cao gầy (185cm).
-            </div>
-        </details>
-
-        <details class="info-box">
-            <summary>Bối cảnh</summary>
-            <!-- FIX LỖI 4: Đã dọn sạch các dấu * bị lỗi -->
-            <div class="info-content">
-                Làng An Hòa, Nam Kỳ Lục Tỉnh vào những năm giao thời cuối thế kỷ XIX. Nơi lưu giữ những nét văn hóa truyền thống xen lẫn sự chuyển giao thời đại.
-            </div>
-        </details>
-
-        <details class="info-box">
-            <summary>Nhân vật phụ</summary>
-            <div class="info-content">
-                <strong>1. Ông Bà Lớn:</strong> Cha má của {{user}}, gia trưởng nhưng cực kỳ thương con.<br>
-                <strong>2. Anh Hai & Chị Ba:</strong> Hết mực cưng chiều em út trong nhà.
-            </div>
-        </details>
-
-        <!-- Cảnh mở đầu -->
+        <!-- Cảnh mở đầu & Liên kết -->
         <div class="story-section">
             <h2>Cảnh mở đầu (Opening Scene)</h2>
             <div class="story-content">
-                {{user}} là con út nhà ông Lớn ở làng An Hòa... Từ nhỏ vì một lần té giếng, người trong vùng đồn rằng y chậm trí. Đến tuổi dựng vợ gả chồng, cha má muốn lo chuyện trăm năm nhưng {{user}} giả điên giả dại đập phá om sòm mong cha má đổi ý. 
-                <br><br>
-                Nào ngờ, thay vì hoãn cưới, ông bà Lớn lại tức tốc mời Hồ Tĩnh An - vị thầy thuốc trẻ nổi danh khắp vùng - đến bắt mạch chữa bệnh. {{user}} cứ ngỡ chỉ cần diễn cho giống là qua mặt tất cả. Tiếc rằng, người bước vào căn buồng hôm ấy lại là kẻ chưa từng bắt sai một mạch bệnh nào.
+                <p>{{user}} là con út nhà ông Lớn ở làng An Hòa, một làng quê yên bình thuộc Nam Kỳ Lục Tỉnh vào những năm giao thời cuối thế kỷ XIX. Từ nhỏ, vì một lần té giếng, người trong vùng đều đồn rằng y chậm trí, ngây ngô hơn người. Dẫu vậy, cha má cùng anh Hai và chị Ba vẫn hết mực yêu thương, cưng chiều đứa út như báu vật trong nhà.</p>
+                
+                <p>Đến tuổi dựng vợ gả chồng, ông bà Lớn vì lo cho tương lai của {{user}} nên một mực muốn lo chuyện trăm năm. Nhưng y hiểu rõ bản thân chưa hề muốn thành thân, càng không nỡ vì mình mà làm lỡ dở cuộc đời người khác. Bí đường, {{user}} đành giả điên giả dại, đập phá om sòm mong cha má đổi ý.</p>
+                
+                <p>Nào ngờ, thay vì hoãn cưới, ông bà Lớn lại tức tốc mời Hồ Tĩnh An - vị thầy thuốc trẻ nổi danh khắp vùng - đến bắt mạch chữa bệnh. {{user}} cứ ngỡ chỉ cần diễn cho giống là có thể qua mặt tất cả. Tiếc rằng, người bước vào căn buồng hôm ấy lại là kẻ chưa từng bắt sai một mạch bệnh nào.</p>
             </div>
             
-            <!-- Ảnh bối cảnh phụ (Đã khống chế kích thước) -->
-            <div class="image-wrapper">
-                <img class="detail-img" src="https://i.ibb.co/jPzJFF4k/b3d69e979713164d4f02.jpg" alt="Bối cảnh">
+            <div class="story-images">
+                <img src="https://i.ibb.co/jPzJFF4k/b3d69e979713164d4f02.jpg" alt="Bối cảnh">
             </div>
 
-            <!-- FIX LỖI 3: Khôi phục nút Link GG AI -->
-            <div class="link-section">
-                <a href="https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%2211fuvTR_5Zft3ii5ySN3oXZypqr5saJnR%22%5D,%22action%22:%22open%22,%22userId%22:%22108161815635416619104%22,%22resourceKeys%22:%7B%7D%7D" class="link-btn" target="_blank">🔗 Link GG AI Studio Prompt</a>
-            </div>
-
-            <!-- FIX LỖI 1: Nút Tim chuẩn chạy mượt không bị báo chữ Lỗi -->
-            <div class="action-section">
-                <button class="like-btn" onclick="addLike()">
-                    ❤️ Thả tim (<span id="likeNum">0</span>)
-                </button>
+            <!-- Nút Link Sang GG AI STUDIO -->
+            <div class="external-links">
+                <a href="https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%2211fuvTR_5Zft3ii5ySN3oXZypqr5saJnR%22%5D,%22action%22:%22open%22,%22userId%22:%22108161815635416619104%22,%22resourceKeys%22:%7B%7D%7D" class="ext-link-btn" target="_blank">
+                    🔗 Trò chuyện cùng Hồ Tĩnh An (Google AI Studio)
+                </a>
             </div>
         </div>
 
-        <!-- FIX LỖI 5: Khung Bình luận mở rộng trơn tru -->
+        <!-- HỆ THỐNG BÌNH LUẬN CUSDIS -->
         <div class="comment-section">
-            <h3 style="font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 15px;">Bình luận</h3>
+            <h2>Bình luận</h2>
             <div id="cusdis_thread"
               data-host="https://cusdis.com"
               data-app-id="9116e093-68d7-402a-9cb6-2fb98f24bdc4"
               data-page-id="ho-tinh-an"
-              data-page-url="https://taphoachongcunbu.vercel.app/ho-tinh-an.html"
-              data-page-title="Hồ Tĩnh An"
-              data-theme="light">
+              data-page-url=""
+              data-page-title="Hồ Tĩnh An">
             </div>
             <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
         </div>
@@ -290,17 +219,60 @@
     </div>
 </div>
 
+<!-- ================= SCRIPT THẢ TIM CHỐNG SPAM ================= -->
 <script>
-    // Logic Tim chuẩn không bị lỗi
-    const charKey = "like_ho_tinh_an";
-    let likes = parseInt(localStorage.getItem(charKey)) || 1; // Mặc định cho sẵn 12 tim
-    document.getElementById("likeNum").innerText = likes;
-
-    function addLike() {
-        likes++;
-        localStorage.setItem(charKey, likes);
-        document.getElementById("likeNum").innerText = likes;
+    const namespace = "taphoa_oc"; 
+    const key = "likes_hotinhan"; 
+    
+    const likeBtn = document.getElementById("likeBtn");
+    const likeText = document.getElementById("likeText");
+    const likeCountSpan = document.getElementById("likeCount");
+    
+    // 1. Kiểm tra LocalStorage xem user đã từng bấm tim nhân vật này chưa
+    let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
+    
+    // Nếu đã bấm rồi -> Khóa nút ngay từ đầu
+    if (isLikedLocally) {
+        likeBtn.disabled = true;
+        likeText.innerText = "💖 Đã thả tim";
     }
+
+    // 2. Fetch số tim từ API (Fallback mặc định là 12 nếu API chưa có data)
+    fetch(`https://api.counterapi.dev/v1/${namespace}/${key}`)
+        .then(response => response.json())
+        .then(data => {
+            const serverCount = data.count || 12;
+            likeCountSpan.innerText = serverCount; 
+        })
+        .catch(err => {
+            console.error("Lỗi tải API, dùng số mặc định.", err);
+            // Vẫn giữ nguyên số 12 đã code cứng trong HTML, không hiện chữ Lỗi
+        });
+
+    // 3. Xử lý khi người dùng Click thả tim
+    likeBtn.addEventListener("click", () => {
+        // Chặn spam: Khóa nút ngay lập tức
+        likeBtn.disabled = true;
+        
+        // Tăng số ảo trên giao diện cho mượt
+        let currentCount = parseInt(likeCountSpan.innerText) || 12;
+        likeCountSpan.innerText = currentCount + 1;
+        
+        // Đổi chữ và lưu LocalStorage
+        likeText.innerText = "💖 Đã thả tim";
+        localStorage.setItem(`isLiked_${key}`, 'true');
+
+        // Bắn API lên Server
+        fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
+            .then(res => res.json())
+            .then(data => {
+                // Cập nhật lại số chính xác từ Server trả về
+                likeCountSpan.innerText = data.count;
+            })
+            .catch(err => {
+                console.error("Lỗi khi bắn API thả tim", err);
+            });
+    });
 </script>
 
 </body>
