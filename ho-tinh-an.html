@@ -248,16 +248,16 @@
         likeText.innerText = "💖 Đã thả tim";
     }
 
-    // 2. Fetch số tim từ API (Fallback mặc định là 12 nếu API chưa có data)
+    // 2. Fetch số tim từ API (Fallback mặc định là 1 nếu API chưa có data)
     fetch(`https://api.counterapi.dev/v1/${namespace}/${key}`)
         .then(response => response.json())
         .then(data => {
-            const serverCount = data.count || 12;
+            const serverCount = data.count || 1;
             likeCountSpan.innerText = serverCount; 
         })
         .catch(err => {
             console.error("Lỗi tải API, dùng số mặc định.", err);
-            // Vẫn giữ nguyên số 12 đã code cứng trong HTML, không hiện chữ Lỗi
+            // Vẫn giữ nguyên số 1 đã code cứng trong HTML, không hiện chữ Lỗi
         });
 
     // 3. Xử lý khi người dùng Click thả tim
@@ -266,7 +266,7 @@
         likeBtn.disabled = true;
         
         // Tăng số ảo trên giao diện cho mượt
-        let currentCount = parseInt(likeCountSpan.innerText) || 12;
+        let currentCount = parseInt(likeCountSpan.innerText) || 1;
         likeCountSpan.innerText = currentCount + 1;
         
         // Đổi chữ và lưu LocalStorage
