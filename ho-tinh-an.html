@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Tĩnh An - Tạp Hóa Chồng Cún Bự</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Giao diện gốc --- */
+        :root {
+            --bg-color: #F8F5F0; 
+            --primary-color: #722F37; 
+            --primary-hover: #5a242b;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --card-bg: #FFFFFF;
+            --font-serif: 'Playfair Display', serif;
+            --font-body: 'Lora', serif; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .back-btn { display: inline-block; background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-size: 1rem; margin-bottom: 30px; transition: 0.3s; }
+        .back-btn:hover { background-color: var(--primary-hover); }
+
+        .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .detail-img { width: 100%; border-radius: 12px; object-fit: cover; aspect-ratio: 3/4; }
+        .detail-info { display: flex; flex-direction: column; gap: 15px; }
+        
+        /* Flexbox Tiêu đề và Nút Tim */
+        .name-and-like { display: flex; align-items: center; justify-content: space-between; }
+        .detail-name { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-color); line-height: 1.2; }
+        
+        /* Nút Tim */
+        .like-btn { background: none; border: none; font-size: 2.5rem; cursor: pointer; color: #ccc; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .like-btn.liked { color: #e74c3c; transform: scale(1.2); }
+        .like-btn:hover { transform: scale(1.1); }
+        .like-count { font-size: 1.2rem; color: var(--text-light); font-weight: bold; margin-left: 10px; }
+
+        .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .detail-tag { background: #f0f0f0; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); }
+        
+        /* --- CSS Thẻ Details (Ẩn/Hiện) --- */
+        details.info-box { background: var(--bg-color); padding: 15px; border-radius: 8px; cursor: pointer; }
+        details.info-box summary { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-color); font-weight: 700; list-style: none; outline: none; display: flex; justify-content: space-between; }
+        details.info-box summary::-webkit-details-marker { display: none; }
+        details.info-box summary::after { content: '+'; font-size: 1.5rem; }
+        details[open].info-box summary::after { content: '-'; }
+        details.info-box p { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
+
+        .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
+        .story-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; font-size: 2rem; }
+        .story-content { white-space: pre-line; margin-bottom: 30px; }
+        .story-images { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .story-images img { width: 100%; border-radius: 8px; }
+
+        /* --- Khung chứa Cusdis --- */
+        .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
+        .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
+
+        @media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">&#8592; Về trang chủ</a>
+    
+    <div class="detail-layout">
+        <!-- Cột trái: Ảnh nhân vật -->
+        <div>
+            <img class="detail-img" src="https://i.ibb.co/JYRVxZV/c5f0dd92d21653480a07.jpg" alt="Hồ Tĩnh An">
+        </div>
+        
+        <!-- Cột phải: Thông tin -->
+        <div class="detail-info">
+            <div class="name-and-like">
+                <h1 class="detail-name">Hồ Tĩnh An</h1>
+                
+                <!-- NÚT THẢ TIM TOÀN CẦU -->
+                <div style="display: flex; align-items: center;">
+                    <button class="like-btn" id="likeBtn">♥</button>
+                    <!-- Hiển thị "..." trong lúc chờ tải dữ liệu từ API -->
+                    <span class="like-count" id="likeCount">...</span> 
+                </div>
+            </div>
+
+            <div class="detail-tags">
+                <span class="detail-tag">Việt Nam xưa</span>
+                <span class="detail-tag">BL</span>
+                <span class="detail-tag">BG</span>
+            </div>
+            
+            <details class="info-box" open>
+                <summary>Thông tin cơ bản</summary>
+                <p>
+                    <strong>Tuổi:</strong> 27 tuổi<br><br>
+                    <strong>Ngoại hình:</strong> Mái tóc đen tuyền, phía trước cắt ngắn rẽ ngôi giữa...
+                </p>
+            </details>
+            
+            <details class="info-box">
+                <summary>Bối cảnh</summary>
+                <p>Làng An Hòa, Nam Kỳ Lục Tỉnh vào những năm giao thời cuối thế kỷ XIX...</p>
+            </details>
+
+            <details class="info-box">
+                <summary>Nhân vật phụ</summary>
+                <p>
+                    <strong>1. Ông bà Lớn:</strong> Cha má của {{user}}...<br>
+                    <strong>2. Anh Hai & Chị Ba:</strong> Luôn cưng chiều em út...
+                </p>
+            </details>
+        </div>
+
+        <!-- Cảnh mở đầu -->
+        <div class="story-section">
+            <h2>Cảnh mở đầu (Opening Scene)</h2>
+            <div class="story-content">
+                {{user}} là con út nhà ông Lớn ở làng An Hòa...
+            </div>
+            <div class="story-images">
+                <img src="https://i.ibb.co/jPzJFF4k/b3d69e979713164d4f02.jpg" alt="Bối cảnh">
+            </div>
+        </div>
+
+        <!-- HỆ THỐNG BÌNH LUẬN (CUSDIS) -->
+        <div class="comment-section">
+            <h2>Bình luận</h2>
+            
+            <!-- CODE CUSDIS -->
+            <div id="cusdis_thread"
+              data-host="https://cusdis.com"
+              data-app-id="e972c281-be11-4edb-97bb-b6b73a4e505a""
+              data-page-id="ho-tinh-an"
+              data-page-url=""
+              data-page-title="Hồ Tĩnh An">
+            </div>
+            <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+            
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // JS: GỌI API THẢ TIM TOÀN CẦU (COUNTER API)
+    // ==========================================
+    
+    // Tên dự án và tên nhân vật (để tạo key duy nhất trên server)
+    const namespace = "taphoa_oc"; 
+    const key = "likes_hotinhan"; 
+    
+    const likeBtn = document.getElementById("likeBtn");
+    const likeCountSpan = document.getElementById("likeCount");
+    
+    // Kiểm tra xem trình duyệt của người này đã bấm tim chưa
+    let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
+    if (isLikedLocally) {
+        likeBtn.classList.add("liked");
+    }
+
+    // 1. LẤY SỐ TIM HIỆN TẠI TỪ SERVER KHI MỞ TRANG
+    fetch(`https://api.counterapi.dev/v1/${namespace}/${key}`)
+        .then(response => response.json())
+        .then(data => {
+            // Nếu chưa ai bấm, API trả về null, gán bằng 0
+            likeCountSpan.innerText = data.count || 0; 
+        })
+        .catch(err => {
+            likeCountSpan.innerText = "Lỗi";
+            console.error("Không thể tải số tim:", err);
+        });
+
+    // 2. XỬ LÝ KHI BẤM NÚT TIM
+    likeBtn.addEventListener("click", () => {
+        // Tạm vô hiệu hóa nút để tránh spam bấm liên tục
+        likeBtn.disabled = true;
+        let currentCount = parseInt(likeCountSpan.innerText) || 0;
+
+        if (isLikedLocally) {
+            // Nếu đã tim -> Bỏ tim (Gọi API trừ 1 - hàm 'down')
+            fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/down`)
+                .then(res => res.json())
+                .then(data => {
+                    likeCountSpan.innerText = data.count;
+                    likeBtn.classList.remove("liked");
+                    localStorage.setItem(`isLiked_${key}`, 'false');
+                    isLikedLocally = false;
+                })
+                .finally(() => likeBtn.disabled = false);
+        } else {
+            // Nếu chưa tim -> Thả tim (Gọi API cộng 1 - hàm 'up')
+            fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
+                .then(res => res.json())
+                .then(data => {
+                    likeCountSpan.innerText = data.count;
+                    likeBtn.classList.add("liked");
+                    localStorage.setItem(`isLiked_${key}`, 'true');
+                    isLikedLocally = true;
+                })
+                .finally(() => likeBtn.disabled = false);
+        }
+    });
+</script>
+
+</body>
+</html>
