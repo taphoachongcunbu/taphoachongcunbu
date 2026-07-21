@@ -213,6 +213,17 @@
               data-page-url=""
               data-page-title="Hồ Tĩnh An">
             </div>
+            <script>
+  // Tự động điều chỉnh chiều cao Cusdis iframe để KHÔNG bị kẹt thanh cuộn
+  window.addEventListener('message', function (e) {
+    if (e.data && e.data.target === 'cusdis') {
+      const iframe = document.querySelector('#cusdis_thread iframe');
+      if (iframe && e.data.data && e.data.data.height) {
+        iframe.style.height = (e.data.data.height + 20) + 'px';
+      }
+    }
+  });
+</script>
             <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
         </div>
 
