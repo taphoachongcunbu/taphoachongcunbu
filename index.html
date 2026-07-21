@@ -343,10 +343,18 @@
         } else {
             noResult.style.display = "none";
             data.forEach(oc => {
-                const card = document.createElement("div");
+                // Tạo thẻ <a> bọc ngoài thay vì dùng card.onclick
+                const card = document.createElement("a");
                 card.className = "card";
-                card.onclick = () => showDetail(oc.id);
+                card.style.textDecoration = "none"; // Bỏ gạch chân link
                 
+                // Chuyển tên thành link file HTML (ví dụ: Hồ Tĩnh An -> ho-tinh-an.html)
+                if (oc.name === "Hồ Tĩnh An") {
+                    card.href = "ho-tinh-an.html";
+                } else {
+                    card.href = "#"; // Mấy OC sau này chưa tạo file thì để tạm
+                }
+
                 card.innerHTML = `
                     <img class="card-img" src="${oc.image}" alt="${oc.name}">
                     <div class="card-info">
