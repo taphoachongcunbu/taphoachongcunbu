@@ -139,7 +139,15 @@
         .no-comment { text-align: center; color: var(--text-light); font-style: italic; padding: 20px 0; }
 
         /* ================= RESPONSIVE ================= */
-        @media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; } }
+       /* ================= FIX LỖI GIAO DIỆN ĐIỆN THOẠI ================= */
+        @media (max-width: 768px) { 
+            .detail-layout { grid-template-columns: 1fr; padding: 15px; gap: 20px; } 
+            .container { padding: 20px 15px; overflow-x: hidden; }
+            body { overflow-x: hidden; }
+            .detail-name { font-size: 2rem; }
+            .story-section h2 { font-size: 1.5rem; }
+            * { word-wrap: break-word; overflow-wrap: break-word; }
+        }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px);} to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
