@@ -24,65 +24,60 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; overflow-x: hidden; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px 20px; }
 
-        /* --- Header & Title (Đã chèn ảnh nền Blur tiệm Cún Bự) --- */
+        /* --- Header Banner Tràn Viền 100% --- */
         header { 
             position: relative; 
-            text-align: center; 
-            padding: 50px 20px; 
+            width: 100vw;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
             margin-bottom: 40px; 
-            border-radius: 20px; 
-            overflow: hidden; 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.06); 
+            background-image: url('https://i.ibb.co/Vkx6c8F/1784736706948-2078060217096962491-3928943315332758507-cd9bcc4e361a6acaa0223e91bba074e8.jpg'); 
+            background-size: cover;
+            background-position: center 35%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+            min-height: 320px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             animation: fadeIn 0.8s ease; 
         }
 
-        /* Lớp ảnh nền mờ phía sau */
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: url('https://i.ibb.co/Vkx6c8F/1784736706948-2078060217096962491-3928943315332758507-cd9bcc4e361a6acaa0223e91bba074e8.jpg'); 
-            background-size: cover;
-            background-position: center 30%;
-            filter: blur(4px); /* Độ mờ của ảnh */
-            transform: scale(1.08); /* Phóng nhẹ tránh lộ viền trắng khi blur */
-            z-index: 1;
+        /* Khung Kính Mờ Đặt Ở Giữa Banner */
+        .header-box {
+            background: rgba(255, 255, 255, 0.82); 
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px);
+            padding: 28px 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            text-align: center;
+            max-width: 650px;
+            width: 100%;
         }
 
-        /* Lớp phủ màu kem dịu mắt giúp chữ đọc siêu rõ */
-        header::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(248, 245, 240, 0.75); /* Màu kem trong suốt 75% */
-            z-index: 2;
-        }
-
-        /* Đẩy chữ và nút nổi lên trên cùng */
-        header h1, header p, header .social-links {
-            position: relative;
-            z-index: 3;
-        }
-
-        h1 { font-family: var(--font-serif); font-size: 3.5rem; color: var(--primary-color); margin-bottom: 10px; font-weight: 700; }
-        header p { color: #555; font-size: 1.1rem; font-weight: 500; }
+        h1 { font-family: var(--font-serif); font-size: 3.2rem; color: var(--primary-color); margin-bottom: 8px; font-weight: 700; line-height: 1.2; }
+        header p { color: #444; font-size: 1.1rem; font-weight: 500; }
 
         /* --- Nút Mạng Xã Hội (Facebook & TikTok) --- */
         .social-links {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 18px;
         }
         .social-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 45px;
-            height: 45px;
+            width: 44px;
+            height: 44px;
             background-color: var(--card-bg);
             color: var(--primary-color);
             border-radius: 50%;
@@ -247,7 +242,8 @@
 
         @media (max-width: 768px) {
             h1 { font-size: 2.2rem; }
-            header { padding: 35px 15px; }
+            header { padding: 40px 15px; min-height: 240px; }
+            .header-box { padding: 20px 15px; }
             .chat-window { width: calc(100% - 40px); right: 20px; bottom: 90px; }
             .chat-btn { bottom: 20px; right: 20px; }
         }
@@ -255,30 +251,32 @@
 </head>
 <body>
 
+<header>
+    <div class="header-box">
+        <h1>Tạp Hóa Chồng Cún Bự</h1>
+        <p>Nơi lưu giữ những đứa con tinh thần</p>
+        
+        <!-- NÚT MẠNG XÃ HỘI TẠI ĐÂY -->
+        <div class="social-links">
+            <!-- Nút Facebook -->
+            <a href="https://www.facebook.com/profile.php?id=61592031838939" target="_blank" class="social-btn" title="Ghé thăm Facebook của tui">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                    <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>
+                </svg>
+            </a>
+            
+            <!-- Nút TikTok -->
+            <a href="https://www.tiktok.com/@taphoachongcunbu?_r=1&_t=ZS-98Ei6ZPv5s2" target="_blank" class="social-btn" title="Ghé thăm TikTok của tui">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</header>
+
 <div class="container">
     <div id="home-view" class="view active">
-        <header>
-            <h1>Tạp Hóa Chồng Cún Bự</h1>
-            <p>Nơi lưu giữ những đứa con tinh thần</p>
-            
-            <!-- NÚT MẠNG XÃ HỘI TẠI ĐÂY -->
-            <div class="social-links">
-                <!-- Nút Facebook -->
-                <a href="https://www.facebook.com/profile.php?id=61592031838939" target="_blank" class="social-btn" title="Ghé thăm Facebook của tui">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                        <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>
-                    </svg>
-                </a>
-                
-                <!-- Nút TikTok -->
-                <a href="https://www.tiktok.com/@taphoachongcunbu?_r=1&_t=ZS-98Ei6ZPv5s2" target="_blank" class="social-btn" title="Ghé thăm TikTok của tui">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                        <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/>
-                    </svg>
-                </a>
-            </div>
-        </header>
-
         <div class="controls">
             <input type="text" id="searchInput" class="search-bar" placeholder="Nhập tên nhân vật bạn muốn tìm...">
             <div class="tags-container" id="tagsContainer"></div>
@@ -596,8 +594,8 @@
     
     let currentTag = "Tất cả";
     let searchQuery = "";
-    let isExpandedTags = false; // Trạng thái ẩn/hiện tag
-    const MAX_VISIBLE_TAGS = 10; // Giới hạn hiển thị ban đầu 10 tag
+    let isExpandedTags = false;
+    const MAX_VISIBLE_TAGS = 10;
 
     const galleryGrid = document.getElementById("galleryGrid");
     const tagsContainer = document.getElementById("tagsContainer");
@@ -617,7 +615,6 @@
     function renderTags() {
         tagsContainer.innerHTML = "";
 
-        // Lấy danh sách tag cần hiện tùy theo trạng thái isExpandedTags
         let visibleTags = isExpandedTags ? allTags : allTags.slice(0, MAX_VISIBLE_TAGS);
 
         visibleTags.forEach(tag => {
@@ -628,7 +625,6 @@
             tagsContainer.appendChild(btn);
         });
 
-        // Tạo nút bấm Xem thêm / Thu gọn nếu số lượng tag nhiều hơn giới hạn
         if (allTags.length > MAX_VISIBLE_TAGS) {
             const toggleBtn = document.createElement("button");
             toggleBtn.className = "tag-btn toggle-tag-btn";
@@ -663,11 +659,9 @@
                 card.className = "card";
                 card.href = oc.slug; 
 
-                // Kiểm tra LocalStorage
                 let isLikedLocally = localStorage.getItem(`isLiked_${oc.likeKey}`) === 'true';
                 let heartIcon = isLikedLocally ? '❤️' : '🤍';
 
-                // Tạo danh sách tag nhỏ
                 let tagsHTML = oc.tags.map(tag => `<span class="card-tag-mini">${tag}</span>`).join('');
 
                 card.innerHTML = `
@@ -677,7 +671,6 @@
                         <div class="card-slogan">"${oc.slogan}"</div>
                         <div class="card-tags-mini">${tagsHTML}</div>
                         
-                        <!-- Nút tim gọi hàm toggleLike -->
                         <button class="card-likes" id="like-btn-${oc.id}" onclick="toggleLike(event, '${oc.likeKey}', ${oc.id})">
                             <span id="heart-icon-${oc.id}">${heartIcon}</span> 
                             <span id="like-count-${oc.id}">0</span>
@@ -686,7 +679,6 @@
                 `;
                 galleryGrid.appendChild(card);
 
-                // FIREBASE: Lấy dữ liệu Realtime và tự nhảy số
                 if (oc.likeKey) {
                     db.ref(`likes/${oc.likeKey}`).on('value', (snapshot) => {
                         const count = snapshot.val() || 0;
@@ -708,14 +700,12 @@
         const btn = document.getElementById(`like-btn-${id}`);
         const iconSpan = document.getElementById(`heart-icon-${id}`);
         
-        // Khóa nút tạm thời tránh bấm quá nhanh
         btn.disabled = true;
 
         let isLikedLocally = localStorage.getItem(`isLiked_${likeKey}`) === 'true';
         const likeRef = db.ref(`likes/${likeKey}`);
 
         if (isLikedLocally) {
-            // UNLIKE -> Trừ tim
             localStorage.setItem(`isLiked_${likeKey}`, 'false');
             iconSpan.innerText = '🤍';
             
@@ -725,7 +715,6 @@
               .catch(() => btn.disabled = false);
 
         } else {
-            // LIKE -> Cộng tim
             localStorage.setItem(`isLiked_${likeKey}`, 'true');
             iconSpan.innerText = '❤️';
             
@@ -737,7 +726,7 @@
     }
 
     // ==========================================
-    // 5. LOGIC CHATBOT AI (CẬP NHẬT TỰ ĐỘNG LẤY TỪ KHÓA TỪ OCDATA)
+    // 5. LOGIC CHATBOT AI
     // ==========================================
     const chatWindow = document.getElementById("chatWindow");
     const chatBody = document.getElementById("chatBody");
@@ -777,22 +766,14 @@
         const cleanInput = input.toLowerCase();
         let matches = []; 
 
-        // Quét từng nhân vật và tự động trích xuất Tên, Tag, Tính cách để đối chiếu
         ocData.forEach(oc => {
             let score = 0;
             
-            // 1. Chuyển tags thành mảng chữ thường
             let tags = oc.tags.map(t => t.toLowerCase());
-            
-            // 2. Chuyển tính cách thành mảng chữ thường (tách bằng dấu phẩy)
             let personalities = oc.personality.split(',').map(p => p.trim().toLowerCase());
-            
-            // 3. Gom hết Tên + Tags + Tính cách thành "từ khóa độc quyền" của nhân vật này
             let charKeywords = [...tags, ...personalities, oc.name.toLowerCase()];
             
-            // 4. So sánh: nếu câu của khách chứa TỪ KHÓA ĐỘC QUYỀN thì cộng điểm
             charKeywords.forEach(kw => {
-                // Bỏ qua các từ khóa quá rỗng hoặc không hợp lệ
                 if(kw && cleanInput.includes(kw)) {
                     score++;
                 }
@@ -803,9 +784,7 @@
             }
         });
 
-        // Trả kết quả
         if(matches.length > 0) {
-            // Sắp xếp ai điểm cao (khớp nhiều từ khóa nhất) lên đầu
             matches.sort((a, b) => b.score - a.score);
 
             let response = `Tui tìm thấy vài gương mặt cực kỳ hợp gu với bạn nè! 🥰<br><br>`;
