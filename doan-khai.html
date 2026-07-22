@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đoạn Khải - Tạp Hóa Chồng Cún Bự</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================= CƠ BẢN ================= */
+        :root {
+            --bg-color: #F8F5F0; 
+            --primary-color: #722F37; 
+            --primary-hover: #5a242b;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --card-bg: #FFFFFF;
+            --font-serif: 'Playfair Display', serif;
+            --font-body: 'Lora', serif; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .back-btn { display: inline-block; background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-size: 1rem; margin-bottom: 30px; transition: 0.3s; }
+        .back-btn:hover { background-color: var(--primary-hover); }
+
+        .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        
+        /* ================= QUẢN LÝ KÍCH THƯỚC ẢNH ================= */
+        .detail-img { 
+            max-height: 480px; 
+            width: auto; 
+            object-fit: contain; 
+            margin: 0 auto; 
+            display: block; 
+            border-radius: 12px;
+        }
+
+        /* ================= TIÊU ĐỀ & NÚT TIM ================= */
+        .detail-info { display: flex; flex-direction: column; gap: 15px; }
+        .name-and-like { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
+        .detail-name { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-color); line-height: 1.2; }
+        
+        /* Nút Tim chống Spam */
+        .like-btn { 
+            background-color: transparent; 
+            border: 2px solid var(--primary-color); 
+            color: var(--primary-color); 
+            padding: 8px 16px; 
+            border-radius: 50px; 
+            font-size: 1.1rem; 
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer; 
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .like-btn:hover:not(:disabled) { background-color: rgba(114, 47, 55, 0.1); transform: translateY(-2px); }
+        .like-btn:disabled { 
+            background-color: var(--primary-color); 
+            color: white; 
+            cursor: not-allowed; 
+            border-color: var(--primary-color);
+            opacity: 0.9;
+        }
+        /* Trạng thái khi đã thả tim */
+        .like-btn.liked {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .detail-tag { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;}
+        
+        /* ================= ACCORDION (THẺ DETAILS) ================= */
+        details.info-box { background: var(--bg-color); padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        details.info-box summary { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-color); font-weight: 700; list-style: none; outline: none; display: flex; justify-content: space-between; }
+        details.info-box summary::-webkit-details-marker { display: none; }
+        details.info-box summary::after { content: '+'; font-size: 1.5rem; transition: transform 0.3s;}
+        details[open].info-box summary::after { content: '-'; }
+        details.info-box p, details.info-box ul { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
+        details.info-box ul { padding-left: 20px; }
+        details.info-box li { margin-bottom: 8px; }
+
+        /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
+        .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
+        .story-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; font-size: 2rem; }
+        .story-content { margin-bottom: 30px; }
+        .story-content p { margin-bottom: 15px; text-align: justify; }
+
+        .external-links { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 15px; }
+        .ext-link-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: var(--font-body);
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+        }
+        .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
+
+        /* ================= HỆ THỐNG BÌNH LUẬN TỰ LÀM ================= */
+        .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
+        .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
+        
+        .comment-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .comment-form input, .comment-form textarea {
+            width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-family: var(--font-body); font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        .comment-form input:focus, .comment-form textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 5px rgba(114, 47, 55, 0.2); }
+        .comment-form textarea { resize: vertical; min-height: 80px; }
+        
+        .comment-btn {
+            align-self: flex-end; background-color: var(--primary-color); color: white; border: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .comment-btn:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .comment-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        .comment-list { display: flex; flex-direction: column; gap: 15px; max-height: 500px; overflow-y: auto; padding-right: 10px; }
+        .comment-list::-webkit-scrollbar { width: 6px; }
+        .comment-list::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 10px; }
+        
+        .comment-item { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); animation: fadeIn 0.4s ease; border-left: 4px solid var(--primary-color); }
+        .comment-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .comment-name { font-weight: bold; color: var(--primary-color); font-size: 1.05rem; }
+        .comment-time { font-size: 0.8rem; color: #888; }
+        .comment-text { color: var(--text-dark); white-space: pre-wrap; line-height: 1.5; font-size: 0.95rem; }
+        
+        .no-comment { text-align: center; color: var(--text-light); font-style: italic; padding: 20px 0; }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px);} to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">&#8592; Về trang chủ</a>
+    
+    <div class="detail-layout">
+        <!-- Cột trái: Ảnh nhân vật -->
+        <div>
+            <img class="detail-img" src="https://i.postimg.cc/CLxzJjR8/128536999b1e1a40430f.jpg" alt="Đoạn Khải">
+        </div>
+        
+        <!-- Cột phải: Thông tin -->
+        <div class="detail-info">
+            <div class="name-and-like">
+                <h1 class="detail-name">Đoạn Khải</h1>
+                
+                <!-- NÚT THẢ TIM -->
+                <button class="like-btn" id="likeBtn">
+                    <span id="likeText">🤍 Thả tim</span> 
+                    <span class="like-count">(<span id="likeCount">...</span>)</span>
+                </button>
+            </div>
+
+            <div class="detail-tags">
+                <span class="detail-tag">ABO</span>
+                <span class="detail-tag">Enigma</span>
+                <span class="detail-tag">Tâm cơ</span>
+                <span class="detail-tag">Thanh xuân vườn trường</span>
+                <span class="detail-tag">BL</span>
+            </div>
+            
+            <details class="info-box" open>
+                <summary>Thông tin cá nhân</summary>
+                <p><strong>Tuổi:</strong> 18 tuổi. Học sinh nhận suất học bổng toàn phần duy nhất của trường dành cho Thủ khoa Quốc gia. Chuyển vào học năm cuối để được đánh giá năng lực và xét tài trợ du học.</p>
+                <p><strong>Chiều cao:</strong> 187cm. Thể trạng cao lớn, vai rộng, hoàn toàn không mang cảm giác yếu đuối nếu đứng thẳng. Tuy nhiên do thói quen từ nhỏ luôn cố thu hẹp sự hiện diện của bản thân, hắn thường hơi khom lưng, cúi đầu khi đi lại hoặc mặc quần áo rộng hơn kích cỡ. Điều này khiến người khác dễ nhầm rằng hắn gầy gò, u ám và dễ bị bắt nạt hơn thực tế.</p>
+                <p><strong>Cung hoàng đạo:</strong> Thiên Yết (11/11). Bề ngoài trầm lặng, ít nói, có khả năng chịu đựng cao và hiếm khi phản ứng cảm xúc mạnh. Bên trong có lòng tự tôn rất lớn, tư duy thực tế, giỏi quan sát và ghi nhớ. Không dễ tha thứ nhưng cũng không chủ động trả thù nếu việc đó không đem lại giá trị.</p>
+                <p><strong>Mối quan hệ với {{user}}:</strong> Trạng thái quan hệ ban đầu: Bạn học cùng trường. Sau sự cố nhà vệ sinh, {{user}} trở thành người đầu tiên xuất hiện hành vi vượt ngoài dự đoán của hắn.</p>
+            </details>
+
+            <details class="info-box">
+                <summary>Ngoại hình & Thể chất</summary>
+                <p><strong>Bình thường:</strong> Tóc đen, mái hơi dài che một phần ánh mắt, mắt đen rất sâu và ít biểu cảm, da trắng nhợt do thức khuya và dùng thuốc ức chế thời gian dài. Ngoại hình sạch sẽ, chỉnh tề nhưng không cố tạo ấn tượng. Luôn đeo vòng cổ màu đen dày để che phần gáy.</p>
+                <p><strong>Khi vào kì phát tình:</strong> Đồng tử ánh tím, ấn ký Enigma sau gáy phát sáng mờ dưới lớp da, các đường tím nổi dần ở cổ và lan lên mặt theo mức độ mất kiểm soát. Tóc chuyển sang đen ombre trắng ở phần ngọn như dấu hiệu cơ thể bước vào trạng thái bất ổn.</p>
+                <p><strong>Mùi pheromone:</strong> Hoa tử đằng trắng. Khi phát tình, mùi hoa trở nên đậm hơn nhưng không ngọt gắt, thay vào đó mang cảm giác nguy hiểm rất khó gọi tên.</p>
+            </details>
+            
+            <details class="info-box">
+                <summary>Bối cảnh (Backstory)</summary>
+                <p>Bối cảnh thế giới: Thế giới ABO hiện đại với hệ thống phân tầng xã hội chịu ảnh hưởng mạnh bởi giới tính thứ cấp, xuất thân và tài nguyên.</p>
+                <p>Trong một thế giới ABO, hắn là học sinh nghèo duy nhất nhận được học bổng vào một ngôi trường dành cho giới thượng lưu. Vì luôn đeo vòng cổ che kín gáy và không ai ngửi được pheromone của hắn, mọi người đều cho rằng hắn là một omega lặn. Mà ở ngôi trường đó, omega không có tiếng nói. Bị khinh thường, bị cô lập, bị bắt nạt gần như mỗi ngày, hắn dần học được cách im lặng chịu đựng và chờ đợi.</p>
+                <p>{{user}} là một alpha xuất thân giàu có. Không giống những người khác, {{user}} không cố tình bắt nạt hắn, nhưng cũng chưa từng đứng ra giúp đỡ.</p>
+                <p>Cho đến một ngày, hắn bị nhốt trong nhà vệ sinh sau một trận bắt nạt quá đáng. {{user}} vô tình đi ngang qua, mở cửa thả hắn ra và ném cho hắn một chiếc khăn tay. Chỉ một hành động nhỏ như vậy. Nhưng lại khiến hắn bắt đầu chú ý đến {{user}}.</p>
+            </details>
+
+            <details class="info-box">
+                <summary>Quan hệ công khai (NPC)</summary>
+                <ul>
+                    <li><strong>Hạ Tử Du:</strong> Alpha, là người khơi mào những lần bắt nạt.</li>
+                    <li><strong>Bạch Minh Nghiên:</strong> Omega, không bắt nạt Đoạn Khải, ngược lại thường cung cấp thông tin hữu ích cho cậu.</li>
+                    <li><strong>Lục Thành Viễn:</strong> Alpha, theo đuổi {{user}} công khai.</li>
+                </ul>
+            </details>
+        </div>
+
+        <!-- Cảnh mở đầu & Liên kết -->
+        <div class="story-section">
+            <h2>Cảnh mở đầu (Opening Scene)</h2>
+            <div class="story-content">
+                <p>Buổi sáng ở ngôi trường này lúc nào cũng có cảm giác rất giống nhau. Ánh nắng xuyên qua những ô cửa kính cao, phản chiếu lên mặt bàn. Trong lúc cả lớp còn đang lác đác người ngồi người đứng, tiếng nói chuyện nhỏ đến mức không ai thật sự nghe ai, cửa lớp bị đẩy mở.</p>
+
+                <p>Hắn bước vào như mọi ngày.</p>
+
+                <p>Không ai đặc biệt chú ý tới hắn, hoặc nếu có thì cũng chỉ là những cái liếc mắt rất nhanh rồi dời đi. Người mới chuyển tới, học bổng, omega lặn - mấy thứ đó sau vài tuần cũng không còn đủ mới mẻ để khiến người ta hứng thú lâu.</p>
+
+                <p>Hắn đi ngang qua các dãy bàn với tốc độ đều đều, đồng phục được mặc chỉnh tề như thể chưa từng có chuyện gì xảy ra. Vòng cổ màu tối vẫn nằm yên dưới cổ áo, che kín phần gáy. Chỉ là trên tay hắn hôm nay có thêm một chiếc khăn tay được gấp lại cẩn thận.</p>
+
+                <p>Khi đi tới bàn {{user}}, hắn dừng bước.</p>
+
+                <p>Không có lời chào, cũng không gọi tên. Hắn cúi người đặt chiếc khăn xuống mặt bàn, động tác rất nhẹ, nhẹ tới mức nếu không chú ý sẽ tưởng đó chỉ là một cử động vô thức khi đi ngang qua.</p>
+
+                <p>Chiếc khăn đã được giặt sạch. Vải mềm hơn hôm qua một chút vì nước, những nếp gấp thẳng và phẳng tới mức gần như có thể nhìn ra người gấp đã mất thời gian vuốt lại từng mép nhỏ. Nó không còn giống món đồ từng bị ném xuống nền gạch lạnh của nhà vệ sinh nữa.</p>
+
+                <p>"… Của cậu."</p>
+
+                <p>Giọng hắn vẫn như thường ngày, không lạnh nhạt nhưng cũng không thân thiện, nghe giống một lời thông báo hơn là bắt chuyện.</p>
+
+                <p>Sau khi nói xong hắn không lập tức rời đi.</p>
+
+                <p>Hắn đứng đó thêm vài giây, ánh mắt dừng trên chiếc khăn rồi lướt đi nơi khác. Gương mặt vẫn bình tĩnh, không để lộ điều gì rõ ràng, nhưng cũng không hoàn toàn giống vẻ thờ ơ thường thấy. Hắn không nhắc tới việc bộ đồng phục lúc đó ướt tới mức nước nhỏ xuống nền, cũng không nhắc tới căn phòng kín với tiếng đập cửa đã nhỏ dần theo thời gian. Có vài chuyện nếu đã qua rồi thì không cần đem ra kể lại thêm nữa.</p>
+
+                <p>Đến khi {{user}} cầm chiếc khăn lên, hắn khẽ gật đầu như xác nhận rằng việc cần làm đã xong.</p>
+
+                <p>"Cảm ơn vì chuyện hôm qua."</p>
+            </div>
+
+            <div class="external-links">
+                <!-- CHÈN LINK GG AI STUDIO VÀO DẤU # Ở DƯỚI NÈ BỒ -->
+                <a href="#" class="ext-link-btn" target="_blank">
+                    🔗 Trò chuyện cùng Đoạn Khải (Google AI Studio)
+                </a>
+            </div>
+        </div>
+
+        <!-- HỆ THỐNG BÌNH LUẬN FIREBASE -->
+        <div class="comment-section">
+            <h2>Góc tâm tình</h2>
+            
+            <!-- Form nhập bình luận -->
+            <div class="comment-form">
+                <input type="text" id="commentName" placeholder="Tên / Nickname của bạn (Bắt buộc)" maxlength="30">
+                <textarea id="commentText" placeholder="Bạn nghĩ gì về nhân vật này? Cứ thoải mái tâm sự nha..." rows="3"></textarea>
+                <button class="comment-btn" id="submitCommentBtn">Gửi bình luận</button>
+            </div>
+
+            <!-- Danh sách bình luận -->
+            <div class="comment-list" id="commentList">
+                <div class="no-comment">Đang tải bình luận...</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= SCRIPT THẢ TIM & BÌNH LUẬN FIREBASE ================= -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+    // 1. CẤU HÌNH FIREBASE 
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHEEapKd9PyLDJS5My0usnremVMmdzl4M",
+      authDomain: "taphoachongcunbu-3d24a.firebaseapp.com",
+      databaseURL: "https://taphoachongcunbu-3d24a-default-rtdb.firebaseio.com",
+      projectId: "taphoachongcunbu-3d24a",
+      storageBucket: "taphoachongcunbu-3d24a.firebasestorage.app",
+      messagingSenderId: "1028086205634",
+      appId: "1:1028086205634:web:679c8b0666347176eebf5b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 2. KHỞI TẠO BIẾN CHO NHÂN VẬT ĐOẠN KHẢI
+    const key = "likes_doankhai"; 
+    
+    const likeBtn = document.getElementById("likeBtn");
+    const likeText = document.getElementById("likeText");
+    const likeCountSpan = document.getElementById("likeCount");
+    
+    // Kiểm tra LocalStorage xem user đã từng bấm tim chưa
+    let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
+    
+    // Hàm cập nhật giao diện nút
+    function updateButtonUI(isLiked) {
+        if (isLiked) {
+            likeText.innerText = "💖 Đã thả tim";
+            likeBtn.classList.add("liked");
+        } else {
+            likeText.innerText = "🤍 Thả tim";
+            likeBtn.classList.remove("liked");
+        }
+    }
+
+    // Set giao diện ban đầu
+    updateButtonUI(isLikedLocally);
+
+    // 3. LẮNG NGHE SỐ TIM REALTIME TỪ FIREBASE
+    db.ref(`likes/${key}`).on('value', (snapshot) => {
+        const count = snapshot.val() || 0;
+        likeCountSpan.innerText = count;
+    });
+
+    // 4. XỬ LÝ KHI NGƯỜI DÙNG BẤM NÚT TIM
+    likeBtn.addEventListener("click", () => {
+        likeBtn.disabled = true;
+        
+        const likeRef = db.ref(`likes/${key}`);
+        
+        if (isLikedLocally) {
+            // ĐÃ LIKE -> BẤM ĐỂ UNLIKE
+            isLikedLocally = false;
+            localStorage.setItem(`isLiked_${key}`, 'false');
+            updateButtonUI(false);
+
+            likeRef.transaction(current => {
+                return Math.max(0, (current || 0) - 1);
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+
+        } else {
+            // CHƯA LIKE -> BẤM ĐỂ LIKE
+            isLikedLocally = true;
+            localStorage.setItem(`isLiked_${key}`, 'true');
+            updateButtonUI(true);
+
+            likeRef.transaction(current => {
+                return (current || 0) + 1;
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+        }
+    });
+
+    // ==========================================
+    // 5. HỆ THỐNG BÌNH LUẬN REALTIME (TỰ LÀM)
+    // ==========================================
+    const commentKey = `comments_${key}`; // Lấy luôn key của nhân vật để làm kho chứa bình luận
+    const commentList = document.getElementById("commentList");
+    const commentName = document.getElementById("commentName");
+    const commentText = document.getElementById("commentText");
+    const submitCommentBtn = document.getElementById("submitCommentBtn");
+
+    // Hàm mã hóa chống hack (XSS) khi user nhập code bậy bạ
+    const escapeHTML = str => str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag]));
+
+    // LẮNG NGHE BÌNH LUẬN LIVE TỪ FIREBASE
+    db.ref(commentKey).on('value', (snapshot) => {
+        commentList.innerHTML = ""; 
+        const data = snapshot.val();
+        
+        if (!data) {
+            commentList.innerHTML = '<div class="no-comment">Chưa có bình luận nào. Hãy là người mở bát! ✨</div>';
+            return;
+        }
+
+        // Chuyển object thành mảng và sắp xếp MỚI NHẤT lên đầu
+        const comments = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+
+        comments.forEach(cmt => {
+            const timeString = new Date(cmt.timestamp).toLocaleString('vi-VN');
+            const safeName = escapeHTML(cmt.name);
+            const safeText = escapeHTML(cmt.text);
+
+            const div = document.createElement("div");
+            div.className = "comment-item";
+            div.innerHTML = `
+                <div class="comment-header">
+                    <span class="comment-name">${safeName}</span>
+                    <span class="comment-time">${timeString}</span>
+                </div>
+                <div class="comment-text">${safeText}</div>
+            `;
+            commentList.appendChild(div);
+        });
+    });
+
+    // XỬ LÝ GỬI BÌNH LUẬN
+    submitCommentBtn.addEventListener("click", () => {
+        const nameVal = commentName.value.trim();
+        const textVal = commentText.value.trim();
+
+        if (!nameVal) { alert("Bồ ơi, cho tui xin cái Nickname nha! 🥺"); return; }
+        if (!textVal) { alert("Nhập vài chữ tâm tình rồi hẵng gửi nè! 🥺"); return; }
+
+        submitCommentBtn.disabled = true;
+        submitCommentBtn.innerText = "Đang gửi...";
+
+        // Bắn lên Firebase
+        db.ref(commentKey).push({
+            name: nameVal,
+            text: textVal,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        }).then(() => {
+            commentText.value = "";
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        }).catch(() => {
+            alert("Lỗi mạng gòi, thử lại xíu nha!");
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        });
+    });
+</script>
+
+</body>
+</html>
