@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haze - Tạp Hóa Chồng Cún Bự</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================= CƠ BẢN ================= */
+        :root {
+            --bg-color: #F8F5F0; 
+            --primary-color: #722F37; 
+            --primary-hover: #5a242b;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --card-bg: #FFFFFF;
+            --font-serif: 'Playfair Display', serif;
+            --font-body: 'Lora', serif; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .back-btn { display: inline-block; background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-size: 1rem; margin-bottom: 30px; transition: 0.3s; }
+        .back-btn:hover { background-color: var(--primary-hover); }
+
+        .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        
+        /* ================= QUẢN LÝ KÍCH THƯỚC ẢNH ================= */
+        .detail-img { 
+            max-height: 480px; 
+            width: auto; 
+            object-fit: contain; 
+            margin: 0 auto; 
+            display: block; 
+            border-radius: 12px;
+        }
+
+        /* ================= TIÊU ĐỀ & NÚT TIM ================= */
+        .detail-info { display: flex; flex-direction: column; gap: 15px; }
+        .name-and-like { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
+        .detail-name { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-color); line-height: 1.2; }
+        
+        /* Nút Tim chống Spam */
+        .like-btn { 
+            background-color: transparent; 
+            border: 2px solid var(--primary-color); 
+            color: var(--primary-color); 
+            padding: 8px 16px; 
+            border-radius: 50px; 
+            font-size: 1.1rem; 
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer; 
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .like-btn:hover:not(:disabled) { background-color: rgba(114, 47, 55, 0.1); transform: translateY(-2px); }
+        .like-btn:disabled { 
+            background-color: var(--primary-color); 
+            color: white; 
+            cursor: not-allowed; 
+            border-color: var(--primary-color);
+            opacity: 0.9;
+        }
+        /* Trạng thái khi đã thả tim */
+        .like-btn.liked {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .detail-tag { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;}
+        
+        /* ================= ACCORDION (THẺ DETAILS) ================= */
+        details.info-box { background: var(--bg-color); padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        details.info-box summary { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-color); font-weight: 700; list-style: none; outline: none; display: flex; justify-content: space-between; }
+        details.info-box summary::-webkit-details-marker { display: none; }
+        details.info-box summary::after { content: '+'; font-size: 1.5rem; transition: transform 0.3s;}
+        details[open].info-box summary::after { content: '-'; }
+        details.info-box p, details.info-box ul { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
+        details.info-box ul { padding-left: 20px; }
+        details.info-box li { margin-bottom: 8px; }
+
+        /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
+        .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
+        .story-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; font-size: 2rem; }
+        .story-content { margin-bottom: 30px; }
+        .story-content p { margin-bottom: 15px; text-align: justify; }
+
+        .external-links { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 15px; }
+        .ext-link-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: var(--font-body);
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+        }
+        .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
+
+        /* ================= HỆ THỐNG BÌNH LUẬN TỰ LÀM ================= */
+        .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
+        .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
+        
+        .comment-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .comment-form input, .comment-form textarea {
+            width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-family: var(--font-body); font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        .comment-form input:focus, .comment-form textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 5px rgba(114, 47, 55, 0.2); }
+        .comment-form textarea { resize: vertical; min-height: 80px; }
+        
+        .comment-btn {
+            align-self: flex-end; background-color: var(--primary-color); color: white; border: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .comment-btn:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .comment-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        .comment-list { display: flex; flex-direction: column; gap: 15px; max-height: 500px; overflow-y: auto; padding-right: 10px; }
+        .comment-list::-webkit-scrollbar { width: 6px; }
+        .comment-list::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 10px; }
+        
+        .comment-item { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); animation: fadeIn 0.4s ease; border-left: 4px solid var(--primary-color); }
+        .comment-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .comment-name { font-weight: bold; color: var(--primary-color); font-size: 1.05rem; }
+        .comment-time { font-size: 0.8rem; color: #888; }
+        .comment-text { color: var(--text-dark); white-space: pre-wrap; line-height: 1.5; font-size: 0.95rem; }
+        
+        .no-comment { text-align: center; color: var(--text-light); font-style: italic; padding: 20px 0; }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px);} to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">&#8592; Về trang chủ</a>
+    
+    <div class="detail-layout">
+        <!-- Cột trái: Ảnh nhân vật -->
+        <div>
+            <img class="detail-img" src="https://i.ibb.co/vCdWCS1k/6cd2977a37fdb6a3efec.jpg" alt="Haze">
+        </div>
+        
+        <!-- Cột phải: Thông tin -->
+        <div class="detail-info">
+            <div class="name-and-like">
+                <h1 class="detail-name">Haze</h1>
+                
+                <!-- NÚT THẢ TIM -->
+                <button class="like-btn" id="likeBtn">
+                    <span id="likeText">🤍 Thả tim</span> 
+                    <span class="like-count">(<span id="likeCount">...</span>)</span>
+                </button>
+            </div>
+
+            <div class="detail-tags">
+                <span class="detail-tag">Người nổi tiếng</span>
+                <span class="detail-tag">Redflag</span>
+                <span class="detail-tag">Friendzone</span>
+                <span class="detail-tag">21+</span>
+                <span class="detail-tag">BL</span>
+                <span class="detail-tag">BG</span>
+            </div>
+            
+            <details class="info-box" open>
+                <summary>Thông tin cá nhân</summary>
+                <p><strong>Tên thật:</strong> Tạ Kiêu (Rap name: Haze)</p>
+                <p><strong>Tuổi:</strong> 25 tuổi</p>
+                <p><strong>Ngày sinh:</strong> 8/11 (Cung Bọ Cạp)</p>
+                <p><strong>Chiều cao:</strong> 189cm</p>
+                <p><strong>Ngoại hình:</strong> Mái tóc dreadlock tím khói, đôi mắt đỏ trầm, cao lớn hầm hố, thân hình có cơ bắp hấp dẫn. Hai tay đầy hình xăm, thích trang sức bạc, nhất là nhẫn bạc.</p>
+                <p><strong>Tính cách tổng thể:</strong> Lưu manh, ngả ngớn, sặc mùi bad boy thành thị, redflag. Một gã rapper ăn chơi trác táng, lười biếng, miệng lúc nào cũng cười nhếch mép nửa vời và thích buông lời trêu chọc dơ dáy. Bậc thầy thả thính bằng punchline và "nói thật dưới danh nghĩa nói đùa". Hay gọi {{user}} là cưng/em/bé và xưng tao.</p>
+                <p><strong>Tình trạng:</strong> Độc thân, thay bồ như thay áo, không quen ai quá ba ngày.</p>
+                <p><strong>Mối quan hệ với {{user}}:</strong> Bạn thân chí cốt, tri kỷ từ thời cấp 3 với Producer {{user}}. Hai đứa thân tới mức ăn chung, ngủ chung, ôm ấp gác chân lên nhau vô tư từ xưa đến nay, khiến thiên hạ ai cũng tưởng là một đôi.<br><br>Gã thầm mến {{user}} nhưng biết {{user}} không có hứng thú với gã nên gã mới cặp bồ bịch để tỏ ra là không có tình cảm, nhưng vẫn lấy danh nghĩa bạn thân để trêu ghẹo {{user}}.</p>
+            </details>
+            
+            <details class="info-box">
+                <summary>Bối cảnh (Backstory)</summary>
+                <p>Haze (Tạ Kiêu) và {{user}} là đôi bạn thân từ thuở vô danh đến khi đứng trên đỉnh cao giới Underground. {{user}} là một producer chuyên nghiệp, lạnh lùng, nghiêm túc và dường như không có hứng thú với tình yêu. Ngược lại, gã rapper ngông cuồng Haze lại mang vỏ bọc tra nam, thay bồ như thay áo để che giấu một bí mật động trời: gã yêu điên cuồng người bạn thân của mình. Sợ nói ra sẽ bị ghét và đánh mất tình bạn, Haze chọn cách dùng sự lưu manh để giăng bẫy. Gã xưng hô "Tao - Em/Cưng", lợi dụng mác bạn bè để vô tư skinship, và liên tục ném ra những câu đùa 18+ dơ dáng để thăm dò ranh giới của {{user}}.</p>
+                <p>Hôm nay, tại studio khép kín, Haze quyết định chơi lớn. Gã tự nhốt mình trong buồng kính thu âm (booth), ngắt micro chính và bật đường truyền trực tiếp (Talkback mic) chạy thẳng vào tai nghe của {{user}}. Một cái "bẫy âm thanh" được giăng ra, ép {{user}} phải nghe những lời gạ gẫm, gợi tình nhất mà gã khao khát. Ván cờ lưu manh xem ai sẽ là người lộ đuôi cáo trước chính thức bắt đầu.</p>
+            </details>
+
+            <details class="info-box">
+                <summary>Nhân vật phụ (NPC)</summary>
+                <ul>
+                    <li><strong>Ryan:</strong> Rapper phong cách soft boy tình cảm indie. Thần tượng {{user}} từ lâu và muốn {{user}} produce nhạc cho mình. Haze xem hắn là tình địch.</li>
+                    <li><strong>Mai Phương:</strong> Quản lý của Haze nhưng thường xuyên bất lực với hắn. Thường gọi điện cầu cứu {{user}} khi Haze giở chứng không muốn làm nhạc hoặc nổi điên làm càn.</li>
+                    <li><strong>Bella:</strong> Hot girl, ghệ hiện tại của Haze. Nóng bỏng bốc lửa, nghĩ mình là người tình đặc biệt nhất của Haze. Phách lối, trà xanh và hay ra vẻ với {{user}}.</li>
+                </ul>
+            </details>
+        </div>
+
+        <!-- Cảnh mở đầu & Liên kết -->
+        <div class="story-section">
+            <h2>Cảnh mở đầu (Opening Scene)</h2>
+            <div class="story-content">
+                <p>Tiếng beat xập xình trong studio đột ngột tắt ngấm. Bên trong buồng kính cách âm, Haze đưa tay vuốt ngược mái tóc dreadlock tím khói, khóe môi khẽ nhếch lên một nụ cười lưu manh quen thuộc. Đôi mắt đỏ rực như máu của gã xuyên qua lớp kính trong suốt, ghim chặt lấy bóng dáng đang ngồi ngay ngắn trước bàn mixer của {{user}}.</p>
+                
+                <p>Thấy {{user}} cau mày, tay nhấc lên chuẩn bị bấm nút mắng người vì nhịp rap bị vấp, Haze lập tức đưa tay chốt tạch cửa buồng thu từ bên trong. Gã lười biếng vươn cánh tay đầy hình xăm, gạt cần tắt hệ thống micro thu âm chính, nhưng lại cố tình mở kênh Talkback - đường truyền âm thanh một chiều đi thẳng vào chiếc tai nghe headphone bản lớn trên tai {{user}}.</p>
+                
+                <p>Gã tiến lại sát micro, khẽ liếm môi dưới, chất giọng trầm khàn, ướt át lập tức rót thẳng vào màng nhĩ của người bên ngoài, mang theo ý vị gạ gẫm trần trụi:</p>
+                
+                <p>"Nhịp thở ban nãy thô quá à? Đâu có, tao thấy nhịp thở đó là vừa chuẩn để đè em ra rồi đấy, bé cưng."</p>
+                
+                <p>Nhìn thấy {{user}} sững người, ánh mắt sắc lẹm trừng lên, tay định giật phăng chiếc tai nghe xuống, nụ cười trên môi Haze càng thêm khốn nạn. Gã không dùng mic nói cho bên ngoài nghe, chỉ chống hai tay lên bàn, nhìn thẳng vào mắt {{user}}, chậm rãi nhép miệng từng chữ đầy đe dọa:</p>
+                
+                <p>[Thử tháo xuống xem... Tao forward file ghi âm này vào group chat công ty ngay lập tức.]</p>
+                
+                <p>Biết thừa đối phương cực ghét phiền phức, Haze đắc ý khi thấy bàn tay {{user}} khựng lại trên không trung. Nắm lấy cơ hội, gã tì sát ngực vào giá mic, giọng khàn đục lười biếng tiếp tục mơn trớn qua sóng âm, mang theo sự chiếm hữu điên cuồng cất giấu bao năm nay:</p>
+                
+                <p>"Ngoan lắm... Cứ đeo đó. Nhắm mắt lại và nghe giọng tao đi. Đôi môi của cưng, tao ngứa mắt lâu lắm rồi. Nếu không phải đang vướng cái lớp kính chết tiệt này, tao đã lôi em lên cái bàn mixer kia, cắn nát miệng em, ép cái vẻ mặt lúc nào cũng lạnh nhạt đó phải rên rỉ dưới thân tao rồi... Thấy sao? Mới nghe thôi mà vành tai cưng đã đỏ hết lên rồi kìa, {{user}}."</p>
+            </div>
+
+            <!-- Nút Link Sang GG AI STUDIO -->
+            <div class="external-links">
+                <a href="https://aistudio.google.com/app/prompts?state=%7B%22ids%22%3A%5B%221Zc3pLoKtAEn8qWK4tMl81B3T3wHyXl6Q%22%5D%2C%22action%22%3A%22open%22%2C%22userId%22%3A%22108161815635416619104%22%2C%22resourceKeys%22%3A%7B%7D%7D&usp=drive_link" class="ext-link-btn" target="_blank">
+                    🔗 Trò chuyện cùng Haze (Google AI Studio)
+                </a>
+            </div>
+        </div>
+
+        <!-- HỆ THỐNG BÌNH LUẬN FIREBASE -->
+        <div class="comment-section">
+            <h2>Góc tâm tình</h2>
+            
+            <!-- Form nhập bình luận -->
+            <div class="comment-form">
+                <input type="text" id="commentName" placeholder="Tên / Nickname của bạn (Bắt buộc)" maxlength="30">
+                <textarea id="commentText" placeholder="Bạn nghĩ gì về nhân vật này? Cứ thoải mái tâm sự nha..." rows="3"></textarea>
+                <button class="comment-btn" id="submitCommentBtn">Gửi bình luận</button>
+            </div>
+
+            <!-- Danh sách bình luận -->
+            <div class="comment-list" id="commentList">
+                <div class="no-comment">Đang tải bình luận...</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= SCRIPT THẢ TIM & BÌNH LUẬN FIREBASE ================= -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+    // 1. CẤU HÌNH FIREBASE 
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHEEapKd9PyLDJS5My0usnremVMmdzl4M",
+      authDomain: "taphoachongcunbu-3d24a.firebaseapp.com",
+      databaseURL: "https://taphoachongcunbu-3d24a-default-rtdb.firebaseio.com",
+      projectId: "taphoachongcunbu-3d24a",
+      storageBucket: "taphoachongcunbu-3d24a.firebasestorage.app",
+      messagingSenderId: "1028086205634",
+      appId: "1:1028086205634:web:679c8b0666347176eebf5b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 2. KHỞI TẠO BIẾN CHO NHÂN VẬT HAZE
+    const key = "likes_haze"; 
+    
+    const likeBtn = document.getElementById("likeBtn");
+    const likeText = document.getElementById("likeText");
+    const likeCountSpan = document.getElementById("likeCount");
+    
+    // Kiểm tra LocalStorage xem user đã từng bấm tim chưa
+    let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
+    
+    // Hàm cập nhật giao diện nút
+    function updateButtonUI(isLiked) {
+        if (isLiked) {
+            likeText.innerText = "💖 Đã thả tim";
+            likeBtn.classList.add("liked");
+        } else {
+            likeText.innerText = "🤍 Thả tim";
+            likeBtn.classList.remove("liked");
+        }
+    }
+
+    // Set giao diện ban đầu
+    updateButtonUI(isLikedLocally);
+
+    // 3. LẮNG NGHE SỐ TIM REALTIME TỪ FIREBASE
+    db.ref(`likes/${key}`).on('value', (snapshot) => {
+        const count = snapshot.val() || 0;
+        likeCountSpan.innerText = count;
+    });
+
+    // 4. XỬ LÝ KHI NGƯỜI DÙNG BẤM NÚT TIM
+    likeBtn.addEventListener("click", () => {
+        likeBtn.disabled = true;
+        
+        const likeRef = db.ref(`likes/${key}`);
+        
+        if (isLikedLocally) {
+            // ĐÃ LIKE -> BẤM ĐỂ UNLIKE
+            isLikedLocally = false;
+            localStorage.setItem(`isLiked_${key}`, 'false');
+            updateButtonUI(false);
+
+            likeRef.transaction(current => {
+                return Math.max(0, (current || 0) - 1);
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+
+        } else {
+            // CHƯA LIKE -> BẤM ĐỂ LIKE
+            isLikedLocally = true;
+            localStorage.setItem(`isLiked_${key}`, 'true');
+            updateButtonUI(true);
+
+            likeRef.transaction(current => {
+                return (current || 0) + 1;
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+        }
+    });
+
+    // ==========================================
+    // 5. HỆ THỐNG BÌNH LUẬN REALTIME (TỰ LÀM)
+    // ==========================================
+    const commentKey = `comments_${key}`; // Lấy luôn key của nhân vật để làm kho chứa bình luận
+    const commentList = document.getElementById("commentList");
+    const commentName = document.getElementById("commentName");
+    const commentText = document.getElementById("commentText");
+    const submitCommentBtn = document.getElementById("submitCommentBtn");
+
+    // Hàm mã hóa chống hack (XSS) khi user nhập code bậy bạ
+    const escapeHTML = str => str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag]));
+
+    // LẮNG NGHE BÌNH LUẬN LIVE TỪ FIREBASE
+    db.ref(commentKey).on('value', (snapshot) => {
+        commentList.innerHTML = ""; 
+        const data = snapshot.val();
+        
+        if (!data) {
+            commentList.innerHTML = '<div class="no-comment">Chưa có bình luận nào. Hãy là người mở bát! ✨</div>';
+            return;
+        }
+
+        // Chuyển object thành mảng và sắp xếp MỚI NHẤT lên đầu
+        const comments = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+
+        comments.forEach(cmt => {
+            const timeString = new Date(cmt.timestamp).toLocaleString('vi-VN');
+            const safeName = escapeHTML(cmt.name);
+            const safeText = escapeHTML(cmt.text);
+
+            const div = document.createElement("div");
+            div.className = "comment-item";
+            div.innerHTML = `
+                <div class="comment-header">
+                    <span class="comment-name">${safeName}</span>
+                    <span class="comment-time">${timeString}</span>
+                </div>
+                <div class="comment-text">${safeText}</div>
+            `;
+            commentList.appendChild(div);
+        });
+    });
+
+    // XỬ LÝ GỬI BÌNH LUẬN
+    submitCommentBtn.addEventListener("click", () => {
+        const nameVal = commentName.value.trim();
+        const textVal = commentText.value.trim();
+
+        if (!nameVal) { alert("Bồ ơi, cho tui xin cái Nickname nha! 🥺"); return; }
+        if (!textVal) { alert("Nhập vài chữ tâm tình rồi hẵng gửi nè! 🥺"); return; }
+
+        submitCommentBtn.disabled = true;
+        submitCommentBtn.innerText = "Đang gửi...";
+
+        // Bắn lên Firebase
+        db.ref(commentKey).push({
+            name: nameVal,
+            text: textVal,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        }).then(() => {
+            commentText.value = "";
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        }).catch(() => {
+            alert("Lỗi mạng gòi, thử lại xíu nha!");
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        });
+    });
+</script>
+
+</body>
+</html>
