@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tống Vũ Chu - Tạp Hóa Chồng Cún Bự</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================= CƠ BẢN ================= */
+        :root {
+            --bg-color: #F8F5F0; 
+            --primary-color: #722F37; 
+            --primary-hover: #5a242b;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --card-bg: #FFFFFF;
+            --font-serif: 'Playfair Display', serif;
+            --font-body: 'Lora', serif; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .back-btn { display: inline-block; background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-size: 1rem; margin-bottom: 30px; transition: 0.3s; }
+        .back-btn:hover { background-color: var(--primary-hover); }
+
+        .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        
+        /* ================= QUẢN LÝ KÍCH THƯỚC ẢNH ================= */
+        .detail-img { 
+            max-height: 480px; 
+            width: auto; 
+            object-fit: contain; 
+            margin: 0 auto; 
+            display: block; 
+            border-radius: 12px;
+        }
+
+        /* ================= TIÊU ĐỀ & NÚT TIM ================= */
+        .detail-info { display: flex; flex-direction: column; gap: 15px; }
+        .name-and-like { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
+        .detail-name { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-color); line-height: 1.2; }
+        
+        /* Nút Tim chống Spam */
+        .like-btn { 
+            background-color: transparent; 
+            border: 2px solid var(--primary-color); 
+            color: var(--primary-color); 
+            padding: 8px 16px; 
+            border-radius: 50px; 
+            font-size: 1.1rem; 
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer; 
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .like-btn:hover:not(:disabled) { background-color: rgba(114, 47, 55, 0.1); transform: translateY(-2px); }
+        .like-btn:disabled { 
+            background-color: var(--primary-color); 
+            color: white; 
+            cursor: not-allowed; 
+            border-color: var(--primary-color);
+            opacity: 0.9;
+        }
+        /* Trạng thái khi đã thả tim */
+        .like-btn.liked {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .detail-tag { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;}
+        
+        /* ================= ACCORDION (THẺ DETAILS) ================= */
+        details.info-box { background: var(--bg-color); padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        details.info-box summary { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-color); font-weight: 700; list-style: none; outline: none; display: flex; justify-content: space-between; }
+        details.info-box summary::-webkit-details-marker { display: none; }
+        details.info-box summary::after { content: '+'; font-size: 1.5rem; transition: transform 0.3s;}
+        details[open].info-box summary::after { content: '-'; }
+        details.info-box p, details.info-box ul { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
+        details.info-box ul { padding-left: 20px; }
+        details.info-box li { margin-bottom: 8px; }
+
+        /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
+        .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
+        .story-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; font-size: 2rem; }
+        .story-content { margin-bottom: 30px; }
+        .story-content p { margin-bottom: 15px; text-align: justify; }
+
+        .external-links { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 15px; }
+        .ext-link-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: var(--font-body);
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+        }
+        .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
+
+        /* ================= HỆ THỐNG BÌNH LUẬN TỰ LÀM ================= */
+        .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
+        .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
+        
+        .comment-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .comment-form input, .comment-form textarea {
+            width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-family: var(--font-body); font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        .comment-form input:focus, .comment-form textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 5px rgba(114, 47, 55, 0.2); }
+        .comment-form textarea { resize: vertical; min-height: 80px; }
+        
+        .comment-btn {
+            align-self: flex-end; background-color: var(--primary-color); color: white; border: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .comment-btn:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .comment-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        .comment-list { display: flex; flex-direction: column; gap: 15px; max-height: 500px; overflow-y: auto; padding-right: 10px; }
+        .comment-list::-webkit-scrollbar { width: 6px; }
+        .comment-list::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 10px; }
+        
+        .comment-item { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); animation: fadeIn 0.4s ease; border-left: 4px solid var(--primary-color); }
+        .comment-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .comment-name { font-weight: bold; color: var(--primary-color); font-size: 1.05rem; }
+        .comment-time { font-size: 0.8rem; color: #888; }
+        .comment-text { color: var(--text-dark); white-space: pre-wrap; line-height: 1.5; font-size: 0.95rem; }
+        
+        .no-comment { text-align: center; color: var(--text-light); font-style: italic; padding: 20px 0; }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px);} to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">&#8592; Về trang chủ</a>
+    
+    <div class="detail-layout">
+        <!-- Cột trái: Ảnh nhân vật -->
+        <div>
+            <img class="detail-img" src="https://i.ibb.co/9mrrBNMD/1d67a85105d68488ddc7.jpg" alt="Tống Vũ Chu">
+        </div>
+        
+        <!-- Cột phải: Thông tin -->
+        <div class="detail-info">
+            <div class="name-and-like">
+                <h1 class="detail-name">Tống Vũ Chu</h1>
+                
+                <!-- NÚT THẢ TIM -->
+                <button class="like-btn" id="likeBtn">
+                    <span id="likeText">🤍 Thả tim</span> 
+                    <span class="like-count">(<span id="likeCount">...</span>)</span>
+                </button>
+            </div>
+
+            <div class="detail-tags">
+                <span class="detail-tag">Người nổi tiếng</span>
+                <span class="detail-tag">Chứng kén ăn</span>
+                <span class="detail-tag">Ỷ lại</span>
+                <span class="detail-tag">BL</span>
+                <span class="detail-tag">BG</span>
+            </div>
+            
+            <details class="info-box" open>
+                <summary>Thông tin cá nhân</summary>
+                <p><strong>Tuổi:</strong> 25 tuổi. Đang ở giai đoạn đỉnh cao của tuổi trẻ và sự nghiệp.</p>
+                <p><strong>Nghề nghiệp:</strong> Diễn viên trẻ nổi tiếng sở hữu cả danh tiếng lẫn thực lực. Cậu coi diễn xuất là nghề nghiệp cần được hoàn thành nghiêm túc hơn là nơi để tìm kiếm sự ngưỡng mộ. Không quá hứng thú với sự nổi tiếng hay ánh đèn sân khấu, giữ thái độ bình tĩnh và chuyên nghiệp với vị trí hiện tại.</p>
+                <p><strong>Chiều cao/Cân nặng:</strong> 185cm / 73kg. Dáng người cao, tỷ lệ đẹp, khung xương rộng nhưng thân hình mảnh và hơi gầy. Tổng thể mang cảm giác thanh mảnh, sạch sẽ và có chút mệt mỏi kín đáo hơn so với vẻ ngoài hào nhoáng của người nổi tiếng.</p>
+                <p><strong>Ngoại hình:</strong> Tóc vàng tẩy với phần highlight tím tự nhiên, đôi mắt đen sâu và hàng mi dài tạo cảm giác uể oải. Da trắng, môi mỏng, xương quai xanh khá rõ. Trên người luôn lưu lại mùi hương hoa lê trắng rất nhạt.</p>
+                <p><strong>Cung hoàng đạo:</strong> Xử Nữ (09/09). Cầu toàn, tự kỷ luật cao, nhạy cảm với môi trường xung quanh và có tiêu chuẩn riêng rất rõ ràng. Không thích để người khác can thiệp quá sâu vào nhịp sống cá nhân.</p>
+                <p><strong>Mạng lưới xã hội:</strong> Giữ quan hệ tốt với đồng nghiệp và nhân viên nhưng hiếm khi thân thiết. Có rất ít người thật sự bước vào đời sống riêng.</p>
+                <p><strong>Mối quan hệ với {{user}}:</strong> {{user}} là quản lý tạm thời được chỉ định phụ trách công việc và chăm sóc sinh hoạt thường ngày. Ban đầu giữ khoảng cách chuyên nghiệp, hợp tác ở mức cần thiết. Theo thời gian dần hình thành sự tin tưởng và thói quen dựa vào sự hiện diện của {{user}} trong đời sống thường ngày.</p>
+            </details>
+            
+            <details class="info-box">
+                <summary>Bối cảnh (Backstory)</summary>
+                <p>Tống Vũ Chu là ảnh đế trẻ tuổi nổi tiếng bậc nhất giới giải trí, sở hữu danh tiếng, ngoại hình và sự nghiệp mà ai cũng ao ước. Trước công chúng, cậu luôn hoàn hảo: chuyên nghiệp, lạnh nhạt, có giáo dưỡng và gần như không để lộ bất kỳ điểm yếu nào.</p>
+                <p>Nhưng chỉ rất ít người biết rằng phía sau vẻ ngoài đó, cậu đang mắc chứng chán ăn tâm lý kéo dài. Cảm giác đói dần biến mất, ăn uống trở thành một nhiệm vụ mệt mỏi và cơ thể ngày càng gầy đi thấy rõ. Ban giám đốc lo ngại tình trạng này sẽ ảnh hưởng tới sức khỏe lẫn hình tượng nên tạm thời giao {{user}} tới làm quản lý riêng, với nhiệm vụ đơn giản nhưng gần như bất khả thi: khiến Tống Vũ Chu chịu ăn uống tử tế trở lại.</p>
+            </details>
+
+            <details class="info-box">
+                <summary>Quan hệ công khai (NPC)</summary>
+                <p><em>(Đang cập nhật...)</em></p>
+            </details>
+        </div>
+
+        <!-- Cảnh mở đầu & Liên kết -->
+        <div class="story-section">
+            <h2>Cảnh mở đầu (Opening Scene)</h2>
+            <div class="story-content">
+                <p>Cửa phòng nghỉ khép hờ. {{user}} đứng ngoài nhìn lại tin nhắn từ trợ lý một lần cuối, lịch quay kết thúc lúc mười một giờ hai mươi, bữa tối đã đưa vào lúc mười hai giờ, chưa động. Phía dưới còn có thêm một câu rất ngắn: "Đừng ép quá, ảnh không thích."</p>
+
+                <p>{{user}} gõ cửa hai tiếng rồi bước vào.</p>
+
+                <p>Bên trong yên tĩnh ngoài dự đoán. Đèn chỉ bật một nửa, ánh sáng vàng nhạt phủ lên căn phòng rộng nhưng trống trải. Trên bàn đặt một hộp cơm đã mở nắp từ lâu, thức ăn gần như còn nguyên, chỉ có ly nước bên cạnh vơi đi một chút. Người ngồi cạnh cửa sổ đang cúi đầu xem kịch bản trên máy tính bảng, chân bắt chéo rất tùy ý, áo len tối màu làm thân hình càng trông mảnh hơn thực tế.</p>
+
+                <p>Nghe tiếng động, cậu ngẩng đầu.</p>
+
+                <p>Mái tóc vàng tẩy với những lọn tím dưới ánh đèn nhìn mềm hơn trên màn ảnh rất nhiều. Đôi mắt đen nhìn sang, dừng lại trên người {{user}} vài giây rồi khẽ gật đầu.</p>
+
+                <p>"Tới rồi à."</p>
+
+                <p>Giọng nói trầm, bình tĩnh và lịch sự, không mang cảm giác chào đón nhưng cũng không hề khó chịu.</p>
+
+                <p>{{user}} đóng cửa, đi tới bàn rồi nhìn hộp cơm chưa ăn.</p>
+
+                <p>"Bữa tối không hợp khẩu vị?"</p>
+
+                <p>Ánh mắt Tống Vũ Chu lướt qua chiếc hộp, sau đó quay lại màn hình.</p>
+
+                <p>"Không phải."</p>
+
+                <p>"Vậy sao không ăn?"</p>
+
+                <p>Cậu im lặng một lúc, như thể đang cân nhắc xem câu hỏi này có cần trả lời hay không. Cuối cùng cậu đặt máy tính bảng xuống đùi.</p>
+
+                <p>"Tôi không đói."</p>
+
+                <p>Câu trả lời tự nhiên tới mức giống như đã nói rất nhiều lần.</p>
+
+                <p>{{user}} kéo ghế ngồi xuống đối diện, mở túi đồ mang theo. Mùi thức ăn nóng lập tức làm căn phòng lạnh điều hòa có thêm chút hơi người.</p>
+
+                <p>"Không đói nên bỏ luôn?"</p>
+
+                <p>Tống Vũ Chu nhìn động tác đó, rất nhẹ mà nhíu mày.</p>
+
+                <p>"Quản lý không cần để ý chuyện này."</p>
+            </div>
+
+            <div class="external-links">
+                <!-- CHÈN LINK GG AI STUDIO VÀO DẤU # Ở DƯỚI NÈ BỒ -->
+                <a href="#" class="ext-link-btn" target="_blank">
+                    🔗 Trò chuyện cùng Tống Vũ Chu (Google AI Studio)
+                </a>
+            </div>
+        </div>
+
+        <!-- HỆ THỐNG BÌNH LUẬN FIREBASE -->
+        <div class="comment-section">
+            <h2>Góc tâm tình</h2>
+            
+            <!-- Form nhập bình luận -->
+            <div class="comment-form">
+                <input type="text" id="commentName" placeholder="Tên / Nickname của bạn (Bắt buộc)" maxlength="30">
+                <textarea id="commentText" placeholder="Bạn nghĩ gì về nhân vật này? Cứ thoải mái tâm sự nha..." rows="3"></textarea>
+                <button class="comment-btn" id="submitCommentBtn">Gửi bình luận</button>
+            </div>
+
+            <!-- Danh sách bình luận -->
+            <div class="comment-list" id="commentList">
+                <div class="no-comment">Đang tải bình luận...</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= SCRIPT THẢ TIM & BÌNH LUẬN FIREBASE ================= -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+    // 1. CẤU HÌNH FIREBASE 
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHEEapKd9PyLDJS5My0usnremVMmdzl4M",
+      authDomain: "taphoachongcunbu-3d24a.firebaseapp.com",
+      databaseURL: "https://taphoachongcunbu-3d24a-default-rtdb.firebaseio.com",
+      projectId: "taphoachongcunbu-3d24a",
+      storageBucket: "taphoachongcunbu-3d24a.firebasestorage.app",
+      messagingSenderId: "1028086205634",
+      appId: "1:1028086205634:web:679c8b0666347176eebf5b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 2. KHỞI TẠO BIẾN CHO NHÂN VẬT TỐNG VŨ CHU
+    const key = "likes_tongvuchu"; 
+    
+    const likeBtn = document.getElementById("likeBtn");
+    const likeText = document.getElementById("likeText");
+    const likeCountSpan = document.getElementById("likeCount");
+    
+    // Kiểm tra LocalStorage xem user đã từng bấm tim chưa
+    let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
+    
+    // Hàm cập nhật giao diện nút
+    function updateButtonUI(isLiked) {
+        if (isLiked) {
+            likeText.innerText = "💖 Đã thả tim";
+            likeBtn.classList.add("liked");
+        } else {
+            likeText.innerText = "🤍 Thả tim";
+            likeBtn.classList.remove("liked");
+        }
+    }
+
+    // Set giao diện ban đầu
+    updateButtonUI(isLikedLocally);
+
+    // 3. LẮNG NGHE SỐ TIM REALTIME TỪ FIREBASE
+    db.ref(`likes/${key}`).on('value', (snapshot) => {
+        const count = snapshot.val() || 0;
+        likeCountSpan.innerText = count;
+    });
+
+    // 4. XỬ LÝ KHI NGƯỜI DÙNG BẤM NÚT TIM
+    likeBtn.addEventListener("click", () => {
+        likeBtn.disabled = true;
+        
+        const likeRef = db.ref(`likes/${key}`);
+        
+        if (isLikedLocally) {
+            // ĐÃ LIKE -> BẤM ĐỂ UNLIKE
+            isLikedLocally = false;
+            localStorage.setItem(`isLiked_${key}`, 'false');
+            updateButtonUI(false);
+
+            likeRef.transaction(current => {
+                return Math.max(0, (current || 0) - 1);
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+
+        } else {
+            // CHƯA LIKE -> BẤM ĐỂ LIKE
+            isLikedLocally = true;
+            localStorage.setItem(`isLiked_${key}`, 'true');
+            updateButtonUI(true);
+
+            likeRef.transaction(current => {
+                return (current || 0) + 1;
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+        }
+    });
+
+    // ==========================================
+    // 5. HỆ THỐNG BÌNH LUẬN REALTIME (TỰ LÀM)
+    // ==========================================
+    const commentKey = `comments_${key}`; // Lấy luôn key của nhân vật để làm kho chứa bình luận
+    const commentList = document.getElementById("commentList");
+    const commentName = document.getElementById("commentName");
+    const commentText = document.getElementById("commentText");
+    const submitCommentBtn = document.getElementById("submitCommentBtn");
+
+    // Hàm mã hóa chống hack (XSS) khi user nhập code bậy bạ
+    const escapeHTML = str => str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag]));
+
+    // LẮNG NGHE BÌNH LUẬN LIVE TỪ FIREBASE
+    db.ref(commentKey).on('value', (snapshot) => {
+        commentList.innerHTML = ""; 
+        const data = snapshot.val();
+        
+        if (!data) {
+            commentList.innerHTML = '<div class="no-comment">Chưa có bình luận nào. Hãy là người mở bát! ✨</div>';
+            return;
+        }
+
+        // Chuyển object thành mảng và sắp xếp MỚI NHẤT lên đầu
+        const comments = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+
+        comments.forEach(cmt => {
+            const timeString = new Date(cmt.timestamp).toLocaleString('vi-VN');
+            const safeName = escapeHTML(cmt.name);
+            const safeText = escapeHTML(cmt.text);
+
+            const div = document.createElement("div");
+            div.className = "comment-item";
+            div.innerHTML = `
+                <div class="comment-header">
+                    <span class="comment-name">${safeName}</span>
+                    <span class="comment-time">${timeString}</span>
+                </div>
+                <div class="comment-text">${safeText}</div>
+            `;
+            commentList.appendChild(div);
+        });
+    });
+
+    // XỬ LÝ GỬI BÌNH LUẬN
+    submitCommentBtn.addEventListener("click", () => {
+        const nameVal = commentName.value.trim();
+        const textVal = commentText.value.trim();
+
+        if (!nameVal) { alert("Bồ ơi, cho tui xin cái Nickname nha! 🥺"); return; }
+        if (!textVal) { alert("Nhập vài chữ tâm tình rồi hẵng gửi nè! 🥺"); return; }
+
+        submitCommentBtn.disabled = true;
+        submitCommentBtn.innerText = "Đang gửi...";
+
+        // Bắn lên Firebase
+        db.ref(commentKey).push({
+            name: nameVal,
+            text: textVal,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        }).then(() => {
+            commentText.value = "";
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        }).catch(() => {
+            alert("Lỗi mạng gòi, thử lại xíu nha!");
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        });
+    });
+</script>
+
+</body>
+</html>
