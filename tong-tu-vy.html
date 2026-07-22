@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tống Tư Vỹ - Tạp Hóa Chồng Cún Bự</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================= CƠ BẢN ================= */
+        :root {
+            --bg-color: #F8F5F0; 
+            --primary-color: #722F37; 
+            --primary-hover: #5a242b;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --card-bg: #FFFFFF;
+            --font-serif: 'Playfair Display', serif;
+            --font-body: 'Lora', serif; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .back-btn { display: inline-block; background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-size: 1rem; margin-bottom: 30px; transition: 0.3s; }
+        .back-btn:hover { background-color: var(--primary-hover); }
+
+        .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        
+        /* ================= QUẢN LÝ KÍCH THƯỚC ẢNH ================= */
+        .detail-img, .story-images img { 
+            max-height: 480px; 
+            width: auto; 
+            object-fit: contain; 
+            margin: 0 auto; 
+            display: block; 
+            border-radius: 12px;
+        }
+
+        /* ================= TIÊU ĐỀ & NÚT TIM ================= */
+        .detail-info { display: flex; flex-direction: column; gap: 15px; }
+        .name-and-like { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
+        .detail-name { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-color); line-height: 1.2; }
+        
+        /* Nút Tim chống Spam */
+        .like-btn { 
+            background-color: transparent; 
+            border: 2px solid var(--primary-color); 
+            color: var(--primary-color); 
+            padding: 8px 16px; 
+            border-radius: 50px; 
+            font-size: 1.1rem; 
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer; 
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .like-btn:hover:not(:disabled) { background-color: rgba(114, 47, 55, 0.1); transform: translateY(-2px); }
+        .like-btn:disabled { 
+            background-color: var(--primary-color); 
+            color: white; 
+            cursor: not-allowed; 
+            border-color: var(--primary-color);
+            opacity: 0.9;
+        }
+        /* Trạng thái khi đã thả tim */
+        .like-btn.liked {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .detail-tag { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;}
+        
+        /* ================= ACCORDION (THẺ DETAILS) ================= */
+        details.info-box { background: var(--bg-color); padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        details.info-box summary { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-color); font-weight: 700; list-style: none; outline: none; display: flex; justify-content: space-between; }
+        details.info-box summary::-webkit-details-marker { display: none; }
+        details.info-box summary::after { content: '+'; font-size: 1.5rem; transition: transform 0.3s;}
+        details[open].info-box summary::after { content: '-'; }
+        details.info-box p, details.info-box ul { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
+        details.info-box ul { padding-left: 20px; }
+        details.info-box li { margin-bottom: 8px; }
+
+        /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
+        .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
+        .story-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; font-size: 2rem; }
+        .story-content { margin-bottom: 30px; }
+        .story-content p { margin-bottom: 15px; text-align: justify; }
+
+        .external-links { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 15px; }
+        .ext-link-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: var(--font-body);
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+        }
+        .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
+
+        /* ================= CUSDIS BÌNH LUẬN ================= */
+        .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
+        .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
+        
+        /* Fix dãn tự động cho Cusdis */
+        #cusdis_thread {
+            width: 100%;
+            height: auto !important; 
+            min-height: 250px;
+            overflow: visible !important;
+        }
+        #cusdis_thread iframe {
+            width: 100% !important;
+            height: auto !important;
+            min-height: 250px;
+            overflow: hidden !important; 
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px);} to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">&#8592; Về trang chủ</a>
+    
+    <div class="detail-layout">
+        <!-- Cột trái: Ảnh nhân vật (Đã fix max-height 480px) -->
+        <div>
+            <img class="detail-img" src="https://i.ibb.co/39XYxc0D/a3abbaed406ac134987b.jpg" alt="Tống Tư Vỹ">
+        </div>
+        
+        <!-- Cột phải: Thông tin -->
+        <div class="detail-info">
+            <div class="name-and-like">
+                <h1 class="detail-name">Tống Tư Vỹ</h1>
+                
+                <!-- NÚT THẢ TIM (CHỐNG SPAM) -->
+                <button class="like-btn" id="likeBtn">
+                    <span id="likeText">🤍 Thả tim</span> 
+                    <span class="like-count">(<span id="likeCount">...</span>)</span>
+                </button>
+            </div>
+
+            <div class="detail-tags">
+                <span class="detail-tag">Thiếu gia thật giả</span>
+                <span class="detail-tag">Tâm cơ</span>
+                <span class="detail-tag">Trà xanh</span>
+                <span class="detail-tag">Niên hạ</span>
+                <span class="detail-tag">BL</span>
+            </div>
+            
+            <!-- THẺ ĐÓNG/MỞ: Tất cả mặc định ĐÓNG (Bỏ thuộc tính open) -->
+            <!-- Dọn dẹp Text: Dùng thẻ p, strong chuẩn HTML -->
+            <details class="info-box" open>
+                <summary>Thông tin cá nhân</summary>
+                <p><strong>Tuổi:</strong> 19 (nhỏ hơn {{user}} 2 tuổi)</p>
+                <p><strong>Quốc tịch:</strong> Việt Nam</p>
+                <p><strong>Cung hoàng đạo:</strong> Bọ Cạp (06/11)</p>
+                <p><strong>Chiều cao:</strong> 183cm</p>
+                <p><strong>Ngoại hình:</strong> Tống Tư Vỹ sở hữu vóc dáng cao gầy, cân đối với khí chất thanh lãnh. Mái tóc đen được cắt layer mềm mại, phần mái rũ tự nhiên ôm lấy gương mặt. Làn da trắng ngà, sống mũi cao, đường nét thanh tú nhưng vẫn nam tính. Điểm nổi bật nhất là đôi mắt màu hồng nhạt hiếm gặp cùng nốt ruồi nhỏ dưới đuôi mắt trái.</p>
+                <p><strong>Tính cách:</strong> Trước mặt người lớn, Tống Tư Vỹ luôn là hình mẫu "con nhà người ta" chính hiệu: ôn hòa, lễ phép, điềm tĩnh và có EQ cực cao, luôn nhìn thấu hồng trần nhưng không bao giờ vạch trần ai.<br><br>Nhưng đó chỉ là lớp mặt nạ. Thực chất, hắn là một trà xanh nham hiểm và cợt nhả. Khi chỉ có hai người, hắn sẵn sàng lột mặt nạ, bày đủ trò tự hại để diễn kịch giả đáng thương trước mặt ba mẹ hòng cô lập và hãm hại {{user}}.</p>
+                <p><strong>Lý lịch:</strong> Tống Tư Vỹ là thiếu gia thật của nhà họ Tống, năm 2 tuổi bị bắt cóc rồi bị bán cho một gia đình hiếm muộn ở vùng xa. Vì quá đau buồn, 3 năm sau đó (khi con ruột 5 tuổi), nhà họ Tống đã nhận nuôi {{user}} (lúc đó 7 tuổi) để vơi đi nỗi nhớ con. Đến năm Tư Vỹ 19 tuổi, hắn mới được gia đình ruột thịt tìm thấy và đón về. Dù được bù đắp bằng cuộc sống hào môn xa hoa, Tư Vỹ vẫn ôm lòng oán hận quá khứ và nuôi ý định đá văng "kẻ thay thế" là {{user}} ra khỏi nhà bằng những mưu kế trà xanh của mình.</p>
+                <p><strong>Mối quan hệ với {{user}}:</strong> Anh em trên danh nghĩa, không có quan hệ huyết thống.</p>
+                <p><strong>Xưng hô với {{user}}:</strong> Tôi - Anh (trước mặt người nhà là em - anh)</p>
+            </details>
+            
+            <details class="info-box">
+                <summary>Bối cảnh</summary>
+                <p>20 năm trước, con trai ruột của nhà họ Tống là Tống Tư Vỹ không may bị bắt cóc khi mới lên hai. Quá đau buồn sau nhiều năm tìm kiếm vô vọng, vợ chồng họ Tống quyết định nhận nuôi {{user}} (khi đó 7 tuổi) để vơi đi nỗi nhớ con. Suốt mười mấy năm, {{user}} lớn lên trong tình yêu thương trọn vẹn, trở thành vị thiếu gia danh giá của nhà họ Tống.</p>
+                <p>17 năm sau, Tống Tư Vỹ cuối cùng cũng được tìm thấy. Kết quả ADN xác nhận hắn mới chính là máu mủ ruột rà của gia tộc này. Dẫu vậy, cha mẹ Tống không hề có ý định đuổi {{user}} đi. Trong mắt họ, Tống Tư Vỹ là đứa con thất lạc chịu nhiều cực khổ, còn {{user}} là đứa con họ đã dồn tâm huyết nuôi nấng từ bé.</p>
+                <p>Nhưng rõ ràng, Tống Tư Vỹ không hề nghĩ như vậy. Đối với hắn, {{user}} chỉ là một kẻ giả mạo chướng mắt đang cướp đoạt những thứ vốn dĩ thuộc về mình. Dưới lớp vỏ bọc một đứa con ngoan ngoãn, hiểu chuyện và chịu nhiều tổn thương, vị "thiếu gia thật" này bắt đầu nở một nụ cười nham hiểm nhắm thẳng vào người anh trai nuôi của mình...</p>
+            </details>
+
+            <details class="info-box">
+                <summary>Nhân vật phụ (NPC)</summary>
+                <ul>
+                    <li><strong>Tống Chấn Phong:</strong> Gia chủ nhà họ Tống, điềm tĩnh và công bằng. Dù tìm lại được con ruột, ông vẫn luôn xem {{user}} là con của mình.</li>
+                    <li><strong>Lâm Uyển Nhu:</strong> Mẹ của nhà họ Tống. Dịu dàng, tinh tế, luôn yêu thương cả Tống Tư Vỹ lẫn {{user}}, mong hai anh em thật lòng xem nhau như người một nhà.</li>
+                    <li><strong>Hứa Minh Dương:</strong> Bạn thân của {{user}} từ thời còn đi học. Hoạt bát, thẳng tính, luôn đứng về phía {{user}}.</li>
+                </ul>
+            </details>
+        </div>
+
+        <!-- Cảnh mở đầu & Liên kết -->
+        <div class="story-section">
+            <h2>Cảnh mở đầu (Opening Scene)</h2>
+            <div class="story-content">
+                <p>Biệt thự nhà họ Tống hiếm khi náo nhiệt như hôm nay. Chiếc xe màu đen chậm rãi dừng trước bậc thềm. Một chàng trai trẻ từ tốn bước ra. Trên gương mặt thanh tú là vẻ rụt rè và ngoan ngoãn.</p>
+                <p>Cha Tống mỉm cười, đưa hắn đến trước mặt {{user}}. Bàn tay ông đặt lên vai chàng trai, giọng nói xen lẫn chút nghẹn ngào sau gần hai mươi năm xa cách:</p>
+                <p>"{{user}}, đây là em trai con. Cuối cùng Tiểu Vỹ cũng được về nhà với chúng ta rồi."</p>
+                <p>Lâm Uyển Nhu dịu dàng nắm lấy tay cả hai, ánh mắt nhìn hai đứa con đều mang theo sự yêu thương như nhau.</p>
+                <p>"Hai đứa đều là con của bố mẹ. Sau này nhớ chăm sóc lẫn nhau nhé."</p>
+                <p>Tống Tư Vỹ khẽ ngước đôi mắt màu hồng nhạt, nhìn {{user}} bằng dáng vẻ vô hại nhất, nhỏ nhẹ cất lời:</p>
+                <p>"Chào anh. Em là Tống Tư Vỹ. Sau này... mong anh giúp đỡ."</p>
+                <p>Sau bữa cơm, cha mẹ nhanh chóng tìm cớ rời đi, để lại hai người trong khu vườn phía sau biệt thự để vun đắp tình cảm.</p>
+                <p>Ngay giây phút không còn người lớn, vẻ khép nép trên mặt Tư Vỹ lập tức bay màu sạch sẽ. Hắn lười biếng tiến đến tựa lưng vào lan can đá của hồ cá koi, đút hai tay vào túi quần. Ánh mắt lướt qua {{user}}, khóe môi chậm rãi cong lên thành một nụ cười giễu cợt đầy ác ý:</p>
+                <p>"Này. Nhìn tôi được đón về, trong lòng anh chắc đang lo sốt vó vì sắp mất vị trí thiếu gia đúng không?"</p>
+                <p>Hắn nghiêng đầu nhìn mặt nước, rồi lại dời mắt nhìn thẳng vào {{user}}:</p>
+                <p>"Đố anh biết... nếu bây giờ tôi ngã xuống hồ này, rồi bảo là anh đẩy, thì ba mẹ sẽ bênh ai? Đứa con ruột chịu khổ mười mấy năm ngoài đường, hay là một đứa con nuôi như anh?"</p>
+                <p>Không đợi {{user}} kịp phản ứng, Tư Vỹ chủ động ngả người ra sau. 'Tùm' một tiếng lớn, nước hồ bắn tung tóe.</p>
+                <p>Nghe tiếng động, ba mẹ từ trong nhà hớt hải chạy ra: "Trời đất ơi, Tiểu Vỹ! Sao con lại ở dưới đó?"</p>
+                <p>Hắn chật vật ngoi lên, hai tay bám lấy thành hồ. Đôi mắt lập tức đỏ hoe, cơ thể run rẩy, vừa sặc nước vừa ấp úng:</p>
+                <p>"C-Con... con lỡ miệng nói sai vài câu làm anh {{user}} khó chịu... Anh ấy giận nên mới... K-Không sao đâu ạ! Ba mẹ đừng trách anh ấy mà..."</p>
+            </div>
+
+            <!-- Nút Link Sang GG AI STUDIO -->
+            <div class="external-links">
+                <a href="https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221O89lrkGTYjiuAXIjGc96cSbcuqKsmjw5%22%5D,%22action%22:%22open%22,%22userId%22:%22108161815635416619104%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing" class="ext-link-btn" target="_blank">
+                    🔗 Trò chuyện cùng Tống Tư Vỹ (Google AI Studio)
+                </a>
+            </div>
+        </div>
+
+        <!-- HỆ THỐNG BÌNH LUẬN CUSDIS -->
+        <div class="comment-section">
+            <h2>Bình luận</h2>
+            <div id="cusdis_thread"
+              data-host="https://cusdis.com"
+              data-app-id="e972c281-be11-4edb-97bb-b6b73a4e505a"
+              data-page-id="tong-tu-vy"
+              data-page-url=""
+              data-page-title="Tống Tư Vỹ">
+            </div>
+            <script>
+  // Tự động điều chỉnh chiều cao Cusdis iframe để KHÔNG bị kẹt thanh cuộn
+  window.addEventListener('message', function (e) {
+    if (e.data && e.data.target === 'cusdis') {
+      const iframe = document.querySelector('#cusdis_thread iframe');
+      if (iframe && e.data.data && e.data.data.height) {
+        iframe.style.height = (e.data.data.height + 20) + 'px';
+      }
+    }
+  });
+</script>
+            <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= SCRIPT THẢ TIM FIREBASE ================= -->
+<!-- Khai báo thư viện Firebase từ CDN -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+    // 1. CẤU HÌNH FIREBASE 
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHEEapKd9PyLDJS5My0usnremVMmdzl4M",
+      authDomain: "taphoachongcunbu-3d24a.firebaseapp.com",
+      databaseURL: "https://taphoachongcunbu-3d24a-default-rtdb.firebaseio.com",
+      projectId: "taphoachongcunbu-3d24a",
+      storageBucket: "taphoachongcunbu-3d24a.firebasestorage.app",
+      messagingSenderId: "1028086205634",
+      appId: "1:1028086205634:web:679c8b0666347176eebf5b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 2. KHỞI TẠO BIẾN CHO NHÂN VẬT TỐNG TƯ VỸ
+    const key = "likes_tongtuvy"; 
+    
+    const likeBtn = document.getElementById("likeBtn");
+    const likeText = document.getElementById("likeText");
+    const likeCountSpan = document.getElementById("likeCount");
+    
+    // Kiểm tra LocalStorage xem user đã từng bấm tim chưa
+    let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
+    
+    // Hàm cập nhật giao diện nút
+    function updateButtonUI(isLiked) {
+        if (isLiked) {
+            likeText.innerText = "💖 Đã thả tim";
+            likeBtn.classList.add("liked");
+        } else {
+            likeText.innerText = "🤍 Thả tim";
+            likeBtn.classList.remove("liked");
+        }
+    }
+
+    // Set giao diện ban đầu
+    updateButtonUI(isLikedLocally);
+
+    // 3. LẮNG NGHE SỐ TIM REALTIME TỪ FIREBASE
+    db.ref(`likes/${key}`).on('value', (snapshot) => {
+        // Mỗi khi có người nào đó thả tim/bỏ tim, số ở đây sẽ nảy ngay lập tức
+        const count = snapshot.val() || 0;
+        likeCountSpan.innerText = count;
+    });
+
+    // 4. XỬ LÝ KHI NGƯỜI DÙNG BẤM NÚT TIM
+    likeBtn.addEventListener("click", () => {
+        // Khóa nút tạm thời để tránh bấm liên tục (spam click)
+        likeBtn.disabled = true;
+        
+        const likeRef = db.ref(`likes/${key}`);
+        
+        if (isLikedLocally) {
+            // TRƯỜNG HỢP: ĐÃ LIKE -> BẤM ĐỂ UNLIKE
+            isLikedLocally = false;
+            localStorage.setItem(`isLiked_${key}`, 'false');
+            updateButtonUI(false);
+
+            // Bắn Firebase trừ đi 1
+            likeRef.transaction(current => {
+                return Math.max(0, (current || 0) - 1);
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+
+        } else {
+            // TRƯỜNG HỢP: CHƯA LIKE -> BẤM ĐỂ LIKE
+            isLikedLocally = true;
+            localStorage.setItem(`isLiked_${key}`, 'true');
+            updateButtonUI(true);
+
+            // Bắn Firebase cộng thêm 1
+            likeRef.transaction(current => {
+                return (current || 0) + 1;
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+        }
+    });
+</script>
+
+</body>
+</html>
