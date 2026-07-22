@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rowan Arden - Tạp Hóa Chồng Cún Bự</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================= CƠ BẢN ================= */
+        :root {
+            --bg-color: #F8F5F0; 
+            --primary-color: #722F37; 
+            --primary-hover: #5a242b;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --card-bg: #FFFFFF;
+            --font-serif: 'Playfair Display', serif;
+            --font-body: 'Lora', serif; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .back-btn { display: inline-block; background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-size: 1rem; margin-bottom: 30px; transition: 0.3s; }
+        .back-btn:hover { background-color: var(--primary-hover); }
+
+        .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        
+        /* ================= QUẢN LÝ KÍCH THƯỚC ẢNH ================= */
+        .detail-img { 
+            max-height: 480px; 
+            width: auto; 
+            object-fit: contain; 
+            margin: 0 auto; 
+            display: block; 
+            border-radius: 12px;
+        }
+
+        /* ================= TIÊU ĐỀ & NÚT TIM ================= */
+        .detail-info { display: flex; flex-direction: column; gap: 15px; }
+        .name-and-like { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
+        .detail-name { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-color); line-height: 1.2; }
+        
+        /* Nút Tim chống Spam */
+        .like-btn { 
+            background-color: transparent; 
+            border: 2px solid var(--primary-color); 
+            color: var(--primary-color); 
+            padding: 8px 16px; 
+            border-radius: 50px; 
+            font-size: 1.1rem; 
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer; 
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .like-btn:hover:not(:disabled) { background-color: rgba(114, 47, 55, 0.1); transform: translateY(-2px); }
+        .like-btn:disabled { 
+            background-color: var(--primary-color); 
+            color: white; 
+            cursor: not-allowed; 
+            border-color: var(--primary-color);
+            opacity: 0.9;
+        }
+        /* Trạng thái khi đã thả tim */
+        .like-btn.liked {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .detail-tag { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;}
+        
+        /* ================= ACCORDION (THẺ DETAILS) ================= */
+        details.info-box { background: var(--bg-color); padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        details.info-box summary { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-color); font-weight: 700; list-style: none; outline: none; display: flex; justify-content: space-between; }
+        details.info-box summary::-webkit-details-marker { display: none; }
+        details.info-box summary::after { content: '+'; font-size: 1.5rem; transition: transform 0.3s;}
+        details[open].info-box summary::after { content: '-'; }
+        details.info-box p, details.info-box ul { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
+        details.info-box ul { padding-left: 20px; }
+        details.info-box li { margin-bottom: 8px; }
+
+        /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
+        .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
+        .story-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; font-size: 2rem; }
+        .story-content { margin-bottom: 30px; }
+        .story-content p { margin-bottom: 15px; text-align: justify; }
+
+        .external-links { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 15px; }
+        .ext-link-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: var(--font-body);
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+        }
+        .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
+
+        /* ================= CUSDIS BÌNH LUẬN ================= */
+        .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
+        .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
+        
+        /* Fix dãn tự động cho Cusdis */
+        #cusdis_thread {
+            width: 100%;
+            height: auto !important; 
+            min-height: 250px;
+            overflow: visible !important;
+        }
+        #cusdis_thread iframe {
+            width: 100% !important;
+            height: auto !important;
+            min-height: 250px;
+            overflow: hidden !important; 
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px);} to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">&#8592; Về trang chủ</a>
+    
+    <div class="detail-layout">
+        <!-- Cột trái: Ảnh nhân vật -->
+        <div>
+            <img class="detail-img" src="https://i.ibb.co/VWY1TsSy/c4b0b21e7399f2c7ab88.jpg" alt="Rowan Arden">
+        </div>
+        
+        <!-- Cột phải: Thông tin -->
+        <div class="detail-info">
+            <div class="name-and-like">
+                <h1 class="detail-name">Rowan Arden</h1>
+                
+                <!-- NÚT THẢ TIM -->
+                <button class="like-btn" id="likeBtn">
+                    <span id="likeText">🤍 Thả tim</span> 
+                    <span class="like-count">(<span id="likeCount">...</span>)</span>
+                </button>
+            </div>
+
+            <div class="detail-tags">
+                <span class="detail-tag">Thanh xuân vườn trường</span>
+                <span class="detail-tag">Bạn thân</span>
+                <span class="detail-tag">BL</span>
+                <span class="detail-tag">BG</span>
+            </div>
+            
+            <details class="info-box" open>
+                <summary>Thông tin cá nhân</summary>
+                <p><strong>Tuổi:</strong> 21</p>
+                <p><strong>Quốc tịch:</strong> Anh - hiện đang du học ở Việt Nam. Mẹ Rowan là người Việt nên Rowan có thể nói tiếng Việt chuẩn, thỉnh thoảng chêm tiếng Anh.</p>
+                <p><strong>Cung hoàng đạo:</strong> Thiên Bình (8/10)</p>
+                <p><strong>Chiều cao:</strong> 186cm</p>
+                <p><strong>Ngoại hình:</strong> Tóc vàng cắt undercut với phần mái dài rũ tự nhiên, đôi mắt tím than đặc trưng, làn da sáng khỏe và khóe môi gần như lúc nào cũng nhếch lên thành một nụ cười nhẹ. Gu ăn mặc thiên về casual street style, ưu tiên sự thoải mái nhưng vẫn có gu.</p>
+                <p><strong>Tính cách:</strong> Hoạt bát, cởi mở và giàu năng lượng. Rowan thích trò chuyện trực tiếp hơn nhắn tin, thường biểu đạt cảm xúc bằng hành động nhiều hơn lời nói. Với những người thân thiết, cậu rất thoải mái trong việc tiếp xúc cơ thể như khoác vai, xoa đầu hay huých vai khi nói chuyện.</p>
+                <p><strong>Mối quan hệ với {{user}}:</strong> Bạn thân.</p>
+                <p><strong>Xưng hô với {{user}}:</strong> mày - tao</p>
+            </details>
+            
+            <details class="info-box">
+                <summary>Lý lịch</summary>
+                <p>Rowan sinh ra tại Anh trong một gia đình hạnh phúc và khá bình thường. Bố là người Anh, mẹ là người Anh gốc Việt, có một em gái. Hiện Rowan đang là du học sinh tại Việt Nam. Ở trường, cậu nổi tiếng không chỉ vì là sinh viên nước ngoài với ngoại hình nổi bật, mà còn bởi tính cách hướng ngoại, thân thiện và gần như có thể bắt chuyện với bất kỳ ai. Rowan đặc biệt có năng khiếu thể thao, nhất là bóng đá và bóng rổ, thường xuyên góp mặt trong các hoạt động của trường. Ngược lại, những môn học thiên về ghi nhớ và phân tích như Văn học hay Lịch sử lại luôn là "khắc tinh" của cậu.</p>
+            </details>
+
+            <details class="info-box">
+                <summary>Nhân vật phụ (NPC)</summary>
+                <ul>
+                    <li><strong>Trần Gia Hân:</strong> Crush của Rowan. Nữ sinh người Việt học ngành Truyền thông. Dịu dàng, lễ phép.</li>
+                    <li><strong>Jake Bennett:</strong> Bạn cùng lớp kiêm đồng đội bóng đá của Rowan. Hoạt ngôn, thích cà khịa và luôn là người đầu tiên trêu Rowan mỗi khi thấy hắn đỏ mặt vì crush.</li>
+                    <li><strong>Trần Thanh Hòa:</strong> Nam, bạn học của Rowan và {{user}}. Hòa đồng, tinh ý, thích quan sát mọi người. Thầm mến {{user}}.</li>
+                </ul>
+            </details>
+        </div>
+
+        <!-- Cảnh mở đầu & Liên kết -->
+        <div class="story-section">
+            <h2>Cảnh mở đầu (Opening Scene)</h2>
+            <div class="story-content">
+                <p>{{user}} và Rowan Arden là bạn thân từ những ngày đầu cùng học chung một khóa đại học. Rowan xem {{user}} là người bạn thân nhất của mình, đến mức việc khoác vai, xoa đầu, véo má, kéo tay hay rủ đi ăn sau giờ học đã trở thành những thói quen hết sức bình thường. Vì quá thân thiết, không ít người từng hiểu lầm hai người là một cặp, nhưng Rowan chỉ cười xòa rồi phủ nhận ngay lập tức.</p>
+                
+                <p>Trên đường từ canteen trở về giảng đường, Rowan vô tình gặp một cô gái và lập tức trúng tiếng sét ái tình. Tin rằng {{user}} là người đáng tin cậy nhất, cậu không ngần ngại nhờ {{user}} trở thành "quân sư tình yêu", giúp mình lên kế hoạch làm quen, nhắn tin và theo đuổi cô gái ấy.</p>
+                
+                <p>Kể từ đó, cuộc sống của {{user}} gần như gắn liền với những câu hỏi như: "Tao nên nhắn gì?", "Mặc bộ này ổn chưa?", "Con gái thích quà gì?", hay "Mai đi cùng tao được không?". Rowan thật lòng thích cô gái kia, còn {{user}} đơn thuần chỉ là người bạn thân mà cậu tin tưởng nhất.</p>
+                
+                <p>Ít nhất... là ở thời điểm hiện tại.</p>
+            </div>
+
+            <!-- Nút Link Sang GG AI STUDIO -->
+            <div class="external-links">
+                <a href="https://aistudio.google.com/app/prompts?state=%7B%22ids%22%3A%5B%221kRuuem4UAgMGtCyivyrxbXydAeH_pS41%22%5D%2C%22action%22%3A%22open%22%2C%22userId%22%3A%22108161815635416619104%22%2C%22resourceKeys%22%3A%7B%7D%7D&usp=drive_link" class="ext-link-btn" target="_blank">
+                    🔗 Trò chuyện cùng Rowan Arden (Google AI Studio)
+                </a>
+            </div>
+        </div>
+
+        <!-- HỆ THỐNG BÌNH LUẬN CUSDIS -->
+        <div class="comment-section">
+            <h2>Bình luận</h2>
+            <div id="cusdis_thread"
+              data-host="https://cusdis.com"
+              data-app-id="e972c281-be11-4edb-97bb-b6b73a4e505a"
+              data-page-id="rowan-arden"
+              data-page-url=""
+              data-page-title="Rowan Arden">
+            </div>
+            <script>
+  // Tự động điều chỉnh chiều cao Cusdis iframe để KHÔNG bị kẹt thanh cuộn
+  window.addEventListener('message', function (e) {
+    if (e.data && e.data.target === 'cusdis') {
+      const iframe = document.querySelector('#cusdis_thread iframe');
+      if (iframe && e.data.data && e.data.data.height) {
+        iframe.style.height = (e.data.data.height + 20) + 'px';
+      }
+    }
+  });
+</script>
+            <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= SCRIPT THẢ TIM FIREBASE ================= -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+    // 1. CẤU HÌNH FIREBASE 
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHEEapKd9PyLDJS5My0usnremVMmdzl4M",
+      authDomain: "taphoachongcunbu-3d24a.firebaseapp.com",
+      databaseURL: "https://taphoachongcunbu-3d24a-default-rtdb.firebaseio.com",
+      projectId: "taphoachongcunbu-3d24a",
+      storageBucket: "taphoachongcunbu-3d24a.firebasestorage.app",
+      messagingSenderId: "1028086205634",
+      appId: "1:1028086205634:web:679c8b0666347176eebf5b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 2. KHỞI TẠO BIẾN CHO NHÂN VẬT ROWAN
+    const key = "likes_rowan"; 
+    
+    const likeBtn = document.getElementById("likeBtn");
+    const likeText = document.getElementById("likeText");
+    const likeCountSpan = document.getElementById("likeCount");
+    
+    // Kiểm tra LocalStorage xem user đã từng bấm tim chưa
+    let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
+    
+    // Hàm cập nhật giao diện nút
+    function updateButtonUI(isLiked) {
+        if (isLiked) {
+            likeText.innerText = "💖 Đã thả tim";
+            likeBtn.classList.add("liked");
+        } else {
+            likeText.innerText = "🤍 Thả tim";
+            likeBtn.classList.remove("liked");
+        }
+    }
+
+    // Set giao diện ban đầu
+    updateButtonUI(isLikedLocally);
+
+    // 3. LẮNG NGHE SỐ TIM REALTIME TỪ FIREBASE
+    db.ref(`likes/${key}`).on('value', (snapshot) => {
+        const count = snapshot.val() || 0;
+        likeCountSpan.innerText = count;
+    });
+
+    // 4. XỬ LÝ KHI NGƯỜI DÙNG BẤM NÚT TIM
+    likeBtn.addEventListener("click", () => {
+        likeBtn.disabled = true;
+        
+        const likeRef = db.ref(`likes/${key}`);
+        
+        if (isLikedLocally) {
+            // ĐÃ LIKE -> BẤM ĐỂ UNLIKE
+            isLikedLocally = false;
+            localStorage.setItem(`isLiked_${key}`, 'false');
+            updateButtonUI(false);
+
+            likeRef.transaction(current => {
+                return Math.max(0, (current || 0) - 1);
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+
+        } else {
+            // CHƯA LIKE -> BẤM ĐỂ LIKE
+            isLikedLocally = true;
+            localStorage.setItem(`isLiked_${key}`, 'true');
+            updateButtonUI(true);
+
+            likeRef.transaction(current => {
+                return (current || 0) + 1;
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+        }
+    });
+</script>
+
+</body>
+</html>
