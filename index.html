@@ -205,7 +205,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // ==========================================
+   // ==========================================
     // 3. DỮ LIỆU NHÂN VẬT 
     // ==========================================
     const ocData = [
@@ -228,15 +228,15 @@
             tags: ["hệ thống", "thanh xuân vườn trường", "BG", "BL"],
             personality: "lạnh lùng, học bá, nam chính, chung tình",
             story: "Tác hợp nam chính và nữ chính, nhưng nữ chính chỉ yêu bạn."
-        }
-         {
+        }, // <--- Nãy bồ thiếu dấu phẩy ở đây nè
+        {
             id: 3,
             name: "Rowan Arden", 
             slug: "rowan-arden.html", 
             likeKey: "likes_rowan",
             image: "https://i.ibb.co/VWY1TsSy/c4b0b21e7399f2c7ab88.jpg",
             tags: ["char đã có crush", "thanh xuân vườn trường", "BG", "BL"],
-            personality: "dương quang", "trai thể thao", "friendzone", "ngoại quốc",
+            personality: "dương quang, trai thể thao, friendzone, ngoại quốc", // <--- Đã sửa thành 1 chuỗi thống nhất
             story: "Thằng bạn thân không yêu bạn."
         }
     ];
