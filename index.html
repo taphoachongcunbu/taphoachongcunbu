@@ -264,7 +264,7 @@
         <button class="close-chat" onclick="toggleChat()">✖</button>
     </div>
     <div class="chat-body" id="chatBody">
-        <div class="msg msg-bot">Chào bạn! Bạn đang tìm nhân vật theo gu nào (BL, Việt Nam xưa, trầm ổn, lạnh lùng...)? Hãy nói cho tui biết nhé!</div>
+        <div class="msg msg-bot">Chào bạn! Bạn đang tìm nhân vật theo gu nào (Ví dụ: tu tiên, lạnh lùng, tổng tài...)? Cứ nói cho tui biết nhé!</div>
     </div>
     <div class="chat-footer">
         <input type="text" id="chatInput" class="chat-input" placeholder="Nhập gu của bạn..." onkeypress="handleEnter(event)">
@@ -698,7 +698,7 @@
     }
 
     // ==========================================
-    // 5. LOGIC CHATBOT AI
+    // 5. LOGIC CHATBOT AI (CẬP NHẬT TỰ ĐỘNG LẤY TỪ KHÓA TỪ OCDATA)
     // ==========================================
     const chatWindow = document.getElementById("chatWindow");
     const chatBody = document.getElementById("chatBody");
@@ -736,36 +736,25 @@
 
     function botBrain(input) {
         const cleanInput = input.toLowerCase();
-
-        // 1. BỘ TỪ ĐIỂN CHUẨN: Bot chỉ phản ứng nếu câu của khách có chứa chữ trong này
-        const validKeywords = [
-            "bl", "bg", "việt nam", "xưa", "thầy thuốc", "trầm ổn", "kiệm lời", "lạnh lùng", "dịu dàng",
-            "hệ thống", "thanh xuân", "vườn trường", "học đường", "học bá", "nam chính", "chung tình",
-            "crush", "bạn thân", "dương quang", "thể thao", "friendzone", "ngoại quốc",
-            "niên hạ", "tâm cơ", "thiếu gia", "trà xanh", "nham hiểm", "mưu mô", "phúc hắc", "antifan",
-            "tổng tài", "mang thai", "xuyên không", "tsundere", "redflag", "rapper", "nũng nịu",
-            "công sở", "thú nhân", "tu tiên", "cổ trang", "sư tôn", "ngược", "chủ - tớ", "419",
-            "nhiếp chính vương", "yêu thầm", "kén ăn", "incubus", "hèn"
-        ];
-
-        // 2. Lọc xem câu của khách có gõ trúng từ khóa xịn nào không
-        let foundWords = validKeywords.filter(kw => cleanInput.includes(kw));
-
-        // Nếu khách gõ cái gì đó mặn chát không dính líu tới game
-        if (foundWords.length === 0) {
-            return `Trùi ui, chắc là hổng có rùi á! 😭<br>Bạn thử nhập khác (ví dụ: BL, thầy thuốc, niên hạ, trà xanh...) xem sao nha! 🥺`;
-        }
-
         let matches = []; 
 
-        // 3. Quét các từ khóa HỢP LỆ vào data nhân vật
+        // Quét từng nhân vật và tự động trích xuất Tên, Tag, Tính cách để đối chiếu
         ocData.forEach(oc => {
             let score = 0;
-            // Chỉ lấy Tên, Tag và Tính cách ra để chấm điểm, bỏ qua cốt truyện tránh bắt nhầm
-            const dataString = (oc.name + " " + oc.tags.join(" ") + " " + oc.personality).toLowerCase();
             
-            foundWords.forEach(kw => {
-                if(dataString.includes(kw)) {
+            // 1. Chuyển tags thành mảng chữ thường
+            let tags = oc.tags.map(t => t.toLowerCase());
+            
+            // 2. Chuyển tính cách thành mảng chữ thường (tách bằng dấu phẩy)
+            let personalities = oc.personality.split(',').map(p => p.trim().toLowerCase());
+            
+            // 3. Gom hết Tên + Tags + Tính cách thành "từ khóa độc quyền" của nhân vật này
+            let charKeywords = [...tags, ...personalities, oc.name.toLowerCase()];
+            
+            // 4. So sánh: nếu câu của khách chứa TỪ KHÓA ĐỘC QUYỀN thì cộng điểm
+            charKeywords.forEach(kw => {
+                // Bỏ qua các từ khóa quá rỗng hoặc không hợp lệ
+                if(kw && cleanInput.includes(kw)) {
                     score++;
                 }
             });
@@ -775,9 +764,9 @@
             }
         });
 
-        // 4. Trả kết quả
+        // Trả kết quả
         if(matches.length > 0) {
-            // Đứa nào khớp nhiều từ nhất thì lên đầu
+            // Sắp xếp ai điểm cao (khớp nhiều từ khóa nhất) lên đầu
             matches.sort((a, b) => b.score - a.score);
 
             let response = `Tui tìm thấy vài gương mặt cực kỳ hợp gu với bạn nè! 🥰<br><br>`;
@@ -789,12 +778,12 @@
             });
 
             if (matches.length > 3) {
-                response += `<i>(Vẫn còn ${matches.length - 3} người nữa hợp gu. Bạn thử gõ thêm từ khóa để tui lọc kỹ hơn nha! 🤔)</i>`;
+                response += `<i>(Vẫn còn ${matches.length - 3} người nữa hợp gu. Bạn có thể miêu tả thêm để tui lọc kỹ hơn nha! 🤔)</i>`;
             }
 
             return response;
         } else {
-            return `Trùi ui, hiện tại tui chưa có nhân vật nào khớp với gu này. Bạn thử nhập từ khóa khác xem sao nha! 🥺`;
+            return `Trùi ui, hiện tại tui chưa có nhân vật nào khớp với gu này. Bạn thử dùng các từ khóa khác (ví dụ: lạnh lùng, tổng tài, niên hạ...) xem sao nha! 🥺`;
         }
     }
 
