@@ -272,6 +272,7 @@
                 let isLikedLocally = localStorage.getItem(`isLiked_${oc.likeKey}`) === 'true';
                 let heartIcon = isLikedLocally ? '❤️' : '🤍';
 
+                // Mới vô để "..." để ám chỉ đang tải dữ liệu tim
                 card.innerHTML = `
                     <img class="card-img" src="${oc.image}" alt="${oc.name}">
                     <div class="card-info">
@@ -279,20 +280,28 @@
                         <!-- Nút tim gọi hàm toggleLike -->
                         <button class="card-likes" id="like-btn-${oc.id}" onclick="toggleLike(event, '${oc.likeKey}', ${oc.id})">
                             <span id="heart-icon-${oc.id}">${heartIcon}</span> 
-                            <span id="like-count-${oc.id}">0</span>
+                            <span id="like-count-${oc.id}">...</span>
                         </button>
                     </div>
                 `;
                 galleryGrid.appendChild(card);
 
-                // GỌI API LẤY SỐ TIM THỰC TẾ
+                // GỌI API LẤY SỐ TIM - GẮN THÊM ?t=... ĐỂ ÉP LẤY DATA MỚI NHẤT, CHỐNG CACHE
                 if (oc.likeKey) {
-                    fetch(`https://api.counterapi.dev/v1/taphoa_oc/${oc.likeKey}`)
+                    fetch(`https://api.counterapi.dev/v1/taphoa_oc/${oc.likeKey}?t=${Date.now()}`)
                         .then(res => res.json())
                         .then(apiData => {
-                            // Cập nhật số thực tế (nếu chưa ai like thì count trả về có thể undefined, ta gán 0)
-                            document.getElementById(`like-count-${oc.id}`).innerText = apiData.count || 0;
-                        }).catch(e => console.log("Lỗi tải tim"));
+                            // Nếu API trả về cục data có chứa số (count)
+                            if(apiData && apiData.count !== undefined) {
+                                document.getElementById(`like-count-${oc.id}`).innerText = apiData.count;
+                            } else {
+                                // Nếu API báo lỗi chưa ai thả tim (404 Not Found)
+                                document.getElementById(`like-count-${oc.id}`).innerText = 0;
+                            }
+                        }).catch(e => {
+                            console.log("Lỗi tải tim");
+                            document.getElementById(`like-count-${oc.id}`).innerText = 0;
+                        });
                 }
             });
         }
@@ -300,7 +309,7 @@
 
     // Hàm Xử lý Thả Tim / Bỏ Tim ở Trang Chủ
     function toggleLike(event, likeKey, id) {
-        // Ngăn chặn sự kiện click lan ra thẻ <a> (giúp không bị nhảy trang)
+        // Chặn chuyển trang khi bấm vào nút tim
         event.preventDefault();
         event.stopPropagation();
 
@@ -308,31 +317,37 @@
         const iconSpan = document.getElementById(`heart-icon-${id}`);
         const countSpan = document.getElementById(`like-count-${id}`);
         
-        // Khóa nút tạm thời tránh spam
+        // Khóa nút tạm thời tránh spam click liên tục
         btn.disabled = true;
 
         let isLikedLocally = localStorage.getItem(`isLiked_${likeKey}`) === 'true';
+        
+        // Nếu nó đang hiện "..." mà user bấm luôn thì coi như số cũ là 0
         let currentCount = parseInt(countSpan.innerText) || 0;
 
         if (isLikedLocally) {
             // ĐANG LIKE -> BẤM UNLIKE
             localStorage.setItem(`isLiked_${likeKey}`, 'false');
             iconSpan.innerText = '🤍';
-            countSpan.innerText = Math.max(0, currentCount - 1); // Trừ đi 1, không cho xuống âm
+            countSpan.innerText = Math.max(0, currentCount - 1);
 
-            fetch(`https://api.counterapi.dev/v1/taphoa_oc/${likeKey}/down`)
+            fetch(`https://api.counterapi.dev/v1/taphoa_oc/${likeKey}/down?t=${Date.now()}`)
                 .then(res => res.json())
-                .then(data => countSpan.innerText = data.count || 0)
+                .then(data => {
+                    if (data && data.count !== undefined) countSpan.innerText = data.count;
+                })
                 .finally(() => btn.disabled = false);
         } else {
             // CHƯA LIKE -> BẤM LIKE
             localStorage.setItem(`isLiked_${likeKey}`, 'true');
             iconSpan.innerText = '❤️';
-            countSpan.innerText = currentCount + 1; // Cộng 1
+            countSpan.innerText = currentCount + 1;
 
-            fetch(`https://api.counterapi.dev/v1/taphoa_oc/${likeKey}/up`)
+            fetch(`https://api.counterapi.dev/v1/taphoa_oc/${likeKey}/up?t=${Date.now()}`)
                 .then(res => res.json())
-                .then(data => countSpan.innerText = data.count || 0)
+                .then(data => {
+                    if (data && data.count !== undefined) countSpan.innerText = data.count;
+                })
                 .finally(() => btn.disabled = false);
         }
     }
