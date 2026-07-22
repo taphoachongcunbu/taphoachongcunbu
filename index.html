@@ -30,6 +30,39 @@
         /* --- Header & Title --- */
         header { text-align: center; margin-bottom: 40px; animation: fadeIn 0.8s ease; }
         h1 { font-family: var(--font-serif); font-size: 3.5rem; color: var(--primary-color); margin-bottom: 10px; font-weight: 700; }
+        header p { color: var(--text-light); font-size: 1.1rem; }
+
+        /* --- Nút Mạng Xã Hội (Facebook & TikTok) --- */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: var(--card-bg);
+            color: var(--primary-color);
+            border-radius: 50%;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .social-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+        .social-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(114, 47, 55, 0.2);
+        }
 
         /* --- Controls: Search & Tags --- */
         .controls { display: flex; flex-direction: column; align-items: center; gap: 20px; margin-bottom: 40px; }
@@ -177,6 +210,23 @@
         <header>
             <h1>Tạp Hóa Chồng Cún Bự</h1>
             <p>Nơi lưu giữ những đứa con tinh thần</p>
+            
+            <!-- NÚT MẠNG XÃ HỘI TẠI ĐÂY -->
+            <div class="social-links">
+                <!-- Nút Facebook -->
+                <a href="https://www.facebook.com/profile.php?id=61592031838939" target="_blank" class="social-btn" title="Ghé thăm Facebook của tui">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                        <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>
+                    </svg>
+                </a>
+                
+                <!-- Nút TikTok -->
+                <a href="https://www.tiktok.com/@taphoachongcunbu?_r=1&_t=ZS-98Ei6ZPv5s2" target="_blank" class="social-btn" title="Ghé thăm TikTok của tui">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/>
+                    </svg>
+                </a>
+            </div>
         </header>
 
         <div class="controls">
@@ -234,7 +284,7 @@
     const db = firebase.database();
 
     // ==========================================
-    // 3. DỮ LIỆU NHÂN VẬT (Đã cập nhật Slogan)
+    // 3. DỮ LIỆU NHÂN VẬT 
     // ==========================================
     const ocData = [
         {
