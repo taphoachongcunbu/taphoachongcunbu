@@ -34,6 +34,7 @@
         /* ================= QUẢN LÝ KÍCH THƯỚC ẢNH ================= */
         .detail-img, .story-images img { 
             max-height: 480px; 
+            max-width: 100%;
             width: auto; 
             object-fit: contain; 
             margin: 0 auto; 
@@ -42,7 +43,7 @@
         }
 
         /* ================= TIÊU ĐỀ & NÚT TIM ================= */
-        .detail-info { display: flex; flex-direction: column; gap: 15px; }
+        .detail-info { display: flex; flex-direction: column; gap: 15px; width: 100%; }
         .name-and-like { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
         .detail-name { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-color); line-height: 1.2; }
         
@@ -88,7 +89,7 @@
         details.info-box p, details.info-box ul { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
         details.info-box ul { padding-left: 20px; }
         details.info-box li { margin-bottom: 8px; }
-        .sys-text { color: #d6642d; font-weight: 600; font-family: monospace; font-size: 1rem;}
+        .sys-text { color: #d6642d; font-weight: 600; font-family: monospace; font-size: 1rem; word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap; }
 
         /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
         .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
@@ -108,6 +109,10 @@
             font-family: var(--font-body);
             transition: 0.3s;
             box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+            max-width: 100%;
+            text-align: center;
+            word-break: break-word;
+            white-space: normal;
         }
         .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
 
@@ -140,12 +145,12 @@
         
         .no-comment { text-align: center; color: var(--text-light); font-style: italic; padding: 20px 0; }
 
-        /* ================= RESPONSIVE ================= */
         /* ================= FIX LỖI GIAO DIỆN ĐIỆN THOẠI ================= */
         @media (max-width: 768px) { 
-            .detail-layout { grid-template-columns: 1fr; padding: 15px; gap: 20px; } 
-            .container { padding: 20px 15px; overflow-x: hidden; }
-            body { overflow-x: hidden; }
+            .detail-layout { grid-template-columns: 1fr; padding: 20px 15px; gap: 20px; } 
+            .container { padding: 20px 10px; overflow-x: hidden; }
+            body, html { overflow-x: hidden; max-width: 100vw; }
+            .detail-img { max-width: 100% !important; height: auto !important; }
             .detail-name { font-size: 2rem; }
             .story-section h2 { font-size: 1.5rem; }
             * { word-wrap: break-word; overflow-wrap: break-word; }
@@ -159,10 +164,10 @@
     <a href="index.html" class="back-btn">&#8592; Về trang chủ</a>
     
     <div class="detail-layout">
-    <!-- Cột trái: Ảnh nhân vật -->
-    <div>
-        <img class="detail-img" src="https://i.ibb.co/bMR7xgcq/229c14aef62a77742e3b.jpg" alt="Triển Húc">
-    </div>
+        <!-- Cột trái: Ảnh nhân vật -->
+        <div>
+            <img class="detail-img" src="https://i.ibb.co/bMR7xgcq/229c14aef62a77742e3b.jpg" alt="Triển Húc">
+        </div>
         
         <!-- Cột phải: Thông tin -->
         <div class="detail-info">
@@ -270,7 +275,6 @@
 </div>
 
 <!-- ================= SCRIPT THẢ TIM & BÌNH LUẬN FIREBASE ================= -->
-<!-- Khai báo thư viện Firebase từ CDN -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
@@ -350,18 +354,16 @@
     // ==========================================
     // 5. HỆ THỐNG BÌNH LUẬN REALTIME (TỰ LÀM)
     // ==========================================
-    const commentKey = `comments_${key}`; // Lấy luôn key của nhân vật để làm kho chứa bình luận
+    const commentKey = `comments_${key}`;
     const commentList = document.getElementById("commentList");
     const commentName = document.getElementById("commentName");
     const commentText = document.getElementById("commentText");
     const submitCommentBtn = document.getElementById("submitCommentBtn");
 
-    // Hàm mã hóa chống hack (XSS) khi user nhập code bậy bạ
     const escapeHTML = str => str.replace(/[&<>'"]/g, tag => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
     }[tag]));
 
-    // LẮNG NGHE BÌNH LUẬN LIVE TỪ FIREBASE
     db.ref(commentKey).on('value', (snapshot) => {
         commentList.innerHTML = ""; 
         const data = snapshot.val();
@@ -371,7 +373,6 @@
             return;
         }
 
-        // Chuyển object thành mảng và sắp xếp MỚI NHẤT lên đầu
         const comments = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
 
         comments.forEach(cmt => {
@@ -392,7 +393,6 @@
         });
     });
 
-    // XỬ LÝ GỬI BÌNH LUẬN
     submitCommentBtn.addEventListener("click", () => {
         const nameVal = commentName.value.trim();
         const textVal = commentText.value.trim();
@@ -403,7 +403,6 @@
         submitCommentBtn.disabled = true;
         submitCommentBtn.innerText = "Đang gửi...";
 
-        // Bắn lên Firebase
         db.ref(commentKey).push({
             name: nameVal,
             text: textVal,
