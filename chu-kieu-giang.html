@@ -88,7 +88,7 @@
         details.info-box p, details.info-box ul { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
         details.info-box ul { padding-left: 20px; }
         details.info-box li { margin-bottom: 8px; }
-        .sys-text { color: #d6642d; font-weight: 600; font-family: monospace; font-size: 1rem;}
+        .sys-text { color: #d6642d; font-weight: 600; font-family: monospace; font-size: 1rem; word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap; }
 
         /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
         .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
@@ -107,6 +107,10 @@
             font-family: var(--font-body);
             transition: 0.3s;
             box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+            max-width: 100%;
+            text-align: center;
+            word-break: break-word;
+            white-space: normal;
         }
         .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
 
@@ -139,8 +143,7 @@
         
         .no-comment { text-align: center; color: var(--text-light); font-style: italic; padding: 20px 0; }
 
-        /* ================= RESPONSIVE ================= */
-        /* ================= FIX LỖI GIAO DIỆN ĐIỆN THOẠI ================= */
+        /* ================= RESPONSIVE FIX GIAO DIỆN ĐIỆN THOẠI ================= */
         @media (max-width: 768px) { 
             .detail-layout { grid-template-columns: 1fr; padding: 15px; gap: 20px; } 
             .container { padding: 20px 15px; overflow-x: hidden; }
@@ -223,10 +226,7 @@
         <div class="story-section">
             <h2>Cảnh mở đầu (Opening Scene)</h2>
             <div class="story-content">
-                <p class="sys-text">
-                    ⏳ Bối cảnh, giờ: Hành lang tầng 7 - khách sạn Minh Hoa, 21:47<br>
-                    ❤ Độ hạnh phúc: 3/10 | 💢 Độ tức giận: 4/10 | 🍆 Độ cương: 0/10
-                </p>
+                <p class="sys-text">⏳ Bối cảnh, giờ: Hành lang tầng 7 - khách sạn Minh Hoa, 21:47<br>❤ Độ hạnh phúc: 3/10 | 💢 Độ tức giận: 4/10 | 🍆 Độ cương: 0/10</p>
 
                 <p>Góc hành lang cuối dãy vắng như tờ. Ánh đèn vàng nhạt hắt xuống nền thảm đỏ sẫm, im lìm đến mức tiếng gót giày của chính bạn nghe rõ mồn một theo từng bước.</p>
 
