@@ -493,50 +493,78 @@
     }
 
     function botBrain(input) {
-        const keywords = input.toLowerCase().split(/\s+/);
-        let matches = []; // Mảng chứa tất cả nhân vật có điểm khớp
+        // 1. Chuẩn hóa & xóa dấu câu
+        const cleanInput = input.toLowerCase().replace(/[.,!?;:()]/g, "");
+        let keywords = cleanInput.split(/\s+/);
+
+        // 2. Danh sách "Từ Rác" mở rộng (Lọc sạch các từ chung chung tiếng Việt)
+        const stopWords = [
+            "tui", "muốn", "tìm", "nhân", "vật", "có", "là", "thì", "mà", "cho", "được", "bị", "những", 
+            "của", "với", "không", "nào", "thích", "gu", "nha", "nhé", "nè", "ơi", "ạ", "chút", "hơi", 
+            "rất", "quá", "kiếm", "ông", "bà", "anh", "em", "tuổi", "trong", "hình", "dạng", "chàng", 
+            "trai", "người", "bạn", "cùng", "nhà", "ra", "vào", "đến", "đi", "làm", "thấy", "xem", 
+            "sau", "trước", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín", "mười"
+        ];
+
+        keywords = keywords.filter(kw => kw.length > 1 && !stopWords.includes(kw));
+
+        // Nếu lọc xong mà không còn từ khóa nào có nghĩa
+        if (keywords.length === 0) {
+            return "Trùi ui, bồ gõ từ khóa cụ thể hơn xíu (ví dụ: BL, thầy thuốc, học đường, trà xanh...) để tui lọc nha! 🐶";
+        }
+
+        let matches = []; 
 
         ocData.forEach(oc => {
             let score = 0;
-            // Gộp data để quét
-            const dataString = (oc.tags.join(" ") + " " + oc.personality + " " + oc.story + " " + oc.name).toLowerCase();
-            
+            const nameStr = oc.name.toLowerCase();
+            const tagsStr = oc.tags.join(" ").toLowerCase();
+            const personalityStr = oc.personality.toLowerCase();
+            const storyStr = (oc.story + " " + oc.slogan).toLowerCase();
+
             keywords.forEach(kw => {
-                if(dataString.includes(kw)) score++;
+                // Ưu tiên 1: Trúng Tên hoặc Tag chuẩn -> Cộng hẳn 5 điểm
+                if (tagsStr.includes(kw) || nameStr.includes(kw)) {
+                    score += 5;
+                } 
+                // Ưu tiên 2: Trúng Từ trong Tính cách -> Cộng 3 điểm
+                else if (personalityStr.includes(kw)) {
+                    score += 3;
+                }
+                // Ưu tiên 3: Trúng từ trong Cốt truyện/Slogan -> Chỉ cộng 1 điểm
+                else if (storyStr.includes(kw)) {
+                    score += 1;
+                }
             });
 
-            // Nếu khớp ít nhất 1 từ khóa, đưa vào danh sách
-            if(score > 0) {
+            // NGƯỠNG LỌC: Phải đạt tối thiểu 2 điểm trở lên mới tính là khớp gu!
+            if(score >= 2) {
                 matches.push({ oc: oc, score: score });
             }
         });
 
-        // Nếu có nhân vật phù hợp
+        // 3. Trả về kết quả
         if(matches.length > 0) {
-            // Sắp xếp mảng từ điểm cao xuống điểm thấp (ai hợp gu nhất lên đầu)
+            // Sắp xếp ai điểm cao nhất lên đầu
             matches.sort((a, b) => b.score - a.score);
 
             let response = `Tui tìm thấy vài gương mặt cực kỳ hợp gu với bạn nè! 🥰<br><br>`;
             
-            // Lấy tối đa 3 người hợp nhất để show ra tránh bị dài quá
             let topMatches = matches.slice(0, 3);
-
             topMatches.forEach(match => {
                 response += `✨ <strong>${match.oc.name}</strong><br>
                              <a href="${match.oc.slug}">👉 Xem chi tiết ngay và luôn</a><br><br>`;
             });
 
-            // Nếu còn nhiều hơn 3 người, mớm thêm câu hỏi cho người dùng (Cách 2)
             if (matches.length > 3) {
-                response += `<i>(Vẫn còn ${matches.length - 3} người nữa hợp gu. Bạn thử gõ thêm từ khóa như "học đường", "dịu dàng"... để tui lọc kỹ hơn nha! 🤔)</i>`;
+                response += `<i>(Vẫn còn ${matches.length - 3} người nữa hợp gu. Bạn thử gõ thêm từ khóa để tui lọc kỹ hơn nha! 🤔)</i>`;
             }
 
             return response;
         } else {
-            return `Trùi ui, hiện tại tui chưa có nhân vật nào khớp với gu này. Bạn thử nhập từ khóa khác (ví dụ: BL, hệ thống, trầm ổn...) xem sao nha! 🥺`;
+            return `Trùi ui, hiện tại tui chưa có nhân vật nào khớp với gu độc lạ này đâu nè! 😭<br>Bạn thử nhập từ khóa khác (ví dụ: BL, thầy thuốc, niên hạ, học đường...) xem sao nha! 🥺`;
         }
     }
-
     // Khởi chạy web
     init();
 
