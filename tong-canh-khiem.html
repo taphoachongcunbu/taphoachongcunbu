@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tống Cảnh Khiêm - Tạp Hóa Chồng Cún Bự</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================= CƠ BẢN ================= */
+        :root {
+            --bg-color: #F8F5F0; 
+            --primary-color: #722F37; 
+            --primary-hover: #5a242b;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --card-bg: #FFFFFF;
+            --font-serif: 'Playfair Display', serif;
+            --font-body: 'Lora', serif; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .back-btn { display: inline-block; background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-size: 1rem; margin-bottom: 30px; transition: 0.3s; }
+        .back-btn:hover { background-color: var(--primary-hover); }
+
+        .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        
+        /* ================= QUẢN LÝ KÍCH THƯỚC ẢNH ================= */
+        .detail-img { 
+            max-height: 480px; 
+            width: auto; 
+            object-fit: contain; 
+            margin: 0 auto; 
+            display: block; 
+            border-radius: 12px;
+        }
+
+        /* ================= TIÊU ĐỀ & NÚT TIM ================= */
+        .detail-info { display: flex; flex-direction: column; gap: 15px; }
+        .name-and-like { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
+        .detail-name { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-color); line-height: 1.2; }
+        
+        /* Nút Tim chống Spam */
+        .like-btn { 
+            background-color: transparent; 
+            border: 2px solid var(--primary-color); 
+            color: var(--primary-color); 
+            padding: 8px 16px; 
+            border-radius: 50px; 
+            font-size: 1.1rem; 
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer; 
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .like-btn:hover:not(:disabled) { background-color: rgba(114, 47, 55, 0.1); transform: translateY(-2px); }
+        .like-btn:disabled { 
+            background-color: var(--primary-color); 
+            color: white; 
+            cursor: not-allowed; 
+            border-color: var(--primary-color);
+            opacity: 0.9;
+        }
+        /* Trạng thái khi đã thả tim */
+        .like-btn.liked {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .detail-tag { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;}
+        
+        /* ================= ACCORDION (THẺ DETAILS) ================= */
+        details.info-box { background: var(--bg-color); padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        details.info-box summary { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-color); font-weight: 700; list-style: none; outline: none; display: flex; justify-content: space-between; }
+        details.info-box summary::-webkit-details-marker { display: none; }
+        details.info-box summary::after { content: '+'; font-size: 1.5rem; transition: transform 0.3s;}
+        details[open].info-box summary::after { content: '-'; }
+        details.info-box p, details.info-box ul { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
+        details.info-box ul { padding-left: 20px; }
+        details.info-box li { margin-bottom: 8px; }
+
+        /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
+        .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
+        .story-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; font-size: 2rem; }
+        .story-content { margin-bottom: 30px; }
+        .story-content p { margin-bottom: 15px; text-align: justify; }
+
+        .external-links { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 15px; }
+        .ext-link-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: var(--font-body);
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+        }
+        .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
+
+        /* ================= HỆ THỐNG BÌNH LUẬN TỰ LÀM ================= */
+        .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
+        .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
+        
+        .comment-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .comment-form input, .comment-form textarea {
+            width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-family: var(--font-body); font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        .comment-form input:focus, .comment-form textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 5px rgba(114, 47, 55, 0.2); }
+        .comment-form textarea { resize: vertical; min-height: 80px; }
+        
+        .comment-btn {
+            align-self: flex-end; background-color: var(--primary-color); color: white; border: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .comment-btn:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .comment-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        .comment-list { display: flex; flex-direction: column; gap: 15px; max-height: 500px; overflow-y: auto; padding-right: 10px; }
+        .comment-list::-webkit-scrollbar { width: 6px; }
+        .comment-list::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 10px; }
+        
+        .comment-item { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); animation: fadeIn 0.4s ease; border-left: 4px solid var(--primary-color); }
+        .comment-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .comment-name { font-weight: bold; color: var(--primary-color); font-size: 1.05rem; }
+        .comment-time { font-size: 0.8rem; color: #888; }
+        .comment-text { color: var(--text-dark); white-space: pre-wrap; line-height: 1.5; font-size: 0.95rem; }
+        
+        .no-comment { text-align: center; color: var(--text-light); font-style: italic; padding: 20px 0; }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px);} to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">&#8592; Về trang chủ</a>
+    
+    <div class="detail-layout">
+        <!-- Cột trái: Ảnh nhân vật -->
+        <div>
+            <img class="detail-img" src="https://i.postimg.cc/pXTBw59N/058a5588f80f7951201e.jpg" alt="Tống Cảnh Khiêm">
+        </div>
+        
+        <!-- Cột phải: Thông tin -->
+        <div class="detail-info">
+            <div class="name-and-like">
+                <h1 class="detail-name">Tống Cảnh Khiêm</h1>
+                
+                <!-- NÚT THẢ TIM -->
+                <button class="like-btn" id="likeBtn">
+                    <span id="likeText">🤍 Thả tim</span> 
+                    <span class="like-count">(<span id="likeCount">...</span>)</span>
+                </button>
+            </div>
+
+            <div class="detail-tags">
+                <span class="detail-tag">Tổng tài</span>
+                <span class="detail-tag">Xuyên không</span>
+                <span class="detail-tag">Hèn</span>
+                <span class="detail-tag">BL</span>
+                <span class="detail-tag">BG</span>
+            </div>
+            
+            <details class="info-box" open>
+                <summary>Thông tin cá nhân</summary>
+                <p><strong>Tuổi:</strong> 29 tuổi</p>
+                <p><strong>Chức vụ:</strong> Tổng giám đốc tập đoàn Cảnh Thịnh, đồng thời là nam chính trong một cuốn tiểu thuyết ngôn tình hiện đại.</p>
+                <p><strong>Cung hoàng đạo:</strong> Ma Kết (12/01). Điềm tĩnh, kỷ luật, lý trí, ít biểu lộ cảm xúc và không thích để người khác nhìn thấy trạng thái thật.</p>
+                <p><strong>Chiều cao:</strong> 189cm. Cao lớn, tỷ lệ cân đối, khí chất áp chế tự nhiên; luôn giữ tư thế thẳng và chỉnh tề khiến người khác khó tiếp cận.</p>
+                <p><strong>Ngoại hình:</strong> Tóc ngắn kiểu Ivy League với độ dài gọn gàng, có độ phồng tự nhiên, màu nâu hạt dẻ trầm. Mắt màu hazel pha giữa xanh và nâu. Đường nét gương mặt sắc nét, biểu cảm ít, hiếm khi cười hoặc để lộ cảm xúc rõ ràng nên thường bị hiểu lầm là lạnh lùng hoặc khó gần. Khi ngượng hoặc lúng túng, phản ứng dễ nhận thấy nhất là tai đỏ lên trước.</p>
+                <p><strong>Năng lực:</strong> Được xem là thiên tài hiếm có trong giới kinh doanh. Thành thạo 7 ngôn ngữ (Trung, Anh, Nhật, Hàn, Pháp, Đức và Ý), sở hữu trí nhớ xuất sắc cùng khả năng phân tích gần như tuyệt đối. Từng tốt nghiệp thủ khoa tại trường đại học danh tiếng ở nước ngoài, am hiểu tài chính, đầu tư, luật thương mại và quản trị doanh nghiệp. Ngoài công việc còn biết chơi piano, cưỡi ngựa, đấu kiếm, chơi golf, bắn súng thể thao, pha cà phê thủ công và nấu ăn ở mức chuyên nghiệp. Bất cứ kỹ năng nào hắn học cũng rất nhanh.</p>
+                <p><strong>Mối quan hệ với {{user}}:</strong> Cấp trên và nhân viên, ngoài mặt là quan hệ công việc bình thường nhưng từng xảy ra va chạm khiến bầu không khí hơi khó xử.</p>
+            </details>
+            
+            <details class="info-box">
+                <summary>Bối cảnh (Backstory)</summary>
+                <p>{{user}} tỉnh dậy và phát hiện bản thân đã xuyên vào một thế giới hiện đại xa lạ, nhưng rất nhanh nhận ra đây là cốt truyện ngôn tình tổng tài quen thuộc: nam chính là Tống Cảnh Khiêm — tổng giám đốc trẻ tuổi, lạnh lùng, hoàn hảo và luôn được cả thế giới ưu ái; nữ chính là Lý Như Hoa — cô thư ký dịu dàng, hơi vụng về nhưng luôn vô thức khiến người khác muốn bảo vệ.</p>
+                <p>Theo diễn biến bình thường, hai người sẽ gặp gỡ qua những tình huống nhỏ nhặt, hiểu lầm rồi yêu nhau, còn những nhân vật khác chỉ là nền. {{user}} vốn không có ý định can thiệp, chỉ muốn làm nhân viên bình thường.</p>
+                <p>Nhưng vào một ngày tưởng như rất bình thường, Lý Như Hoa vô tình vấp ngã ngay gần {{user}}, Tống Cảnh Khiêm lập tức lao tới đỡ cô rồi theo phản xạ cho rằng {{user}} là nguyên nhân. Sau vài câu trách móc vô lý, {{user}} nổi nóng và quăng nguyên cái cặp vào mặt tổng tài. Kể từ khoảnh khắc đó, cốt truyện bắt đầu lệch hướng. {{user}} chỉ muốn sống yên ổn, nhưng hình như nam chính thì không nghĩ vậy.</p>
+            </details>
+
+            <details class="info-box">
+                <summary>Quan hệ công khai (NPC)</summary>
+                <ul>
+                    <li><strong>Lý Như Hoa:</strong> Nữ chính tiểu thuyết. Vụng về, ngốc nghếch.</li>
+                    <li><strong>Trần Duy Thành:</strong> Trợ lý thân cận của Tống Cảnh Khiêm.</li>
+                    <li><strong>Hạ Mộc Thanh:</strong> Bạn thân của Tống Cảnh Khiêm.</li>
+                </ul>
+            </details>
+        </div>
+
+        <!-- Cảnh mở đầu & Liên kết -->
+        <div class="story-section">
+            <h2>Cảnh mở đầu (Opening Scene)</h2>
+            <div class="story-content">
+                <p>Văn phòng tầng 31 vốn luôn yên tĩnh, vậy mà lúc này lại im lặng đến mức nghe rõ cả tiếng tập tài liệu rơi xuống nền gạch. Chiếc cặp da màu đen nằm chỏng chơ ngay cạnh chân Tống Cảnh Khiêm, còn người vừa ném nó thì vẫn đứng đó với vẻ mặt bình thản như thể chuyện vừa xảy ra hoàn toàn hợp lý. Lý Như Hoa vẫn còn ngơ ngác phía sau hắn.</p>
+                
+                <p>Chỉ vài giây trước, cô vô tình vấp chân khi đi ngang, hắn theo phản xạ đưa tay đỡ lấy, rồi gần như không cần suy nghĩ đã quay sang yêu cầu {{user}} xin lỗi. Trong nhận thức của Tống Cảnh Khiêm, đó là một kết thúc rất hợp lý. Người bị chất vấn sẽ giải thích, hoặc xin lỗi, hoặc ít nhất cũng hạ giọng.</p>
+                
+                <p>Thế nhưng {{user}} chỉ nhìn hắn như đang nhìn một người hết sức vô lý, sau đó không nói thêm câu nào mà cầm thẳng chiếc cặp trên bàn ném vào mặt hắn.</p>
+                
+                <p>Tiếng va chạm không lớn, nhưng đủ khiến cả văn phòng đồng loạt im bặt. Tống Cảnh Khiêm vẫn đứng nguyên tại chỗ, chỉ khẽ đưa mắt nhìn chiếc cặp dưới chân mình rồi nhìn sang {{user}}. Trên gương mặt hắn gần như không có biến hóa gì, ngay cả giọng nói cũng vẫn bình tĩnh như trước.</p>
+                
+                <p>"Cô ấy ngã."</p>
+                
+                <p>"Rồi sao?"</p>
+                
+                <p>31 năm cuộc đời, đây là lần đầu tiên có người vừa ném đồ vào mặt hắn, vừa nhìn hắn như thể người vô lý lại chính là hắn. Hắn buông tay khỏi cánh tay Lý Như Hoa, chậm rãi nói: "Cậu không nên động tay."</p>
+                
+                <p>"Vậy anh cũng không nên tự kết luận."</p>
+                
+                <p>Suy nghĩ nội tâm của Tống Cảnh Khiêm: <em>Mình vừa bị đánh trước mặt toàn bộ nhân viên. Nếu tiếp tục nói, khả năng cuộc tranh luận leo thang là rất cao. Môi trường làm việc không phù hợp để xảy ra xung đột. Đúng, đây chỉ là đánh giá rủi ro, hoàn toàn không liên quan đến việc chiếc cặp vừa nãy ném khá chính xác.</em></p>
+                
+                <p>{{user}} cúi người nhặt lại chiếc cặp. Chỉ là một động tác rất bình thường, nhưng ngay khi nhìn thấy chiếc cặp được cầm lên, Tống Cảnh Khiêm vẫn vô thức lùi về sau nửa bước rồi lập tức đứng thẳng trở lại như chưa từng có chuyện gì xảy ra.</p>
+                
+                <p>"Anh vừa né?"</p>
+                
+                <p>"...Không."</p>
+                
+                <p><em>Chỉ là giữ khoảng cách an toàn hơn một chút. Một tổng giám đốc biết đánh giá rủi ro không có gì sai cả.</em></p>
+            </div>
+
+            <div class="external-links">
+                <!-- CHÈN LINK GG AI STUDIO VÀO DẤU # Ở DƯỚI NÈ BỒ -->
+                <a href="#" class="ext-link-btn" target="_blank">
+                    🔗 Trò chuyện cùng Tống Cảnh Khiêm (Google AI Studio)
+                </a>
+            </div>
+        </div>
+
+        <!-- HỆ THỐNG BÌNH LUẬN FIREBASE -->
+        <div class="comment-section">
+            <h2>Góc tâm tình</h2>
+            
+            <!-- Form nhập bình luận -->
+            <div class="comment-form">
+                <input type="text" id="commentName" placeholder="Tên / Nickname của bạn (Bắt buộc)" maxlength="30">
+                <textarea id="commentText" placeholder="Bạn nghĩ gì về nhân vật này? Cứ thoải mái tâm sự nha..." rows="3"></textarea>
+                <button class="comment-btn" id="submitCommentBtn">Gửi bình luận</button>
+            </div>
+
+            <!-- Danh sách bình luận -->
+            <div class="comment-list" id="commentList">
+                <div class="no-comment">Đang tải bình luận...</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= SCRIPT THẢ TIM & BÌNH LUẬN FIREBASE ================= -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+    // 1. CẤU HÌNH FIREBASE 
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHEEapKd9PyLDJS5My0usnremVMmdzl4M",
+      authDomain: "taphoachongcunbu-3d24a.firebaseapp.com",
+      databaseURL: "https://taphoachongcunbu-3d24a-default-rtdb.firebaseio.com",
+      projectId: "taphoachongcunbu-3d24a",
+      storageBucket: "taphoachongcunbu-3d24a.firebasestorage.app",
+      messagingSenderId: "1028086205634",
+      appId: "1:1028086205634:web:679c8b0666347176eebf5b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 2. KHỞI TẠO BIẾN CHO NHÂN VẬT TỐNG CẢNH KHIÊM
+    const key = "likes_tongcanhkhiem"; 
+    
+    const likeBtn = document.getElementById("likeBtn");
+    const likeText = document.getElementById("likeText");
+    const likeCountSpan = document.getElementById("likeCount");
+    
+    // Kiểm tra LocalStorage xem user đã từng bấm tim chưa
+    let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
+    
+    // Hàm cập nhật giao diện nút
+    function updateButtonUI(isLiked) {
+        if (isLiked) {
+            likeText.innerText = "💖 Đã thả tim";
+            likeBtn.classList.add("liked");
+        } else {
+            likeText.innerText = "🤍 Thả tim";
+            likeBtn.classList.remove("liked");
+        }
+    }
+
+    // Set giao diện ban đầu
+    updateButtonUI(isLikedLocally);
+
+    // 3. LẮNG NGHE SỐ TIM REALTIME TỪ FIREBASE
+    db.ref(`likes/${key}`).on('value', (snapshot) => {
+        const count = snapshot.val() || 0;
+        likeCountSpan.innerText = count;
+    });
+
+    // 4. XỬ LÝ KHI NGƯỜI DÙNG BẤM NÚT TIM
+    likeBtn.addEventListener("click", () => {
+        likeBtn.disabled = true;
+        
+        const likeRef = db.ref(`likes/${key}`);
+        
+        if (isLikedLocally) {
+            // ĐÃ LIKE -> BẤM ĐỂ UNLIKE
+            isLikedLocally = false;
+            localStorage.setItem(`isLiked_${key}`, 'false');
+            updateButtonUI(false);
+
+            likeRef.transaction(current => {
+                return Math.max(0, (current || 0) - 1);
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+
+        } else {
+            // CHƯA LIKE -> BẤM ĐỂ LIKE
+            isLikedLocally = true;
+            localStorage.setItem(`isLiked_${key}`, 'true');
+            updateButtonUI(true);
+
+            likeRef.transaction(current => {
+                return (current || 0) + 1;
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+        }
+    });
+
+    // ==========================================
+    // 5. HỆ THỐNG BÌNH LUẬN REALTIME (TỰ LÀM)
+    // ==========================================
+    const commentKey = `comments_${key}`; // Lấy luôn key của nhân vật để làm kho chứa bình luận
+    const commentList = document.getElementById("commentList");
+    const commentName = document.getElementById("commentName");
+    const commentText = document.getElementById("commentText");
+    const submitCommentBtn = document.getElementById("submitCommentBtn");
+
+    // Hàm mã hóa chống hack (XSS) khi user nhập code bậy bạ
+    const escapeHTML = str => str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag]));
+
+    // LẮNG NGHE BÌNH LUẬN LIVE TỪ FIREBASE
+    db.ref(commentKey).on('value', (snapshot) => {
+        commentList.innerHTML = ""; 
+        const data = snapshot.val();
+        
+        if (!data) {
+            commentList.innerHTML = '<div class="no-comment">Chưa có bình luận nào. Hãy là người mở bát! ✨</div>';
+            return;
+        }
+
+        // Chuyển object thành mảng và sắp xếp MỚI NHẤT lên đầu
+        const comments = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+
+        comments.forEach(cmt => {
+            const timeString = new Date(cmt.timestamp).toLocaleString('vi-VN');
+            const safeName = escapeHTML(cmt.name);
+            const safeText = escapeHTML(cmt.text);
+
+            const div = document.createElement("div");
+            div.className = "comment-item";
+            div.innerHTML = `
+                <div class="comment-header">
+                    <span class="comment-name">${safeName}</span>
+                    <span class="comment-time">${timeString}</span>
+                </div>
+                <div class="comment-text">${safeText}</div>
+            `;
+            commentList.appendChild(div);
+        });
+    });
+
+    // XỬ LÝ GỬI BÌNH LUẬN
+    submitCommentBtn.addEventListener("click", () => {
+        const nameVal = commentName.value.trim();
+        const textVal = commentText.value.trim();
+
+        if (!nameVal) { alert("Bồ ơi, cho tui xin cái Nickname nha! 🥺"); return; }
+        if (!textVal) { alert("Nhập vài chữ tâm tình rồi hẵng gửi nè! 🥺"); return; }
+
+        submitCommentBtn.disabled = true;
+        submitCommentBtn.innerText = "Đang gửi...";
+
+        // Bắn lên Firebase
+        db.ref(commentKey).push({
+            name: nameVal,
+            text: textVal,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        }).then(() => {
+            commentText.value = "";
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        }).catch(() => {
+            alert("Lỗi mạng gòi, thử lại xíu nha!");
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        });
+    });
+</script>
+
+</body>
+</html>
