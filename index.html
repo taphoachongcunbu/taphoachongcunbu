@@ -53,13 +53,12 @@
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(248, 245, 240, 0.42); /* Phủ kem trong suốt siêu nhẹ */
-            backdrop-filter: blur(2.5px); /* Blur nhẹ hều vừa đủ tôn chữ */
+            background: rgba(248, 245, 240, 0.42); 
+            backdrop-filter: blur(2.5px); 
             -webkit-backdrop-filter: blur(2.5px);
             z-index: 1;
         }
 
-        /* Cho nội dung nổi lên trên lớp phủ */
         .header-box {
             position: relative;
             z-index: 2;
@@ -68,7 +67,6 @@
             width: 100%;
         }
 
-        /* Tiêu đề đỏ rượu chuẩn nguyên bản + viền tỏa sáng trắng */
         h1 { 
             font-family: var(--font-serif); 
             font-size: 3.5rem; 
@@ -81,16 +79,14 @@
                 0 0 22px rgba(255, 255, 255, 0.85);
         }
 
-        /* Slogan mềm mại, thanh thoát - Nhường spotlight cho tên web */
         header p { 
-            color: #F8F5F0; /* Màu kem sáng nhẹ mắt */
-            font-size: 1.1rem; /* Thu nhỏ lại một chút */
-            font-weight: 500; /* Giảm độ đậm về nét thường */
+            color: #FFFFFF; 
+            font-size: 1.1rem; 
+            font-weight: 500; 
             letter-spacing: 0.5px;
-            opacity: 0.92; /* Giảm nhẹ độ gắt */
-            /* Bóng đổ mỏng vừa đủ để nét chữ rõ ràng trên nền tối */
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7); 
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 6px rgba(0, 0, 0, 0.7);
         }
+
         /* --- Nút Mạng Xã Hội (Facebook & TikTok) --- */
         .social-links {
             display: flex;
@@ -132,7 +128,6 @@
         .tag-btn { background-color: transparent; color: var(--primary-color); border: 1px solid var(--primary-color); padding: 6px 16px; border-radius: 50px; cursor: pointer; font-family: var(--font-body); transition: all 0.3s; }
         .tag-btn:hover, .tag-btn.active { background-color: var(--primary-color); color: #fff; }
 
-        /* Nút ẩn/hiện thêm tag */
         .toggle-tag-btn {
             border-style: dashed !important;
             font-weight: 600;
@@ -162,7 +157,6 @@
         .card-info { padding: 20px 15px; text-align: center; display: flex; flex-direction: column; align-items: center;}
         .card-name { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 700; color: var(--primary-color); margin-bottom: 8px;}
         
-        /* --- Phần Slogan và Tag mới --- */
         .card-slogan {
             font-size: 0.95rem;
             color: var(--text-light);
@@ -190,7 +184,6 @@
             font-weight: 500;
         }
 
-        /* Phần tim trên trang chủ */
         .card-likes { 
             position: relative;
             z-index: 2;
@@ -210,28 +203,80 @@
         }
         .card-likes:hover { background-color: rgba(114, 47, 55, 0.05); border-color: rgba(114, 47, 55, 0.2); }
 
-        /* ================= CHATBOT WIDGET ================= */
-        .chat-btn {
+        /* ================= CHATBOT & NÚT TRỢ GIÚP WIDGET ================= */
+        .floating-container {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 60px;
-            height: 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .action-circle-btn {
+            width: 55px;
+            height: 55px;
             background-color: var(--primary-color);
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(114, 47, 55, 0.4);
+            box-shadow: 0 5px 15px rgba(114, 47, 55, 0.35);
             border: none;
             transition: 0.3s;
-            z-index: 1000;
+            font-family: var(--font-serif);
+            font-weight: bold;
         }
-        .chat-btn:hover { transform: scale(1.1); background-color: var(--primary-hover); }
+        .action-circle-btn:hover { transform: scale(1.1); background-color: var(--primary-hover); }
 
+        /* Bảng Menu Hướng Dẫn Trợ Giúp */
+        .help-window {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 320px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1001;
+            border: 1px solid #eee;
+            animation: slideUp 0.3s ease;
+        }
+        .help-window.active { display: flex; }
+
+        .help-header { background-color: var(--primary-color); color: white; padding: 15px; font-family: var(--font-serif); font-weight: bold; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center; }
+        .help-body { padding: 20px 15px; display: flex; flex-direction: column; gap: 12px; background-color: #faf9f7; }
+        
+        .help-guide-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: white;
+            color: var(--text-dark);
+            padding: 12px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            transition: all 0.3s ease;
+        }
+        .help-guide-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(114, 47, 55, 0.12);
+        }
+
+        /* Bảng Chatbot */
         .chat-window {
             position: fixed;
             bottom: 100px;
@@ -243,14 +288,14 @@
             display: none;
             flex-direction: column;
             overflow: hidden;
-            z-index: 1000;
+            z-index: 1001;
             border: 1px solid #eee;
             animation: slideUp 0.3s ease;
         }
         .chat-window.active { display: flex; }
 
         .chat-header { background-color: var(--primary-color); color: white; padding: 15px; font-family: var(--font-serif); font-weight: bold; font-size: 1.1rem; display: flex; justify-content: space-between; align-items: center; }
-        .close-chat { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
+        .close-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
         
         .chat-body { height: 300px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-color: #faf9f7; font-size: 0.95rem; }
         
@@ -269,8 +314,8 @@
         @media (max-width: 768px) {
             h1 { font-size: 2.2rem; }
             header { padding: 35px 15px; min-height: 220px; }
-            .chat-window { width: calc(100% - 40px); right: 20px; bottom: 90px; }
-            .chat-btn { bottom: 20px; right: 20px; }
+            .floating-container { bottom: 20px; right: 20px; }
+            .chat-window, .help-window { width: calc(100% - 40px); right: 20px; bottom: 150px; }
         }
     </style>
 </head>
@@ -281,16 +326,13 @@
         <h1>Tạp Hóa Chồng Cún Bự</h1>
         <p>Nơi lưu giữ những đứa con tinh thần</p>
         
-        <!-- NÚT MẠNG XÃ HỘI TẠI ĐÂY -->
         <div class="social-links">
-            <!-- Nút Facebook -->
             <a href="https://www.facebook.com/profile.php?id=61592031838939" target="_blank" class="social-btn" title="Ghé thăm Facebook của tui">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                     <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>
                 </svg>
             </a>
             
-            <!-- Nút TikTok -->
             <a href="https://www.tiktok.com/@taphoachongcunbu?_r=1&_t=ZS-98Ei6ZPv5s2" target="_blank" class="social-btn" title="Ghé thăm TikTok của tui">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/>
@@ -307,9 +349,7 @@
             <div class="tags-container" id="tagsContainer"></div>
         </div>
 
-        <div class="gallery-grid" id="galleryGrid">
-            <!-- Thẻ nhân vật sẽ hiển thị ở đây -->
-        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
         
         <div id="no-result" style="display:none; text-align:center; color: var(--text-light); width: 100%;">
             Không tìm thấy nhân vật nào phù hợp 😭
@@ -317,13 +357,42 @@
     </div>
 </div>
 
-<!-- CHATBOT WIDGET -->
-<button class="chat-btn" onclick="toggleChat()">💬</button>
+<!-- ================= CỤM NÚT TÁC VỤ (HỖ TRỢ & CHATBOT) ================= -->
+<div class="floating-container">
+    <!-- Nút ? Hỗ trợ -->
+    <button class="action-circle-btn" onclick="toggleHelp()" title="Hướng dẫn & Hỗ trợ">❓</button>
+    <!-- Nút Chatbot -->
+    <button class="action-circle-btn" onclick="toggleChat()" title="Trợ lý Cún Bự">💬</button>
+</div>
 
+<!-- BẢNG HƯỚNG DẪN TRỢ GIÚP -->
+<div class="help-window" id="helpWindow">
+    <div class="help-header">
+        Góc Hướng Dẫn & Hỗ Trợ 💡
+        <button class="close-btn" onclick="toggleHelp()">✖</button>
+    </div>
+    <div class="help-body">
+        <!-- BỒ THAY LINK TIKTOK CỦA BỒ VÀO DẤU # Ở DƯỚI NÈ: -->
+        <a href="https://vt.tiktok.com/ZSXpyPHp9/" target="_blank" class="help-guide-btn">
+            <span>📖 cách sử dụng web</span>
+            <span>▶</span>
+        </a>
+        <a href="https://vt.tiktok.com/ZSXpyAhwr/" target="_blank" class="help-guide-btn">
+            <span>🤖 cách dùng Google AI Studio</span>
+            <span>▶</span>
+        </a>
+        <a href="https://vt.tiktok.com/ZSXpyVF2H/" target="_blank" class="help-guide-btn">
+            <span>🔄 cách đổi mail khi bị limit</span>
+            <span>▶</span>
+        </a>
+    </div>
+</div>
+
+<!-- CHATBOT WIDGET -->
 <div class="chat-window" id="chatWindow">
     <div class="chat-header">
         Trợ lý Cún Bự 🐶
-        <button class="close-chat" onclick="toggleChat()">✖</button>
+        <button class="close-btn" onclick="toggleChat()">✖</button>
     </div>
     <div class="chat-body" id="chatBody">
         <div class="msg msg-bot">Chào bạn! Bạn đang tìm nhân vật theo gu nào (Ví dụ: tu tiên, lạnh lùng, tổng tài...)? Cứ nói cho tui biết nhé!</div>
@@ -335,14 +404,10 @@
 </div>
 
 <!-- ================= JAVASCRIPT & FIREBASE ================= -->
-<!-- 1. Import SDK của Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
 <script>
-    // ==========================================
-    // 2. KHỞI TẠO FIREBASE
-    // ==========================================
     const firebaseConfig = {
       apiKey: "AIzaSyCHEEapKd9PyLDJS5My0usnremVMmdzl4M",
       authDomain: "taphoachongcunbu-3d24a.firebaseapp.com",
@@ -356,9 +421,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // ==========================================
-    // 3. DỮ LIỆU NHÂN VẬT 
-    // ==========================================
     const ocData = [
         {
             id: 1,
@@ -715,9 +777,6 @@
         }
     }
 
-    // ==========================================
-    // 4. XỬ LÝ THẢ TIM VỚI FIREBASE
-    // ==========================================
     function toggleLike(event, likeKey, id) {
         event.preventDefault();
         event.stopPropagation();
@@ -750,16 +809,21 @@
         }
     }
 
-    // ==========================================
-    // 5. LOGIC CHATBOT AI
-    // ==========================================
+    // ================= LOGIC ẨN/HIỆN CỦA NÚT HỖ TRỢ & CHATBOT =================
+    const helpWindow = document.getElementById("helpWindow");
     const chatWindow = document.getElementById("chatWindow");
-    const chatBody = document.getElementById("chatBody");
-    const chatInput = document.getElementById("chatInput");
+
+    function toggleHelp() {
+        // Tắt chatbot nếu đang mở
+        chatWindow.classList.remove("active");
+        helpWindow.classList.toggle("active");
+    }
 
     function toggleChat() {
+        // Tắt bảng hỗ trợ nếu đang mở
+        helpWindow.classList.remove("active");
         chatWindow.classList.toggle("active");
-        if(chatWindow.classList.contains("active")) chatInput.focus();
+        if(chatWindow.classList.contains("active")) document.getElementById("chatInput").focus();
     }
 
     function handleEnter(e) {
@@ -767,6 +831,7 @@
     }
 
     function sendMessage() {
+        const chatInput = document.getElementById("chatInput");
         const text = chatInput.value.trim();
         if(!text) return;
 
@@ -780,6 +845,7 @@
     }
 
     function appendMessage(text, className) {
+        const chatBody = document.getElementById("chatBody");
         const div = document.createElement("div");
         div.className = `msg ${className}`;
         div.innerHTML = text; 
@@ -793,7 +859,6 @@
 
         ocData.forEach(oc => {
             let score = 0;
-            
             let tags = oc.tags.map(t => t.toLowerCase());
             let personalities = oc.personality.split(',').map(p => p.trim().toLowerCase());
             let charKeywords = [...tags, ...personalities, oc.name.toLowerCase()];
@@ -830,9 +895,7 @@
         }
     }
 
-    // Khởi chạy web
     init();
-
 </script>
 </body>
 </html>
