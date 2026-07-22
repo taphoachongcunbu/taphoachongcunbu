@@ -41,7 +41,7 @@
         .tag-btn:hover, .tag-btn.active { background-color: var(--primary-color); color: #fff; }
 
         /* --- Gallery Grid --- */
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         
         /* Chuyển .card thành thẻ a nên cần style text-decoration */
         .card { 
@@ -57,9 +57,37 @@
         }
         .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
         .card-img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
-        .card-info { padding: 15px; text-align: center; }
-        .card-name { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--primary-color); margin-bottom: 5px;}
+        .card-info { padding: 20px 15px; text-align: center; display: flex; flex-direction: column; align-items: center;}
+        .card-name { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 700; color: var(--primary-color); margin-bottom: 8px;}
         
+        /* --- Phần Slogan và Tag mới --- */
+        .card-slogan {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 12px;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .card-tags-mini {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        .card-tag-mini {
+            background-color: #f0f0f0;
+            color: #555;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
         /* Phần tim trên trang chủ */
         .card-likes { 
             position: relative;
@@ -71,14 +99,14 @@
             color: var(--text-light); 
             font-weight: bold; 
             background: none;
-            border: none;
+            border: 2px solid #eee;
             cursor: pointer;
-            padding: 5px 10px;
+            padding: 6px 14px;
             border-radius: 20px;
             transition: all 0.3s;
             font-family: var(--font-body);
         }
-        .card-likes:hover { background-color: rgba(114, 47, 55, 0.1); }
+        .card-likes:hover { background-color: rgba(114, 47, 55, 0.05); border-color: rgba(114, 47, 55, 0.2); }
 
         /* ================= CHATBOT WIDGET ================= */
         .chat-btn {
@@ -205,8 +233,8 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-   // ==========================================
-    // 3. DỮ LIỆU NHÂN VẬT 
+    // ==========================================
+    // 3. DỮ LIỆU NHÂN VẬT (Đã cập nhật Slogan)
     // ==========================================
     const ocData = [
         {
@@ -215,6 +243,7 @@
             slug: "ho-tinh-an.html",
             likeKey: "likes_hotinhan", 
             image: "https://i.ibb.co/JYRVxZV/c5f0dd92d21653480a07.jpg",
+            slogan: "Lần sau có giả điên thì chọn trò nào dưới đất mà làm. Lỡ ngã đau... thì ai chịu cho em?",
             tags: ["Việt Nam xưa", "BL", "BG", "thầy thuốc"],
             personality: "trầm ổn, kiệm lời, giữ lễ nghĩa, lạnh lùng, xa cách, dịu dàng ngầm",
             story: "Con út nhà ông Lớn ở làng An Hòa Nam Kỳ Lục Tỉnh. Hồ Tĩnh An là vị thầy thuốc trẻ bắt mạch không bao giờ sai."
@@ -225,18 +254,20 @@
             slug: "trien-huc.html", 
             likeKey: "likes_trienhuc",
             image: "https://i.ibb.co/bMR7xgcq/229c14aef62a77742e3b.jpg",
+            slogan: "Bớt gán ghép linh tinh, người tôi thích chỉ có một thôi.",
             tags: ["hệ thống", "thanh xuân vườn trường", "BG", "BL"],
             personality: "lạnh lùng, học bá, nam chính, chung tình",
             story: "Tác hợp nam chính và nữ chính, nhưng nữ chính chỉ yêu bạn."
-        }, // <--- Nãy bồ thiếu dấu phẩy ở đây nè
+        },
         {
             id: 3,
             name: "Rowan Arden", 
             slug: "rowan-arden.html", 
             likeKey: "likes_rowan",
             image: "https://i.ibb.co/VWY1TsSy/c4b0b21e7399f2c7ab88.jpg",
+            slogan: "Tao thật sự thích cô ấy lắm... {{user}}, mày giúp tao tán cô ấy được không?",
             tags: ["char đã có crush", "thanh xuân vườn trường", "BG", "BL"],
-            personality: "dương quang, trai thể thao, friendzone, ngoại quốc", // <--- Đã sửa thành 1 chuỗi thống nhất
+            personality: "dương quang, trai thể thao, friendzone, ngoại quốc",
             story: "Thằng bạn thân không yêu bạn."
         }
     ];
@@ -294,10 +325,16 @@
                 let isLikedLocally = localStorage.getItem(`isLiked_${oc.likeKey}`) === 'true';
                 let heartIcon = isLikedLocally ? '❤️' : '🤍';
 
+                // Tạo danh sách tag nhỏ
+                let tagsHTML = oc.tags.map(tag => `<span class="card-tag-mini">${tag}</span>`).join('');
+
                 card.innerHTML = `
                     <img class="card-img" src="${oc.image}" alt="${oc.name}">
                     <div class="card-info">
                         <div class="card-name">${oc.name}</div>
+                        <div class="card-slogan">"${oc.slogan}"</div>
+                        <div class="card-tags-mini">${tagsHTML}</div>
+                        
                         <!-- Nút tim gọi hàm toggleLike -->
                         <button class="card-likes" id="like-btn-${oc.id}" onclick="toggleLike(event, '${oc.likeKey}', ${oc.id})">
                             <span id="heart-icon-${oc.id}">${heartIcon}</span> 
