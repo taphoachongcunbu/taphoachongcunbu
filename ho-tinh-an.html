@@ -152,7 +152,7 @@
                 <!-- NÚT THẢ TIM (CHỐNG SPAM) -->
                 <button class="like-btn" id="likeBtn">
                     <span id="likeText">🤍 Thả tim</span> 
-                    <span class="like-count">(<span id="likeCount">0</span>)</span>
+                    <span class="like-count">(<span id="likeCount">...</span>)</span>
                 </button>
             </div>
 
@@ -235,16 +235,34 @@
     </div>
 </div>
 
-<!-- ================= SCRIPT THẢ TIM CÓ THỂ UNLIKE ================= -->
+<!-- ================= SCRIPT THẢ TIM FIREBASE (ĐÃ FIX) ================= -->
+<!-- Khai báo thư viện Firebase từ CDN -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
 <script>
-    const namespace = "taphoa_oc"; 
+    // 1. CẤU HÌNH FIREBASE 
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHEEapKd9PyLDJS5My0usnremVMmdzl4M",
+      authDomain: "taphoachongcunbu-3d24a.firebaseapp.com",
+      databaseURL: "https://taphoachongcunbu-3d24a-default-rtdb.firebaseio.com",
+      projectId: "taphoachongcunbu-3d24a",
+      storageBucket: "taphoachongcunbu-3d24a.firebasestorage.app",
+      messagingSenderId: "1028086205634",
+      appId: "1:1028086205634:web:679c8b0666347176eebf5b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 2. KHỞI TẠO BIẾN CHO NHÂN VẬT HỒ TĨNH AN
     const key = "likes_hotinhan"; 
     
     const likeBtn = document.getElementById("likeBtn");
     const likeText = document.getElementById("likeText");
     const likeCountSpan = document.getElementById("likeCount");
     
-    // 1. Kiểm tra LocalStorage xem user đã từng bấm tim chưa
+    // Kiểm tra LocalStorage xem user đã từng bấm tim chưa
     let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
     
     // Hàm cập nhật giao diện nút
@@ -261,53 +279,43 @@
     // Set giao diện ban đầu
     updateButtonUI(isLikedLocally);
 
-    // 2. Lấy số tim thực tế từ Server khi vừa vào trang
-    fetch(`https://api.counterapi.dev/v1/${namespace}/${key}`)
-        .then(response => response.json())
-        .then(data => {
-            // Nếu API trả về số thì dùng, chưa ai like (null) thì mặc định là 0
-            likeCountSpan.innerText = data.count || 0; 
-        })
-        .catch(err => {
-            console.error("Lỗi tải API, giữ nguyên 0.", err);
-        });
+    // 3. LẮNG NGHE SỐ TIM REALTIME TỪ FIREBASE
+    db.ref(`likes/${key}`).on('value', (snapshot) => {
+        // Mỗi khi có người nào đó thả tim/bỏ tim, số ở đây sẽ nảy ngay lập tức
+        const count = snapshot.val() || 0;
+        likeCountSpan.innerText = count;
+    });
 
-    // 3. Xử lý khi người dùng Click nút
+    // 4. XỬ LÝ KHI NGƯỜI DÙNG BẤM NÚT TIM
     likeBtn.addEventListener("click", () => {
         // Khóa nút tạm thời để tránh bấm liên tục (spam click)
         likeBtn.disabled = true;
         
-        let currentCount = parseInt(likeCountSpan.innerText) || 0;
+        const likeRef = db.ref(`likes/${key}`);
         
         if (isLikedLocally) {
             // TRƯỜNG HỢP: ĐÃ LIKE -> BẤM ĐỂ UNLIKE
             isLikedLocally = false;
             localStorage.setItem(`isLiked_${key}`, 'false');
-            
-            // Cập nhật giao diện mượt (trừ 1)
-            likeCountSpan.innerText = Math.max(0, currentCount - 1);
             updateButtonUI(false);
 
-            // Bắn API trừ 1
-            fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/down`)
-                .then(res => res.json())
-                .then(data => likeCountSpan.innerText = data.count || 0)
-                .finally(() => likeBtn.disabled = false); // Mở lại nút
+            // Bắn Firebase trừ đi 1
+            likeRef.transaction(current => {
+                return Math.max(0, (current || 0) - 1);
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
 
         } else {
             // TRƯỜNG HỢP: CHƯA LIKE -> BẤM ĐỂ LIKE
             isLikedLocally = true;
             localStorage.setItem(`isLiked_${key}`, 'true');
-            
-            // Cập nhật giao diện mượt (cộng 1)
-            likeCountSpan.innerText = currentCount + 1;
             updateButtonUI(true);
 
-            // Bắn API cộng 1
-            fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
-                .then(res => res.json())
-                .then(data => likeCountSpan.innerText = data.count || 0)
-                .finally(() => likeBtn.disabled = false); // Mở lại nút
+            // Bắn Firebase cộng thêm 1
+            likeRef.transaction(current => {
+                return (current || 0) + 1;
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
         }
     });
 </script>
