@@ -493,59 +493,46 @@
     }
 
     function botBrain(input) {
-        // 1. Chuẩn hóa & xóa dấu câu
-        const cleanInput = input.toLowerCase().replace(/[.,!?;:()]/g, "");
-        let keywords = cleanInput.split(/\s+/);
+        const cleanInput = input.toLowerCase();
 
-        // 2. Danh sách "Từ Rác" mở rộng (Lọc sạch các từ chung chung tiếng Việt)
-        const stopWords = [
-            "tui", "muốn", "tìm", "nhân", "vật", "có", "là", "thì", "mà", "cho", "được", "bị", "những", 
-            "của", "với", "không", "nào", "thích", "gu", "nha", "nhé", "nè", "ơi", "ạ", "chút", "hơi", 
-            "rất", "quá", "kiếm", "ông", "bà", "anh", "em", "tuổi", "trong", "hình", "dạng", "chàng", 
-            "trai", "người", "bạn", "cùng", "nhà", "ra", "vào", "đến", "đi", "làm", "thấy", "xem", 
-            "sau", "trước", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín", "mười"
+        // 1. BỘ TỪ ĐIỂN CHUẨN: Bot chỉ phản ứng nếu câu của khách có chứa chữ trong này
+        const validKeywords = [
+            "bl", "bg", "việt nam", "xưa", "thầy thuốc", "trầm ổn", "kiệm lời", "lạnh lùng", "dịu dàng",
+            "hệ thống", "thanh xuân", "vườn trường", "học đường", "học bá", "nam chính", "chung tình",
+            "crush", "bạn thân", "dương quang", "thể thao", "friendzone", "ngoại quốc",
+            "niên hạ", "tâm cơ", "thiếu gia", "trà xanh", "nham hiểm", "mưu mô"
         ];
 
-        keywords = keywords.filter(kw => kw.length > 1 && !stopWords.includes(kw));
+        // 2. Lọc xem câu của khách có gõ trúng từ khóa xịn nào không
+        let foundWords = validKeywords.filter(kw => cleanInput.includes(kw));
 
-        // Nếu lọc xong mà không còn từ khóa nào có nghĩa
-        if (keywords.length === 0) {
-            return "Trùi ui, bồ gõ từ khóa cụ thể hơn xíu (ví dụ: BL, thầy thuốc, học đường, trà xanh...) để tui lọc nha! 🐶";
+        // Nếu khách gõ cái gì đó mặn chát không dính líu tới game (VD: "ông già 80 cơ bắp")
+        if (foundWords.length === 0) {
+            return `Trùi ui, gu của bồ mặn chát luôn tui tìm hổng ra! 😭<br>Bạn thử nhập từ khóa bình thường thôi (ví dụ: BL, thầy thuốc, niên hạ, trà xanh...) xem sao nha! 🥺`;
         }
 
         let matches = []; 
 
+        // 3. Quét các từ khóa HỢP LỆ vào data nhân vật
         ocData.forEach(oc => {
             let score = 0;
-            const nameStr = oc.name.toLowerCase();
-            const tagsStr = oc.tags.join(" ").toLowerCase();
-            const personalityStr = oc.personality.toLowerCase();
-            const storyStr = (oc.story + " " + oc.slogan).toLowerCase();
-
-            keywords.forEach(kw => {
-                // Ưu tiên 1: Trúng Tên hoặc Tag chuẩn -> Cộng hẳn 5 điểm
-                if (tagsStr.includes(kw) || nameStr.includes(kw)) {
-                    score += 5;
-                } 
-                // Ưu tiên 2: Trúng Từ trong Tính cách -> Cộng 3 điểm
-                else if (personalityStr.includes(kw)) {
-                    score += 3;
-                }
-                // Ưu tiên 3: Trúng từ trong Cốt truyện/Slogan -> Chỉ cộng 1 điểm
-                else if (storyStr.includes(kw)) {
-                    score += 1;
+            // Chỉ lấy Tên, Tag và Tính cách ra để chấm điểm, bỏ qua cốt truyện tránh bắt nhầm
+            const dataString = (oc.name + " " + oc.tags.join(" ") + " " + oc.personality).toLowerCase();
+            
+            foundWords.forEach(kw => {
+                if(dataString.includes(kw)) {
+                    score++;
                 }
             });
 
-            // NGƯỠNG LỌC: Phải đạt tối thiểu 2 điểm trở lên mới tính là khớp gu!
-            if(score >= 2) {
+            if(score > 0) {
                 matches.push({ oc: oc, score: score });
             }
         });
 
-        // 3. Trả về kết quả
+        // 4. Trả kết quả
         if(matches.length > 0) {
-            // Sắp xếp ai điểm cao nhất lên đầu
+            // Đứa nào khớp nhiều từ nhất thì lên đầu
             matches.sort((a, b) => b.score - a.score);
 
             let response = `Tui tìm thấy vài gương mặt cực kỳ hợp gu với bạn nè! 🥰<br><br>`;
@@ -562,7 +549,7 @@
 
             return response;
         } else {
-            return `Trùi ui, hiện tại tui chưa có nhân vật nào khớp với gu độc lạ này đâu nè! 😭<br>Bạn thử nhập từ khóa khác (ví dụ: BL, thầy thuốc, niên hạ, học đường...) xem sao nha! 🥺`;
+            return `Trùi ui, hiện tại tui chưa có nhân vật nào khớp với gu này. Bạn thử nhập từ khóa khác xem sao nha! 🥺`;
         }
     }
     // Khởi chạy web
