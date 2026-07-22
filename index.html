@@ -27,10 +27,48 @@
         body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
 
-        /* --- Header & Title --- */
-        header { text-align: center; margin-bottom: 40px; animation: fadeIn 0.8s ease; }
+        /* --- Header & Title (Đã chèn ảnh nền Blur tiệm Cún Bự) --- */
+        header { 
+            position: relative; 
+            text-align: center; 
+            padding: 50px 20px; 
+            margin-bottom: 40px; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06); 
+            animation: fadeIn 0.8s ease; 
+        }
+
+        /* Lớp ảnh nền mờ phía sau */
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('https://i.ibb.co/Vkx6c8F/1784736706948-2078060217096962491-3928943315332758507-cd9bcc4e361a6acaa0223e91bba074e8.jpg'); 
+            background-size: cover;
+            background-position: center 30%;
+            filter: blur(4px); /* Độ mờ của ảnh */
+            transform: scale(1.08); /* Phóng nhẹ tránh lộ viền trắng khi blur */
+            z-index: 1;
+        }
+
+        /* Lớp phủ màu kem dịu mắt giúp chữ đọc siêu rõ */
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(248, 245, 240, 0.75); /* Màu kem trong suốt 75% */
+            z-index: 2;
+        }
+
+        /* Đẩy chữ và nút nổi lên trên cùng */
+        header h1, header p, header .social-links {
+            position: relative;
+            z-index: 3;
+        }
+
         h1 { font-family: var(--font-serif); font-size: 3.5rem; color: var(--primary-color); margin-bottom: 10px; font-weight: 700; }
-        header p { color: var(--text-light); font-size: 1.1rem; }
+        header p { color: #555; font-size: 1.1rem; font-weight: 500; }
 
         /* --- Nút Mạng Xã Hội (Facebook & TikTok) --- */
         .social-links {
@@ -49,7 +87,7 @@
             color: var(--primary-color);
             border-radius: 50%;
             text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
         }
         .social-btn svg {
@@ -87,7 +125,6 @@
         /* --- Gallery Grid --- */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         
-        /* Chuyển .card thành thẻ a nên cần style text-decoration */
         .card { 
             display: block; 
             text-decoration: none; 
@@ -135,7 +172,7 @@
         /* Phần tim trên trang chủ */
         .card-likes { 
             position: relative;
-            z-index: 2; /* Nổi lên trên thẻ a để bấm được */
+            z-index: 2;
             display: inline-flex;
             align-items: center;
             gap: 5px;
@@ -182,7 +219,7 @@
             background: white;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            display: none; /* Ẩn mặc định */
+            display: none;
             flex-direction: column;
             overflow: hidden;
             z-index: 1000;
@@ -209,6 +246,8 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            header { padding: 35px 15px; }
             .chat-window { width: calc(100% - 40px); right: 20px; bottom: 90px; }
             .chat-btn { bottom: 20px; right: 20px; }
         }
