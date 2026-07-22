@@ -386,28 +386,46 @@
 
     function botBrain(input) {
         const keywords = input.toLowerCase().split(/\s+/);
-        let bestMatch = null;
-        let maxScore = 0;
+        let matches = []; // Mảng chứa tất cả nhân vật có điểm khớp
 
         ocData.forEach(oc => {
             let score = 0;
+            // Gộp data để quét
             const dataString = (oc.tags.join(" ") + " " + oc.personality + " " + oc.story + " " + oc.name).toLowerCase();
             
             keywords.forEach(kw => {
                 if(dataString.includes(kw)) score++;
             });
 
-            if(score > maxScore) {
-                maxScore = score;
-                bestMatch = oc;
+            // Nếu khớp ít nhất 1 từ khóa, đưa vào danh sách
+            if(score > 0) {
+                matches.push({ oc: oc, score: score });
             }
         });
 
-        if(bestMatch && maxScore > 0) {
-            return `Tui nghĩ bạn sẽ u mê <strong>${bestMatch.name}</strong> đó! 🥰<br>
-                    <a href="${bestMatch.slug}">👉 Bấm vào đây để xem chi tiết nhé!</a>`;
+        // Nếu có nhân vật phù hợp
+        if(matches.length > 0) {
+            // Sắp xếp mảng từ điểm cao xuống điểm thấp (ai hợp gu nhất lên đầu)
+            matches.sort((a, b) => b.score - a.score);
+
+            let response = `Tui tìm thấy vài gương mặt cực kỳ hợp gu với bạn nè! 🥰<br><br>`;
+            
+            // Lấy tối đa 3 người hợp nhất để show ra tránh bị dài quá
+            let topMatches = matches.slice(0, 3);
+
+            topMatches.forEach(match => {
+                response += `✨ <strong>${match.oc.name}</strong><br>
+                             <a href="${match.oc.slug}">👉 Xem chi tiết ngay và luôn</a><br><br>`;
+            });
+
+            // Nếu còn nhiều hơn 3 người, mớm thêm câu hỏi cho người dùng (Cách 2)
+            if (matches.length > 3) {
+                response += `<i>(Vẫn còn ${matches.length - 3} người nữa hợp gu. Bạn thử gõ thêm từ khóa như "học đường", "dịu dàng"... để tui lọc kỹ hơn nha! 🤔)</i>`;
+            }
+
+            return response;
         } else {
-            return `Trùi ui, hiện tại tui chưa có nhân vật nào khớp với gu này. Bạn thử nhập từ khóa khác (ví dụ: BL, học đường, trầm ổn...) xem sao nha! 🥺`;
+            return `Trùi ui, hiện tại tui chưa có nhân vật nào khớp với gu này. Bạn thử nhập từ khóa khác (ví dụ: BL, hệ thống, trầm ổn...) xem sao nha! 🥺`;
         }
     }
 
