@@ -183,19 +183,37 @@
     </div>
 </div>
 
-<!-- ================= JAVASCRIPT ================= -->
+<!-- ================= JAVASCRIPT & FIREBASE ================= -->
+<!-- 1. Import SDK của Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
 <script>
-    // ---------------------------------------------------------
-    // BƯỚC 1: DỮ LIỆU NHÂN VẬT 
-    // (Đã thêm slug, likeKey và defaultLikes)
-    // ---------------------------------------------------------
+    // ==========================================
+    // 2. KHỞI TẠO FIREBASE
+    // ==========================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHEEapKd9PyLDJS5My0usnremVMmdzl4M",
+      authDomain: "taphoachongcunbu-3d24a.firebaseapp.com",
+      databaseURL: "https://taphoachongcunbu-3d24a-default-rtdb.firebaseio.com",
+      projectId: "taphoachongcunbu-3d24a",
+      storageBucket: "taphoachongcunbu-3d24a.firebasestorage.app",
+      messagingSenderId: "1028086205634",
+      appId: "1:1028086205634:web:679c8b0666347176eebf5b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // ==========================================
+    // 3. DỮ LIỆU NHÂN VẬT 
+    // ==========================================
     const ocData = [
         {
             id: 1,
             name: "Hồ Tĩnh An",
             slug: "ho-tinh-an.html",
-            likeKey: "likes_hotinhan", // Từ khóa API lưu tim
-            defaultLikes: 1,
+            likeKey: "likes_hotinhan", 
             image: "https://i.ibb.co/JYRVxZV/c5f0dd92d21653480a07.jpg",
             tags: ["Việt Nam xưa", "BL", "BG", "thầy thuốc"],
             personality: "trầm ổn, kiệm lời, giữ lễ nghĩa, lạnh lùng, xa cách, dịu dàng ngầm",
@@ -203,18 +221,16 @@
         },
         {
             id: 2,
-            name: "Triển Húc", // Thêm 1 OC mẫu để Chatbot có dữ liệu tư vấn
-            slug: "trien-huc.html", // Thay link file html của nhân vật này vào đây sau
+            name: "Triển Húc", 
+            slug: "trien-huc.html", 
             likeKey: "likes_trienhuc",
-            defaultLikes: 1,
             image: "https://i.ibb.co/bMR7xgcq/229c14aef62a77742e3b.jpg",
-            tags: ["hệ thống", "thanh xuân vườn trường", "BG", "BL",],
+            tags: ["hệ thống", "thanh xuân vườn trường", "BG", "BL"],
             personality: "lạnh lùng, học bá, nam chính, chung tình",
             story: "Tác hợp nam chính và nữ chính, nhưng nữ chính chỉ yêu bạn."
         }
     ];
 
-    // Tạo danh sách tag tự động
     const allTags = ["Tất cả", ...new Set(ocData.flatMap(oc => oc.tags))];
     
     let currentTag = "Tất cả";
@@ -225,7 +241,6 @@
     const searchInput = document.getElementById("searchInput");
     const noResult = document.getElementById("no-result");
     
-    // Khởi tạo trang
     function init() {
         renderTags();
         renderGallery(ocData);
@@ -236,7 +251,6 @@
         });
     }
 
-    // Render nút Tags
     function renderTags() {
         tagsContainer.innerHTML = "";
         allTags.forEach(tag => {
@@ -248,7 +262,6 @@
         });
     }
 
-    // Lọc dữ liệu
     function filterData() {
         let filtered = ocData;
         if (currentTag !== "Tất cả") filtered = filtered.filter(oc => oc.tags.includes(currentTag));
@@ -256,8 +269,7 @@
         renderGallery(filtered);
     }
 
-   // Render danh sách Gallery
-    function renderGallery(data) {
+   function renderGallery(data) {
         galleryGrid.innerHTML = "";
         if(data.length === 0) {
             noResult.style.display = "block";
@@ -266,13 +278,12 @@
             data.forEach(oc => {
                 const card = document.createElement("a");
                 card.className = "card";
-                card.href = oc.slug; // Bấm vào nhảy sang link file HTML
+                card.href = oc.slug; 
 
-                // Kiểm tra xem User đã like nhân vật này chưa để chọn icon tim
+                // Kiểm tra LocalStorage
                 let isLikedLocally = localStorage.getItem(`isLiked_${oc.likeKey}`) === 'true';
                 let heartIcon = isLikedLocally ? '❤️' : '🤍';
 
-                // Mới vô để "..." để ám chỉ đang tải dữ liệu tim
                 card.innerHTML = `
                     <img class="card-img" src="${oc.image}" alt="${oc.name}">
                     <div class="card-info">
@@ -280,133 +291,108 @@
                         <!-- Nút tim gọi hàm toggleLike -->
                         <button class="card-likes" id="like-btn-${oc.id}" onclick="toggleLike(event, '${oc.likeKey}', ${oc.id})">
                             <span id="heart-icon-${oc.id}">${heartIcon}</span> 
-                            <span id="like-count-${oc.id}">...</span>
+                            <span id="like-count-${oc.id}">0</span>
                         </button>
                     </div>
                 `;
                 galleryGrid.appendChild(card);
 
-                // GỌI API LẤY SỐ TIM - GẮN THÊM ?t=... ĐỂ ÉP LẤY DATA MỚI NHẤT, CHỐNG CACHE
+                // FIREBASE: Lấy dữ liệu Realtime và tự nhảy số
                 if (oc.likeKey) {
-                    fetch(`https://api.counterapi.dev/v1/taphoa_oc/${oc.likeKey}?t=${Date.now()}`)
-                        .then(res => res.json())
-                        .then(apiData => {
-                            // Nếu API trả về cục data có chứa số (count)
-                            if(apiData && apiData.count !== undefined) {
-                                document.getElementById(`like-count-${oc.id}`).innerText = apiData.count;
-                            } else {
-                                // Nếu API báo lỗi chưa ai thả tim (404 Not Found)
-                                document.getElementById(`like-count-${oc.id}`).innerText = 0;
-                            }
-                        }).catch(e => {
-                            console.log("Lỗi tải tim");
-                            document.getElementById(`like-count-${oc.id}`).innerText = 0;
-                        });
+                    db.ref(`likes/${oc.likeKey}`).on('value', (snapshot) => {
+                        const count = snapshot.val() || 0;
+                        const el = document.getElementById(`like-count-${oc.id}`);
+                        if(el) el.innerText = count;
+                    });
                 }
             });
         }
     }
 
-    // Hàm Xử lý Thả Tim / Bỏ Tim ở Trang Chủ
+    // ==========================================
+    // 4. XỬ LÝ THẢ TIM VỚI FIREBASE
+    // ==========================================
     function toggleLike(event, likeKey, id) {
-        // Chặn chuyển trang khi bấm vào nút tim
         event.preventDefault();
         event.stopPropagation();
 
         const btn = document.getElementById(`like-btn-${id}`);
         const iconSpan = document.getElementById(`heart-icon-${id}`);
-        const countSpan = document.getElementById(`like-count-${id}`);
         
-        // Khóa nút tạm thời tránh spam click liên tục
+        // Khóa nút tạm thời tránh bấm quá nhanh
         btn.disabled = true;
 
         let isLikedLocally = localStorage.getItem(`isLiked_${likeKey}`) === 'true';
-        
-        // Nếu nó đang hiện "..." mà user bấm luôn thì coi như số cũ là 0
-        let currentCount = parseInt(countSpan.innerText) || 0;
+        const likeRef = db.ref(`likes/${likeKey}`);
 
         if (isLikedLocally) {
-            // ĐANG LIKE -> BẤM UNLIKE
+            // UNLIKE -> Trừ tim
             localStorage.setItem(`isLiked_${likeKey}`, 'false');
             iconSpan.innerText = '🤍';
-            countSpan.innerText = Math.max(0, currentCount - 1);
+            
+            likeRef.transaction(current => {
+                return Math.max(0, (current || 0) - 1);
+            }).then(() => btn.disabled = false)
+              .catch(() => btn.disabled = false);
 
-            fetch(`https://api.counterapi.dev/v1/taphoa_oc/${likeKey}/down?t=${Date.now()}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data && data.count !== undefined) countSpan.innerText = data.count;
-                })
-                .finally(() => btn.disabled = false);
         } else {
-            // CHƯA LIKE -> BẤM LIKE
+            // LIKE -> Cộng tim
             localStorage.setItem(`isLiked_${likeKey}`, 'true');
             iconSpan.innerText = '❤️';
-            countSpan.innerText = currentCount + 1;
-
-            fetch(`https://api.counterapi.dev/v1/taphoa_oc/${likeKey}/up?t=${Date.now()}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data && data.count !== undefined) countSpan.innerText = data.count;
-                })
-                .finally(() => btn.disabled = false);
+            
+            likeRef.transaction(current => {
+                return (current || 0) + 1;
+            }).then(() => btn.disabled = false)
+              .catch(() => btn.disabled = false);
         }
     }
 
     // ==========================================
-    // LOGIC CHATBOT AI TƯ VẤN NHÂN VẬT
+    // 5. LOGIC CHATBOT AI
     // ==========================================
     const chatWindow = document.getElementById("chatWindow");
     const chatBody = document.getElementById("chatBody");
     const chatInput = document.getElementById("chatInput");
 
-    // Ẩn/hiện khung chat
     function toggleChat() {
         chatWindow.classList.toggle("active");
         if(chatWindow.classList.contains("active")) chatInput.focus();
     }
 
-    // Bắt sự kiện ấn phím Enter
     function handleEnter(e) {
         if(e.key === "Enter") sendMessage();
     }
 
-    // Gửi tin nhắn
     function sendMessage() {
         const text = chatInput.value.trim();
         if(!text) return;
 
-        // Hiện tin nhắn người dùng
         appendMessage(text, "msg-user");
         chatInput.value = "";
 
-        // Trợ lý suy nghĩ 0.5s rồi trả lời
         setTimeout(() => {
             const response = botBrain(text);
             appendMessage(response, "msg-bot");
         }, 500);
     }
 
-    // Thêm tin nhắn vào khung
     function appendMessage(text, className) {
         const div = document.createElement("div");
         div.className = `msg ${className}`;
-        div.innerHTML = text; // Cho phép dùng thẻ HTML (để tạo link)
+        div.innerHTML = text; 
         chatBody.appendChild(div);
-        chatBody.scrollTop = chatBody.scrollHeight; // Cuộn xuống cuối
+        chatBody.scrollTop = chatBody.scrollHeight; 
     }
 
-    // Bộ não của Chatbot (Quét từ khóa)
     function botBrain(input) {
-        const keywords = input.toLowerCase().split(/\s+/); // Tách câu thành các từ
+        const keywords = input.toLowerCase().split(/\s+/);
         let bestMatch = null;
         let maxScore = 0;
 
         ocData.forEach(oc => {
             let score = 0;
-            // Gộp tất cả thông tin nhân vật thành 1 chuỗi dài để quét
             const dataString = (oc.tags.join(" ") + " " + oc.personality + " " + oc.story + " " + oc.name).toLowerCase();
             
-            // Tính điểm: Trùng 1 từ khóa +1 điểm
             keywords.forEach(kw => {
                 if(dataString.includes(kw)) score++;
             });
@@ -417,7 +403,6 @@
             }
         });
 
-        // Nếu tìm thấy nhân vật phù hợp (điểm > 0)
         if(bestMatch && maxScore > 0) {
             return `Tui nghĩ bạn sẽ u mê <strong>${bestMatch.name}</strong> đó! 🥰<br>
                     <a href="${bestMatch.slug}">👉 Bấm vào đây để xem chi tiết nhé!</a>`;
