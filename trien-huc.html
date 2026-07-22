@@ -70,6 +70,11 @@
             border-color: var(--primary-color);
             opacity: 0.9;
         }
+        /* Trạng thái khi đã thả tim */
+        .like-btn.liked {
+            background-color: var(--primary-color);
+            color: white;
+        }
 
         .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
         .detail-tag { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;}
@@ -106,23 +111,34 @@
         }
         .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
 
-        /* ================= CUSDIS BÌNH LUẬN ================= */
+        /* ================= HỆ THỐNG BÌNH LUẬN TỰ LÀM ================= */
         .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
         .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
         
-        /* Fix dãn tự động cho Cusdis */
-        #cusdis_thread {
-            width: 100%;
-            height: auto !important; 
-            min-height: 250px;
-            overflow: visible !important;
+        .comment-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .comment-form input, .comment-form textarea {
+            width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-family: var(--font-body); font-size: 1rem; outline: none; transition: 0.3s;
         }
-        #cusdis_thread iframe {
-            width: 100% !important;
-            height: auto !important;
-            min-height: 250px;
-            overflow: hidden !important; 
+        .comment-form input:focus, .comment-form textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 5px rgba(114, 47, 55, 0.2); }
+        .comment-form textarea { resize: vertical; min-height: 80px; }
+        
+        .comment-btn {
+            align-self: flex-end; background-color: var(--primary-color); color: white; border: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-weight: bold; cursor: pointer; transition: 0.3s;
         }
+        .comment-btn:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .comment-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        .comment-list { display: flex; flex-direction: column; gap: 15px; max-height: 500px; overflow-y: auto; padding-right: 10px; }
+        .comment-list::-webkit-scrollbar { width: 6px; }
+        .comment-list::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 10px; }
+        
+        .comment-item { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); animation: fadeIn 0.4s ease; border-left: 4px solid var(--primary-color); }
+        .comment-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .comment-name { font-weight: bold; color: var(--primary-color); font-size: 1.05rem; }
+        .comment-time { font-size: 0.8rem; color: #888; }
+        .comment-text { color: var(--text-dark); white-space: pre-wrap; line-height: 1.5; font-size: 0.95rem; }
+        
+        .no-comment { text-align: center; color: var(--text-light); font-style: italic; padding: 20px 0; }
 
         /* ================= RESPONSIVE ================= */
         @media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; } }
@@ -148,7 +164,7 @@
                 <!-- NÚT THẢ TIM (CHỐNG SPAM) -->
                 <button class="like-btn" id="likeBtn">
                     <span id="likeText">🤍 Thả tim</span> 
-                    <span class="like-count">(<span id="likeCount">0</span>)</span>
+                    <span class="like-count">(<span id="likeCount">...</span>)</span>
                 </button>
             </div>
 
@@ -176,7 +192,6 @@
                     <li>Mọi nội dung trong <strong>[ ]</strong> là cuộc trò chuyện riêng với Hệ thống, chỉ bạn nhìn thấy.</li>
                     <li>Mọi nội dung trong <strong>" "</strong> là hội thoại bình thường, tất cả nhân vật đều nghe được.</li>
                 </ul>
-  
             </details>
 
             <details class="info-box">
@@ -218,89 +233,182 @@
                 <p>"Chỗ này mát. Với lại... giáo viên ít để ý."</p>
             </div>
             
-
-
             <!-- Nút Link Sang GG AI STUDIO -->
-<div class="external-links">
-    <a href="https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221yYU1bJL4HDPILzFehwOm_GjKQqFEurKm%22%5D,%22action%22:%22open%22,%22userId%22:%22108161815635416619104%22,%22resourceKeys%22:%7B%7D%7D" class="ext-link-btn" target="_blank">
-        🔗 Trò chuyện cùng Triển Húc (Google AI Studio)
-    </a>
-</div>
+            <div class="external-links">
+                <a href="https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221yYU1bJL4HDPILzFehwOm_GjKQqFEurKm%22%5D,%22action%22:%22open%22,%22userId%22:%22108161815635416619104%22,%22resourceKeys%22:%7B%7D%7D" class="ext-link-btn" target="_blank">
+                    🔗 Trò chuyện cùng Triển Húc (Google AI Studio)
+                </a>
+            </div>
         </div>
 
-        <!-- HỆ THỐNG BÌNH LUẬN CUSDIS -->
+        <!-- HỆ THỐNG BÌNH LUẬN FIREBASE -->
         <div class="comment-section">
-            <h2>Bình luận</h2>
-            <div id="cusdis_thread"
-              data-host="https://cusdis.com"
-              data-app-id="e972c281-be11-4edb-97bb-b6b73a4e505a"
-              data-page-id="trien-huc"
-              data-page-url=""
-              data-page-title="Triển Húc">
+            <h2>Góc tâm tình</h2>
+            
+            <!-- Form nhập bình luận -->
+            <div class="comment-form">
+                <input type="text" id="commentName" placeholder="Tên / Nickname của bạn (Bắt buộc)" maxlength="30">
+                <textarea id="commentText" placeholder="Bạn nghĩ gì về nhân vật này? Cứ thoải mái tâm sự nha..." rows="3"></textarea>
+                <button class="comment-btn" id="submitCommentBtn">Gửi bình luận</button>
             </div>
-            <script>
-  window.addEventListener('message', function (e) {
-    if (e.data && e.data.target === 'cusdis') {
-      const iframe = document.querySelector('#cusdis_thread iframe');
-      if (iframe && e.data.data && e.data.data.height) {
-        iframe.style.height = (e.data.data.height + 20) + 'px';
-      }
-    }
-  });
-</script>
-            <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+
+            <!-- Danh sách bình luận -->
+            <div class="comment-list" id="commentList">
+                <div class="no-comment">Đang tải bình luận...</div>
+            </div>
         </div>
 
     </div>
 </div>
 
-<!-- ================= SCRIPT THẢ TIM CHỐNG SPAM ================= -->
+<!-- ================= SCRIPT THẢ TIM & BÌNH LUẬN FIREBASE ================= -->
+<!-- Khai báo thư viện Firebase từ CDN -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
 <script>
-    const namespace = "taphoa_oc"; 
-    const key = "likes_trienhuc"; // Key riêng biệt cho Triển Húc
+    // 1. CẤU HÌNH FIREBASE 
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHEEapKd9PyLDJS5My0usnremVMmdzl4M",
+      authDomain: "taphoachongcunbu-3d24a.firebaseapp.com",
+      databaseURL: "https://taphoachongcunbu-3d24a-default-rtdb.firebaseio.com",
+      projectId: "taphoachongcunbu-3d24a",
+      storageBucket: "taphoachongcunbu-3d24a.firebasestorage.app",
+      messagingSenderId: "1028086205634",
+      appId: "1:1028086205634:web:679c8b0666347176eebf5b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 2. KHỞI TẠO BIẾN CHO NHÂN VẬT TRIỂN HÚC
+    const key = "likes_trienhuc"; 
     
     const likeBtn = document.getElementById("likeBtn");
     const likeText = document.getElementById("likeText");
     const likeCountSpan = document.getElementById("likeCount");
     
-    // 1. Kiểm tra LocalStorage xem user đã từng bấm tim nhân vật này chưa
+    // Kiểm tra LocalStorage xem user đã từng bấm tim chưa
     let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
     
-    // Nếu đã bấm rồi -> Khóa nút ngay từ đầu
-    if (isLikedLocally) {
-        likeBtn.disabled = true;
-        likeText.innerText = "💖 Đã thả tim";
+    // Hàm cập nhật giao diện nút
+    function updateButtonUI(isLiked) {
+        if (isLiked) {
+            likeText.innerText = "💖 Đã thả tim";
+            likeBtn.classList.add("liked");
+        } else {
+            likeText.innerText = "🤍 Thả tim";
+            likeBtn.classList.remove("liked");
+        }
     }
 
-    // 2. Fetch số tim từ API
-    fetch(`https://api.counterapi.dev/v1/${namespace}/${key}`)
-        .then(response => response.json())
-        .then(data => {
-            const serverCount = data.count || 0;
-            likeCountSpan.innerText = serverCount; 
-        })
-        .catch(err => {
-            console.error("Lỗi tải API, dùng số mặc định.", err);
-        });
+    // Set giao diện ban đầu
+    updateButtonUI(isLikedLocally);
 
-    // 3. Xử lý khi người dùng Click thả tim
+    // 3. LẮNG NGHE SỐ TIM REALTIME TỪ FIREBASE
+    db.ref(`likes/${key}`).on('value', (snapshot) => {
+        const count = snapshot.val() || 0;
+        likeCountSpan.innerText = count;
+    });
+
+    // 4. XỬ LÝ KHI NGƯỜI DÙNG BẤM NÚT TIM
     likeBtn.addEventListener("click", () => {
         likeBtn.disabled = true;
         
-        let currentCount = parseInt(likeCountSpan.innerText) || 0;
-        likeCountSpan.innerText = currentCount + 1;
+        const likeRef = db.ref(`likes/${key}`);
         
-        likeText.innerText = "💖 Đã thả tim";
-        localStorage.setItem(`isLiked_${key}`, 'true');
+        if (isLikedLocally) {
+            isLikedLocally = false;
+            localStorage.setItem(`isLiked_${key}`, 'false');
+            updateButtonUI(false);
 
-        fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
-            .then(res => res.json())
-            .then(data => {
-                likeCountSpan.innerText = data.count;
-            })
-            .catch(err => {
-                console.error("Lỗi khi bắn API thả tim", err);
-            });
+            likeRef.transaction(current => {
+                return Math.max(0, (current || 0) - 1);
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+
+        } else {
+            isLikedLocally = true;
+            localStorage.setItem(`isLiked_${key}`, 'true');
+            updateButtonUI(true);
+
+            likeRef.transaction(current => {
+                return (current || 0) + 1;
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+        }
+    });
+
+    // ==========================================
+    // 5. HỆ THỐNG BÌNH LUẬN REALTIME (TỰ LÀM)
+    // ==========================================
+    const commentKey = `comments_${key}`; // Lấy luôn key của nhân vật để làm kho chứa bình luận
+    const commentList = document.getElementById("commentList");
+    const commentName = document.getElementById("commentName");
+    const commentText = document.getElementById("commentText");
+    const submitCommentBtn = document.getElementById("submitCommentBtn");
+
+    // Hàm mã hóa chống hack (XSS) khi user nhập code bậy bạ
+    const escapeHTML = str => str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag]));
+
+    // LẮNG NGHE BÌNH LUẬN LIVE TỪ FIREBASE
+    db.ref(commentKey).on('value', (snapshot) => {
+        commentList.innerHTML = ""; 
+        const data = snapshot.val();
+        
+        if (!data) {
+            commentList.innerHTML = '<div class="no-comment">Chưa có bình luận nào. Hãy là người mở bát! ✨</div>';
+            return;
+        }
+
+        // Chuyển object thành mảng và sắp xếp MỚI NHẤT lên đầu
+        const comments = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+
+        comments.forEach(cmt => {
+            const timeString = new Date(cmt.timestamp).toLocaleString('vi-VN');
+            const safeName = escapeHTML(cmt.name);
+            const safeText = escapeHTML(cmt.text);
+
+            const div = document.createElement("div");
+            div.className = "comment-item";
+            div.innerHTML = `
+                <div class="comment-header">
+                    <span class="comment-name">${safeName}</span>
+                    <span class="comment-time">${timeString}</span>
+                </div>
+                <div class="comment-text">${safeText}</div>
+            `;
+            commentList.appendChild(div);
+        });
+    });
+
+    // XỬ LÝ GỬI BÌNH LUẬN
+    submitCommentBtn.addEventListener("click", () => {
+        const nameVal = commentName.value.trim();
+        const textVal = commentText.value.trim();
+
+        if (!nameVal) { alert("Bồ ơi, cho tui xin cái Nickname nha! 🥺"); return; }
+        if (!textVal) { alert("Nhập vài chữ tâm tình rồi hẵng gửi nè! 🥺"); return; }
+
+        submitCommentBtn.disabled = true;
+        submitCommentBtn.innerText = "Đang gửi...";
+
+        // Bắn lên Firebase
+        db.ref(commentKey).push({
+            name: nameVal,
+            text: textVal,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        }).then(() => {
+            commentText.value = "";
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        }).catch(() => {
+            alert("Lỗi mạng gòi, thử lại xíu nha!");
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        });
     });
 </script>
 
