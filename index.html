@@ -61,7 +61,24 @@
         .card-name { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--primary-color); margin-bottom: 5px;}
         
         /* Phần tim trên trang chủ */
-        .card-likes { font-size: 1rem; color: var(--text-light); font-weight: bold; }
+        .card-likes { 
+            position: relative;
+            z-index: 2; /* Nổi lên trên thẻ a để bấm được */
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 1rem; 
+            color: var(--text-light); 
+            font-weight: bold; 
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-family: var(--font-body);
+        }
+        .card-likes:hover { background-color: rgba(114, 47, 55, 0.1); }
 
         /* ================= CHATBOT WIDGET ================= */
         .chat-btn {
@@ -239,7 +256,7 @@
         renderGallery(filtered);
     }
 
-    // Render danh sách Gallery
+   // Render danh sách Gallery
     function renderGallery(data) {
         galleryGrid.innerHTML = "";
         if(data.length === 0) {
@@ -251,26 +268,72 @@
                 card.className = "card";
                 card.href = oc.slug; // Bấm vào nhảy sang link file HTML
 
+                // Kiểm tra xem User đã like nhân vật này chưa để chọn icon tim
+                let isLikedLocally = localStorage.getItem(`isLiked_${oc.likeKey}`) === 'true';
+                let heartIcon = isLikedLocally ? '❤️' : '🤍';
+
                 card.innerHTML = `
                     <img class="card-img" src="${oc.image}" alt="${oc.name}">
                     <div class="card-info">
                         <div class="card-name">${oc.name}</div>
-                        <div class="card-likes">❤️ <span id="like-count-${oc.id}">${oc.defaultLikes}</span></div>
+                        <!-- Nút tim gọi hàm toggleLike -->
+                        <button class="card-likes" id="like-btn-${oc.id}" onclick="toggleLike(event, '${oc.likeKey}', ${oc.id})">
+                            <span id="heart-icon-${oc.id}">${heartIcon}</span> 
+                            <span id="like-count-${oc.id}">0</span>
+                        </button>
                     </div>
                 `;
                 galleryGrid.appendChild(card);
 
-                // GỌI API LẤY SỐ TIM THỰC TẾ TRÊN TOÀN CẦU CHO TỪNG NHÂN VẬT
+                // GỌI API LẤY SỐ TIM THỰC TẾ
                 if (oc.likeKey) {
                     fetch(`https://api.counterapi.dev/v1/taphoa_oc/${oc.likeKey}`)
                         .then(res => res.json())
                         .then(apiData => {
-                            if(apiData.count) {
-                                document.getElementById(`like-count-${oc.id}`).innerText = apiData.count;
-                            }
-                        }).catch(e => console.log("Lấy tim mặc định"));
+                            // Cập nhật số thực tế (nếu chưa ai like thì count trả về có thể undefined, ta gán 0)
+                            document.getElementById(`like-count-${oc.id}`).innerText = apiData.count || 0;
+                        }).catch(e => console.log("Lỗi tải tim"));
                 }
             });
+        }
+    }
+
+    // Hàm Xử lý Thả Tim / Bỏ Tim ở Trang Chủ
+    function toggleLike(event, likeKey, id) {
+        // Ngăn chặn sự kiện click lan ra thẻ <a> (giúp không bị nhảy trang)
+        event.preventDefault();
+        event.stopPropagation();
+
+        const btn = document.getElementById(`like-btn-${id}`);
+        const iconSpan = document.getElementById(`heart-icon-${id}`);
+        const countSpan = document.getElementById(`like-count-${id}`);
+        
+        // Khóa nút tạm thời tránh spam
+        btn.disabled = true;
+
+        let isLikedLocally = localStorage.getItem(`isLiked_${likeKey}`) === 'true';
+        let currentCount = parseInt(countSpan.innerText) || 0;
+
+        if (isLikedLocally) {
+            // ĐANG LIKE -> BẤM UNLIKE
+            localStorage.setItem(`isLiked_${likeKey}`, 'false');
+            iconSpan.innerText = '🤍';
+            countSpan.innerText = Math.max(0, currentCount - 1); // Trừ đi 1, không cho xuống âm
+
+            fetch(`https://api.counterapi.dev/v1/taphoa_oc/${likeKey}/down`)
+                .then(res => res.json())
+                .then(data => countSpan.innerText = data.count || 0)
+                .finally(() => btn.disabled = false);
+        } else {
+            // CHƯA LIKE -> BẤM LIKE
+            localStorage.setItem(`isLiked_${likeKey}`, 'true');
+            iconSpan.innerText = '❤️';
+            countSpan.innerText = currentCount + 1; // Cộng 1
+
+            fetch(`https://api.counterapi.dev/v1/taphoa_oc/${likeKey}/up`)
+                .then(res => res.json())
+                .then(data => countSpan.innerText = data.count || 0)
+                .finally(() => btn.disabled = false);
         }
     }
 
