@@ -70,6 +70,11 @@
             border-color: var(--primary-color);
             opacity: 0.9;
         }
+        /* Trạng thái khi đã thả tim */
+        .like-btn.liked {
+            background-color: var(--primary-color);
+            color: white;
+        }
 
         .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
         .detail-tag { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;}
@@ -147,7 +152,7 @@
                 <!-- NÚT THẢ TIM (CHỐNG SPAM) -->
                 <button class="like-btn" id="likeBtn">
                     <span id="likeText">🤍 Thả tim</span> 
-                    <span class="like-count">(<span id="likeCount">12</span>)</span>
+                    <span class="like-count">(<span id="likeCount">0</span>)</span>
                 </button>
             </div>
 
@@ -230,7 +235,7 @@
     </div>
 </div>
 
-<!-- ================= SCRIPT THẢ TIM CHỐNG SPAM ================= -->
+<!-- ================= SCRIPT THẢ TIM CÓ THỂ UNLIKE ================= -->
 <script>
     const namespace = "taphoa_oc"; 
     const key = "likes_hotinhan"; 
@@ -239,50 +244,71 @@
     const likeText = document.getElementById("likeText");
     const likeCountSpan = document.getElementById("likeCount");
     
-    // 1. Kiểm tra LocalStorage xem user đã từng bấm tim nhân vật này chưa
+    // 1. Kiểm tra LocalStorage xem user đã từng bấm tim chưa
     let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
     
-    // Nếu đã bấm rồi -> Khóa nút ngay từ đầu
-    if (isLikedLocally) {
-        likeBtn.disabled = true;
-        likeText.innerText = "💖 Đã thả tim";
+    // Hàm cập nhật giao diện nút
+    function updateButtonUI(isLiked) {
+        if (isLiked) {
+            likeText.innerText = "💖 Đã thả tim";
+            likeBtn.classList.add("liked");
+        } else {
+            likeText.innerText = "🤍 Thả tim";
+            likeBtn.classList.remove("liked");
+        }
     }
 
-    // 2. Fetch số tim từ API (Fallback mặc định là 1 nếu API chưa có data)
+    // Set giao diện ban đầu
+    updateButtonUI(isLikedLocally);
+
+    // 2. Lấy số tim thực tế từ Server khi vừa vào trang
     fetch(`https://api.counterapi.dev/v1/${namespace}/${key}`)
         .then(response => response.json())
         .then(data => {
-            const serverCount = data.count || 1;
-            likeCountSpan.innerText = serverCount; 
+            // Nếu API trả về số thì dùng, chưa ai like (null) thì mặc định là 0
+            likeCountSpan.innerText = data.count || 0; 
         })
         .catch(err => {
-            console.error("Lỗi tải API, dùng số mặc định.", err);
-            // Vẫn giữ nguyên số 1 đã code cứng trong HTML, không hiện chữ Lỗi
+            console.error("Lỗi tải API, giữ nguyên 0.", err);
         });
 
-    // 3. Xử lý khi người dùng Click thả tim
+    // 3. Xử lý khi người dùng Click nút
     likeBtn.addEventListener("click", () => {
-        // Chặn spam: Khóa nút ngay lập tức
+        // Khóa nút tạm thời để tránh bấm liên tục (spam click)
         likeBtn.disabled = true;
         
-        // Tăng số ảo trên giao diện cho mượt
-        let currentCount = parseInt(likeCountSpan.innerText) || 1;
-        likeCountSpan.innerText = currentCount + 1;
+        let currentCount = parseInt(likeCountSpan.innerText) || 0;
         
-        // Đổi chữ và lưu LocalStorage
-        likeText.innerText = "💖 Đã thả tim";
-        localStorage.setItem(`isLiked_${key}`, 'true');
+        if (isLikedLocally) {
+            // TRƯỜNG HỢP: ĐÃ LIKE -> BẤM ĐỂ UNLIKE
+            isLikedLocally = false;
+            localStorage.setItem(`isLiked_${key}`, 'false');
+            
+            // Cập nhật giao diện mượt (trừ 1)
+            likeCountSpan.innerText = Math.max(0, currentCount - 1);
+            updateButtonUI(false);
 
-        // Bắn API lên Server
-        fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
-            .then(res => res.json())
-            .then(data => {
-                // Cập nhật lại số chính xác từ Server trả về
-                likeCountSpan.innerText = data.count;
-            })
-            .catch(err => {
-                console.error("Lỗi khi bắn API thả tim", err);
-            });
+            // Bắn API trừ 1
+            fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/down`)
+                .then(res => res.json())
+                .then(data => likeCountSpan.innerText = data.count || 0)
+                .finally(() => likeBtn.disabled = false); // Mở lại nút
+
+        } else {
+            // TRƯỜNG HỢP: CHƯA LIKE -> BẤM ĐỂ LIKE
+            isLikedLocally = true;
+            localStorage.setItem(`isLiked_${key}`, 'true');
+            
+            // Cập nhật giao diện mượt (cộng 1)
+            likeCountSpan.innerText = currentCount + 1;
+            updateButtonUI(true);
+
+            // Bắn API cộng 1
+            fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
+                .then(res => res.json())
+                .then(data => likeCountSpan.innerText = data.count || 0)
+                .finally(() => likeBtn.disabled = false); // Mở lại nút
+        }
     });
 </script>
 
