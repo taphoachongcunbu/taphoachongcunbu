@@ -32,8 +32,9 @@
         .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
         
         /* ================= QUẢN LÝ KÍCH THƯỚC ẢNH ================= */
-        .detail-img, .story-images img { 
+        .detail-img { 
             max-height: 480px; 
+            max-width: 100%; /* <--- THÊM DÒNG NÀY VÀO LÀ CÂN MỌI MÀN HÌNH! */
             width: auto; 
             object-fit: contain; 
             margin: 0 auto; 
