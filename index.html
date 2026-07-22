@@ -73,6 +73,17 @@
         .tag-btn { background-color: transparent; color: var(--primary-color); border: 1px solid var(--primary-color); padding: 6px 16px; border-radius: 50px; cursor: pointer; font-family: var(--font-body); transition: all 0.3s; }
         .tag-btn:hover, .tag-btn.active { background-color: var(--primary-color); color: #fff; }
 
+        /* Nút ẩn/hiện thêm tag */
+        .toggle-tag-btn {
+            border-style: dashed !important;
+            font-weight: 600;
+            background-color: rgba(114, 47, 55, 0.05);
+        }
+        .toggle-tag-btn:hover {
+            background-color: var(--primary-color) !important;
+            color: #fff !important;
+        }
+
         /* --- Gallery Grid --- */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         
@@ -283,7 +294,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-  // ==========================================
+    // ==========================================
     // 3. DỮ LIỆU NHÂN VẬT 
     // ==========================================
     const ocData = [
@@ -319,7 +330,7 @@
             tags: ["char đã có crush", "thanh xuân vườn trường", "BG", "BL"],
             personality: "dương quang, trai thể thao, friendzone, ngoại quốc",
             story: "Thằng bạn thân không yêu bạn."
-        }, // <--- CHÍNH LÀ DẤU PHẨY NÀY ĐÂY!!!
+        },
         {
             id: 4,
             name: "Tống Tư Vỹ", 
@@ -491,6 +502,8 @@
     
     let currentTag = "Tất cả";
     let searchQuery = "";
+    let isExpandedTags = false; // Trạng thái ẩn/hiện tag
+    const MAX_VISIBLE_TAGS = 10; // Giới hạn hiển thị ban đầu 10 tag
 
     const galleryGrid = document.getElementById("galleryGrid");
     const tagsContainer = document.getElementById("tagsContainer");
@@ -509,13 +522,33 @@
 
     function renderTags() {
         tagsContainer.innerHTML = "";
-        allTags.forEach(tag => {
+
+        // Lấy danh sách tag cần hiện tùy theo trạng thái isExpandedTags
+        let visibleTags = isExpandedTags ? allTags : allTags.slice(0, MAX_VISIBLE_TAGS);
+
+        visibleTags.forEach(tag => {
             const btn = document.createElement("button");
             btn.className = `tag-btn ${tag === currentTag ? 'active' : ''}`;
             btn.textContent = tag;
             btn.onclick = () => { currentTag = tag; renderTags(); filterData(); };
             tagsContainer.appendChild(btn);
         });
+
+        // Tạo nút bấm Xem thêm / Thu gọn nếu số lượng tag nhiều hơn giới hạn
+        if (allTags.length > MAX_VISIBLE_TAGS) {
+            const toggleBtn = document.createElement("button");
+            toggleBtn.className = "tag-btn toggle-tag-btn";
+
+            if (!isExpandedTags) {
+                const hiddenCount = allTags.length - MAX_VISIBLE_TAGS;
+                toggleBtn.textContent = `+${hiddenCount} tag nữa...`;
+                toggleBtn.onclick = () => { isExpandedTags = true; renderTags(); };
+            } else {
+                toggleBtn.textContent = `Thu gọn ▲`;
+                toggleBtn.onclick = () => { isExpandedTags = false; renderTags(); };
+            }
+            tagsContainer.appendChild(toggleBtn);
+        }
     }
 
     function filterData() {
@@ -654,13 +687,16 @@
             "bl", "bg", "việt nam", "xưa", "thầy thuốc", "trầm ổn", "kiệm lời", "lạnh lùng", "dịu dàng",
             "hệ thống", "thanh xuân", "vườn trường", "học đường", "học bá", "nam chính", "chung tình",
             "crush", "bạn thân", "dương quang", "thể thao", "friendzone", "ngoại quốc",
-            "niên hạ", "tâm cơ", "thiếu gia", "trà xanh", "nham hiểm", "mưu mô"
+            "niên hạ", "tâm cơ", "thiếu gia", "trà xanh", "nham hiểm", "mưu mô", "phúc hắc", "antifan",
+            "tổng tài", "mang thai", "xuyên không", "tsundere", "redflag", "rapper", "nũng nịu",
+            "công sở", "thú nhân", "tu tiên", "cổ trang", "sư tôn", "ngược", "chủ - tớ", "419",
+            "nhiếp chính vương", "yêu thầm", "kén ăn", "incubus", "hèn"
         ];
 
         // 2. Lọc xem câu của khách có gõ trúng từ khóa xịn nào không
         let foundWords = validKeywords.filter(kw => cleanInput.includes(kw));
 
-        // Nếu khách gõ cái gì đó mặn chát không dính líu tới game (VD: "ông già 80 cơ bắp")
+        // Nếu khách gõ cái gì đó mặn chát không dính líu tới game
         if (foundWords.length === 0) {
             return `Trùi ui, chắc là hổng có rùi á! 😭<br>Bạn thử nhập khác (ví dụ: BL, thầy thuốc, niên hạ, trà xanh...) xem sao nha! 🥺`;
         }
@@ -706,6 +742,7 @@
             return `Trùi ui, hiện tại tui chưa có nhân vật nào khớp với gu này. Bạn thử nhập từ khóa khác xem sao nha! 🥺`;
         }
     }
+
     // Khởi chạy web
     init();
 
