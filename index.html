@@ -48,7 +48,6 @@
             animation: fadeIn 0.8s ease; 
         }
 
-        /* Lớp phủ Blur mờ sương sương tràn 100% chiều ngang */
         header::before {
             content: '';
             position: absolute;
@@ -87,37 +86,15 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 6px rgba(0, 0, 0, 0.7);
         }
 
-        /* --- Nút Mạng Xã Hội (Facebook & TikTok) --- */
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 18px;
-        }
+        /* --- Nút Mạng Xã Hội --- */
+        .social-links { display: flex; justify-content: center; gap: 15px; margin-top: 18px; }
         .social-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            background-color: rgba(255, 255, 255, 0.9);
-            color: var(--primary-color);
-            border-radius: 50%;
-            text-decoration: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-            transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; width: 44px; height: 44px;
+            background-color: rgba(255, 255, 255, 0.9); color: var(--primary-color); border-radius: 50%;
+            text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.12); transition: all 0.3s ease;
         }
-        .social-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-        .social-btn:hover {
-            background-color: var(--primary-color);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(114, 47, 55, 0.25);
-        }
+        .social-btn svg { width: 20px; height: 20px; fill: currentColor; }
+        .social-btn:hover { background-color: var(--primary-color); color: white; transform: translateY(-3px); }
 
         /* --- Controls: Search & Tags --- */
         .controls { display: flex; flex-direction: column; align-items: center; gap: 20px; margin-bottom: 40px; }
@@ -128,29 +105,16 @@
         .tag-btn { background-color: transparent; color: var(--primary-color); border: 1px solid var(--primary-color); padding: 6px 16px; border-radius: 50px; cursor: pointer; font-family: var(--font-body); transition: all 0.3s; }
         .tag-btn:hover, .tag-btn.active { background-color: var(--primary-color); color: #fff; }
 
-        .toggle-tag-btn {
-            border-style: dashed !important;
-            font-weight: 600;
-            background-color: rgba(114, 47, 55, 0.05);
-        }
-        .toggle-tag-btn:hover {
-            background-color: var(--primary-color) !important;
-            color: #fff !important;
-        }
+        .toggle-tag-btn { border-style: dashed !important; font-weight: 600; background-color: rgba(114, 47, 55, 0.05); }
+        .toggle-tag-btn:hover { background-color: var(--primary-color) !important; color: #fff !important; }
 
         /* --- Gallery Grid --- */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
         
         .card { 
-            display: block; 
-            text-decoration: none; 
-            background: var(--card-bg); 
-            border-radius: 12px; 
-            overflow: hidden; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-            cursor: pointer; 
-            transition: transform 0.3s, box-shadow 0.3s; 
-            animation: fadeIn 0.5s ease;
+            display: block; text-decoration: none; background: var(--card-bg); border-radius: 12px; 
+            overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); cursor: pointer; 
+            transition: transform 0.3s, box-shadow 0.3s; animation: fadeIn 0.5s ease;
         }
         .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
         .card-img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
@@ -158,147 +122,50 @@
         .card-name { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 700; color: var(--primary-color); margin-bottom: 8px;}
         
         .card-slogan {
-            font-size: 0.95rem;
-            color: var(--text-light);
-            font-style: italic;
-            margin-bottom: 12px;
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            font-size: 0.95rem; color: var(--text-light); font-style: italic; margin-bottom: 12px; line-height: 1.5;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
         }
-        .card-tags-mini {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 6px;
-            margin-bottom: 15px;
-        }
-        .card-tag-mini {
-            background-color: #f0f0f0;
-            color: #555;
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 500;
-        }
+        .card-tags-mini { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 15px; }
+        .card-tag-mini { background-color: #f0f0f0; color: #555; font-size: 0.75rem; padding: 4px 10px; border-radius: 20px; font-weight: 500; }
 
         .card-likes { 
-            position: relative;
-            z-index: 2;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 1rem; 
-            color: var(--text-light); 
-            font-weight: bold; 
-            background: none;
-            border: 2px solid #eee;
-            cursor: pointer;
-            padding: 6px 14px;
-            border-radius: 20px;
-            transition: all 0.3s;
-            font-family: var(--font-body);
+            position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 5px; font-size: 1rem; 
+            color: var(--text-light); font-weight: bold; background: none; border: 2px solid #eee; cursor: pointer;
+            padding: 6px 14px; border-radius: 20px; transition: all 0.3s; font-family: var(--font-body);
         }
         .card-likes:hover { background-color: rgba(114, 47, 55, 0.05); border-color: rgba(114, 47, 55, 0.2); }
 
         /* ================= CHATBOT & NÚT TRỢ GIÚP WIDGET ================= */
-        .floating-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            z-index: 1000;
-        }
+        .floating-container { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
 
         .action-circle-btn {
-            width: 55px;
-            height: 55px;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(114, 47, 55, 0.35);
-            border: none;
-            transition: 0.3s;
-            font-family: var(--font-serif);
-            font-weight: bold;
+            width: 55px; height: 55px; background-color: var(--primary-color); color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(114, 47, 55, 0.35); border: none; transition: 0.3s; font-family: var(--font-serif); font-weight: bold;
         }
         .action-circle-btn:hover { transform: scale(1.1); background-color: var(--primary-hover); }
 
-        /* Bảng Menu Hướng Dẫn Trợ Giúp */
-        .help-window {
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            width: 320px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            z-index: 1001;
-            border: 1px solid #eee;
-            animation: slideUp 0.3s ease;
+        .help-window, .chat-window {
+            position: fixed; bottom: 100px; right: 30px; background: white; border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: none; flex-direction: column; overflow: hidden;
+            z-index: 1001; border: 1px solid #eee; animation: slideUp 0.3s ease;
         }
-        .help-window.active { display: flex; }
+        .help-window { width: 320px; }
+        .chat-window { width: 350px; }
+        .help-window.active, .chat-window.active { display: flex; }
 
-        .help-header { background-color: var(--primary-color); color: white; padding: 15px; font-family: var(--font-serif); font-weight: bold; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center; }
-        .help-body { padding: 20px 15px; display: flex; flex-direction: column; gap: 12px; background-color: #faf9f7; }
-        
-        .help-guide-btn {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: white;
-            color: var(--text-dark);
-            padding: 12px 16px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border: 1px solid #e5e5e5;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-            transition: all 0.3s ease;
-        }
-        .help-guide-btn:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(114, 47, 55, 0.12);
-        }
-
-        /* Bảng Chatbot */
-        .chat-window {
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            width: 350px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-            z-index: 1001;
-            border: 1px solid #eee;
-            animation: slideUp 0.3s ease;
-        }
-        .chat-window.active { display: flex; }
-
-        .chat-header { background-color: var(--primary-color); color: white; padding: 15px; font-family: var(--font-serif); font-weight: bold; font-size: 1.1rem; display: flex; justify-content: space-between; align-items: center; }
+        .help-header, .chat-header { background-color: var(--primary-color); color: white; padding: 15px; font-family: var(--font-serif); font-weight: bold; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center; }
         .close-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
-        
+
+        .help-body { padding: 20px 15px; display: flex; flex-direction: column; gap: 12px; background-color: #faf9f7; }
+        .help-guide-btn {
+            display: flex; align-items: center; justify-content: space-between; background-color: white; color: var(--text-dark);
+            padding: 12px 16px; border-radius: 10px; text-decoration: none; font-size: 0.95rem; font-weight: 600;
+            border: 1px solid #e5e5e5; box-shadow: 0 2px 5px rgba(0,0,0,0.03); transition: all 0.3s ease;
+        }
+        .help-guide-btn:hover { border-color: var(--primary-color); color: var(--primary-color); transform: translateX(4px); }
+
         .chat-body { height: 300px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-color: #faf9f7; font-size: 0.95rem; }
-        
         .msg { max-width: 80%; padding: 10px 15px; border-radius: 15px; line-height: 1.4; }
         .msg-bot { background-color: #fff; color: var(--text-dark); align-self: flex-start; border: 1px solid #eee; border-bottom-left-radius: 2px; }
         .msg-bot a { color: var(--primary-color); font-weight: bold; }
@@ -308,6 +175,46 @@
         .chat-input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 20px; outline: none; font-family: var(--font-body); }
         .chat-send { background: none; border: none; color: var(--primary-color); font-weight: bold; padding: 0 15px; cursor: pointer; font-size: 1rem; }
 
+        /* ================= POPUP NHÂN VẬT MỚI (NEW) ================= */
+        .popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(4px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        }
+        .popup-overlay.show { opacity: 1; visibility: visible; }
+
+        .popup-card {
+            background: white; border-radius: 20px; width: 90%; max-width: 520px; padding: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); text-align: center; position: relative;
+            transform: scale(0.8); transition: all 0.3s ease; border: 2px solid rgba(114, 47, 55, 0.15);
+        }
+        .popup-overlay.show .popup-card { transform: scale(1); }
+
+        .popup-close {
+            position: absolute; top: 12px; right: 15px; background: none; border: none;
+            font-size: 1.5rem; color: #888; cursor: pointer; transition: 0.2s;
+        }
+        .popup-close:hover { color: var(--primary-color); }
+
+        .popup-title { font-family: var(--font-serif); color: var(--primary-color); font-size: 1.6rem; margin-bottom: 5px; font-weight: 700; }
+        .popup-subtitle { font-size: 0.9rem; color: var(--text-light); margin-bottom: 20px; font-style: italic; }
+
+        /* Khung chứa 2 nhân vật mới nằm ngang */
+        .popup-items-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .popup-item { background: #faf9f7; border-radius: 12px; padding: 12px; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; }
+        .popup-item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
+        .popup-item-name { font-family: var(--font-serif); font-weight: bold; color: var(--primary-color); font-size: 1.1rem; margin-bottom: 8px; }
+        
+        .popup-btn {
+            background-color: var(--primary-color); color: white; text-decoration: none; padding: 6px 14px;
+            border-radius: 20px; font-size: 0.85rem; font-weight: bold; transition: 0.3s;
+        }
+        .popup-btn:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+
+        .popup-footer-action { font-size: 0.85rem; color: #777; cursor: pointer; text-decoration: underline; }
+        .popup-footer-action:hover { color: var(--primary-color); }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -316,6 +223,7 @@
             header { padding: 35px 15px; min-height: 220px; }
             .floating-container { bottom: 20px; right: 20px; }
             .chat-window, .help-window { width: calc(100% - 40px); right: 20px; bottom: 150px; }
+            .popup-items-grid { grid-template-columns: 1fr; } /* Trên điện thoại xếp dọc lại cho dễ nhìn */
         }
     </style>
 </head>
@@ -332,7 +240,6 @@
                     <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>
                 </svg>
             </a>
-            
             <a href="https://www.tiktok.com/@taphoachongcunbu?_r=1&_t=ZS-98Ei6ZPv5s2" target="_blank" class="social-btn" title="Ghé thăm TikTok của tui">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/>
@@ -357,34 +264,22 @@
     </div>
 </div>
 
-<!-- ================= CỤM NÚT TÁC VỤ (HỖ TRỢ & CHATBOT) ================= -->
+<!-- ================= CỤM NÚT TÁC VỤ ================= -->
 <div class="floating-container">
-    <!-- Nút ? Hỗ trợ -->
     <button class="action-circle-btn" onclick="toggleHelp()" title="Hướng dẫn & Hỗ trợ">❓</button>
-    <!-- Nút Chatbot -->
     <button class="action-circle-btn" onclick="toggleChat()" title="Trợ lý Cún Bự">💬</button>
 </div>
 
-<!-- BẢNG HƯỚNG DẪN TRỢ GIÚP -->
+<!-- BẢNG HƯỚNG DẪN -->
 <div class="help-window" id="helpWindow">
     <div class="help-header">
         Góc Hướng Dẫn & Hỗ Trợ 💡
         <button class="close-btn" onclick="toggleHelp()">✖</button>
     </div>
     <div class="help-body">
-        <!-- BỒ THAY LINK TIKTOK CỦA BỒ VÀO DẤU # Ở DƯỚI NÈ: -->
-        <a href="https://vt.tiktok.com/ZSXpyPHp9/" target="_blank" class="help-guide-btn">
-            <span>📖 cách sử dụng web</span>
-            <span>▶</span>
-        </a>
-        <a href="https://vt.tiktok.com/ZSXpyAhwr/" target="_blank" class="help-guide-btn">
-            <span>🤖 cách dùng Google AI Studio</span>
-            <span>▶</span>
-        </a>
-        <a href="https://vt.tiktok.com/ZSXpyVF2H/" target="_blank" class="help-guide-btn">
-            <span>🔄 cách đổi mail khi bị limit</span>
-            <span>▶</span>
-        </a>
+        <a href="#" target="_blank" class="help-guide-btn"><span>📖 cách sử dụng web</span><span>▶</span></a>
+        <a href="#" target="_blank" class="help-guide-btn"><span>🤖 cách dùng Google AI Studio</span><span>▶</span></a>
+        <a href="#" target="_blank" class="help-guide-btn"><span>🔄 cách đổi mail khi bị limit</span><span>▶</span></a>
     </div>
 </div>
 
@@ -400,6 +295,21 @@
     <div class="chat-footer">
         <input type="text" id="chatInput" class="chat-input" placeholder="Nhập gu của bạn..." onkeypress="handleEnter(event)">
         <button class="chat-send" onclick="sendMessage()">Gửi</button>
+    </div>
+</div>
+
+<!-- ================= POPUP THÔNG BÁO NHÂN VẬT MỚI ================= -->
+<div class="popup-overlay" id="newOcPopup">
+    <div class="popup-card">
+        <button class="popup-close" onclick="closePopup()">✖</button>
+        <div class="popup-title">✨ Tân Binh Mới Lên Sóng!</div>
+        <div class="popup-subtitle">Ghé thăm & trải nghiệm ngay những đứa con tinh thần mới nhất nè:</div>
+        
+        <div class="popup-items-grid" id="popupItemsGrid">
+            <!-- 2 nhân vật mới sẽ tự động hiển thị ở đây -->
+        </div>
+
+        <span class="popup-footer-action" onclick="closePopupAndSave()">Đã hiểu (Không hiện lại hôm nay)</span>
     </div>
 </div>
 
@@ -678,7 +588,6 @@
     ];
 
     const allTags = ["Tất cả", ...new Set(ocData.flatMap(oc => oc.tags))];
-    
     let currentTag = "Tất cả";
     let searchQuery = "";
     let isExpandedTags = false;
@@ -692,6 +601,7 @@
     function init() {
         renderTags();
         renderGallery(ocData);
+        checkAndShowNewPopup();
         
         searchInput.addEventListener("input", (e) => {
             searchQuery = e.target.value.toLowerCase();
@@ -701,7 +611,6 @@
 
     function renderTags() {
         tagsContainer.innerHTML = "";
-
         let visibleTags = isExpandedTags ? allTags : allTags.slice(0, MAX_VISIBLE_TAGS);
 
         visibleTags.forEach(tag => {
@@ -715,10 +624,8 @@
         if (allTags.length > MAX_VISIBLE_TAGS) {
             const toggleBtn = document.createElement("button");
             toggleBtn.className = "tag-btn toggle-tag-btn";
-
             if (!isExpandedTags) {
-                const hiddenCount = allTags.length - MAX_VISIBLE_TAGS;
-                toggleBtn.textContent = `+${hiddenCount} tag nữa...`;
+                toggleBtn.textContent = `+${allTags.length - MAX_VISIBLE_TAGS} tag nữa...`;
                 toggleBtn.onclick = () => { isExpandedTags = true; renderTags(); };
             } else {
                 toggleBtn.textContent = `Thu gọn ▲`;
@@ -735,20 +642,23 @@
         renderGallery(filtered);
     }
 
-   function renderGallery(data) {
+    function renderGallery(data) {
         galleryGrid.innerHTML = "";
         if(data.length === 0) {
             noResult.style.display = "block";
         } else {
             noResult.style.display = "none";
-            data.forEach(oc => {
+            
+            // ĐẢO NGƯỢC DANH SÁCH: Cho nhân vật mới nhất (id lớn nhất) bay lên đầu!
+            const sortedData = [...data].sort((a, b) => b.id - a.id);
+
+            sortedData.forEach(oc => {
                 const card = document.createElement("a");
                 card.className = "card";
                 card.href = oc.slug; 
 
                 let isLikedLocally = localStorage.getItem(`isLiked_${oc.likeKey}`) === 'true';
                 let heartIcon = isLikedLocally ? '❤️' : '🤍';
-
                 let tagsHTML = oc.tags.map(tag => `<span class="card-tag-mini">${tag}</span>`).join('');
 
                 card.innerHTML = `
@@ -757,7 +667,6 @@
                         <div class="card-name">${oc.name}</div>
                         <div class="card-slogan">"${oc.slogan}"</div>
                         <div class="card-tags-mini">${tagsHTML}</div>
-                        
                         <button class="card-likes" id="like-btn-${oc.id}" onclick="toggleLike(event, '${oc.likeKey}', ${oc.id})">
                             <span id="heart-icon-${oc.id}">${heartIcon}</span> 
                             <span id="like-count-${oc.id}">0</span>
@@ -777,13 +686,53 @@
         }
     }
 
+    // ================= POPUP AUTOMATION (BẮT TỰ ĐỘNG 2 NHÂN VẬT MỚI NHẤT) =================
+    function checkAndShowNewPopup() {
+        const hideUntil = localStorage.getItem("hideNewPopupUntil");
+        const today = new Date().toDateString();
+
+        // Nếu người dùng chọn "Không hiện lại hôm nay", tạm ẩn Pop-up
+        if (hideUntil === today) return;
+
+        // Tự động sắp xếp để bốc ra 2 nhân vật có ID lớn nhất
+        const latestTwo = [...ocData].sort((a, b) => b.id - a.id).slice(0, 2);
+        const popupGrid = document.getElementById("popupItemsGrid");
+        popupGrid.innerHTML = "";
+
+        latestTwo.forEach(oc => {
+            const div = document.createElement("div");
+            div.className = "popup-item";
+            div.innerHTML = `
+                <img src="${oc.image}" alt="${oc.name}">
+                <div class="popup-item-name">${oc.name}</div>
+                <a href="${oc.slug}" class="popup-btn">Ghé xem ngay ▶</a>
+            `;
+            popupGrid.appendChild(div);
+        });
+
+        // Bật Pop-up sau 0.8s khi vào trang
+        setTimeout(() => {
+            document.getElementById("newOcPopup").classList.add("show");
+        }, 800);
+    }
+
+    function closePopup() {
+        document.getElementById("newOcPopup").classList.remove("show");
+    }
+
+    function closePopupAndSave() {
+        const today = new Date().toDateString();
+        localStorage.setItem("hideNewPopupUntil", today);
+        closePopup();
+    }
+
+    // ================= THẢ TIM =================
     function toggleLike(event, likeKey, id) {
         event.preventDefault();
         event.stopPropagation();
 
         const btn = document.getElementById(`like-btn-${id}`);
         const iconSpan = document.getElementById(`heart-icon-${id}`);
-        
         btn.disabled = true;
 
         let isLikedLocally = localStorage.getItem(`isLiked_${likeKey}`) === 'true';
@@ -792,56 +741,38 @@
         if (isLikedLocally) {
             localStorage.setItem(`isLiked_${likeKey}`, 'false');
             iconSpan.innerText = '🤍';
-            
-            likeRef.transaction(current => {
-                return Math.max(0, (current || 0) - 1);
-            }).then(() => btn.disabled = false)
-              .catch(() => btn.disabled = false);
-
+            likeRef.transaction(current => Math.max(0, (current || 0) - 1)).then(() => btn.disabled = false);
         } else {
             localStorage.setItem(`isLiked_${likeKey}`, 'true');
             iconSpan.innerText = '❤️';
-            
-            likeRef.transaction(current => {
-                return (current || 0) + 1;
-            }).then(() => btn.disabled = false)
-              .catch(() => btn.disabled = false);
+            likeRef.transaction(current => (current || 0) + 1).then(() => btn.disabled = false);
         }
     }
 
-    // ================= LOGIC ẨN/HIỆN CỦA NÚT HỖ TRỢ & CHATBOT =================
+    // ================= WIDGETS =================
     const helpWindow = document.getElementById("helpWindow");
     const chatWindow = document.getElementById("chatWindow");
 
     function toggleHelp() {
-        // Tắt chatbot nếu đang mở
         chatWindow.classList.remove("active");
         helpWindow.classList.toggle("active");
     }
 
     function toggleChat() {
-        // Tắt bảng hỗ trợ nếu đang mở
         helpWindow.classList.remove("active");
         chatWindow.classList.toggle("active");
         if(chatWindow.classList.contains("active")) document.getElementById("chatInput").focus();
     }
 
-    function handleEnter(e) {
-        if(e.key === "Enter") sendMessage();
-    }
+    function handleEnter(e) { if(e.key === "Enter") sendMessage(); }
 
     function sendMessage() {
         const chatInput = document.getElementById("chatInput");
         const text = chatInput.value.trim();
         if(!text) return;
-
         appendMessage(text, "msg-user");
         chatInput.value = "";
-
-        setTimeout(() => {
-            const response = botBrain(text);
-            appendMessage(response, "msg-bot");
-        }, 500);
+        setTimeout(() => { appendMessage(botBrain(text), "msg-bot"); }, 500);
     }
 
     function appendMessage(text, className) {
@@ -863,35 +794,19 @@
             let personalities = oc.personality.split(',').map(p => p.trim().toLowerCase());
             let charKeywords = [...tags, ...personalities, oc.name.toLowerCase()];
             
-            charKeywords.forEach(kw => {
-                if(kw && cleanInput.includes(kw)) {
-                    score++;
-                }
-            });
-
-            if(score > 0) {
-                matches.push({ oc: oc, score: score });
-            }
+            charKeywords.forEach(kw => { if(kw && cleanInput.includes(kw)) score++; });
+            if(score > 0) matches.push({ oc: oc, score: score });
         });
 
         if(matches.length > 0) {
             matches.sort((a, b) => b.score - a.score);
-
             let response = `Tui tìm thấy vài gương mặt cực kỳ hợp gu với bạn nè! 🥰<br><br>`;
-            
-            let topMatches = matches.slice(0, 3);
-            topMatches.forEach(match => {
-                response += `✨ <strong>${match.oc.name}</strong><br>
-                             <a href="${match.oc.slug}">👉 Xem chi tiết ngay và luôn</a><br><br>`;
+            matches.slice(0, 3).forEach(match => {
+                response += `✨ <strong>${match.oc.name}</strong><br><a href="${match.oc.slug}">👉 Xem chi tiết ngay và luôn</a><br><br>`;
             });
-
-            if (matches.length > 3) {
-                response += `<i>(Vẫn còn ${matches.length - 3} người nữa hợp gu. Bạn có thể miêu tả thêm để tui lọc kỹ hơn nha! 🤔)</i>`;
-            }
-
             return response;
         } else {
-            return `Trùi ui, hiện tại tui chưa có nhân vật nào khớp với gu này. Bạn thử dùng các từ khóa khác (ví dụ: lạnh lùng, tổng tài, niên hạ...) xem sao nha! 🥺`;
+            return `Trùi ui, hiện tại tui chưa có nhân vật nào khớp với gu này. Bạn thử dùng các từ khóa khác xem sao nha! 🥺`;
         }
     }
 
