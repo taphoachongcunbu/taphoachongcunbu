@@ -145,31 +145,25 @@
         }
         .search-bar:focus { border-color: var(--primary-color); box-shadow: 0 0 8px rgba(226, 128, 138, 0.3); }
 
+        /* THANH 3 NÚT TÍNH NĂNG TÁCH BIỆT RIÊNG */
         .feature-bar {
-            display: flex; justify-content: center; gap: 15px; width: 100%; flex-wrap: wrap; margin-bottom: 5px;
+            display: flex; justify-content: center; gap: 12px; width: 100%; flex-wrap: wrap; margin-bottom: 5px;
         }
         .feature-btn {
             display: inline-flex; align-items: center; gap: 8px;
-            padding: 9px 20px; border-radius: 30px; font-weight: bold; font-size: 0.95rem;
+            padding: 9px 18px; border-radius: 30px; font-weight: bold; font-size: 0.9rem;
             cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;
             box-shadow: 0 4px 12px rgba(0,0,0,0.06); font-family: var(--font-body);
         }
         
-        .fav-feature-btn {
-            background-color: var(--card-bg); color: #e24b59; border-color: #e24b59;
-        }
-        .fav-feature-btn:hover, .fav-feature-btn.active {
-            background-color: #e24b59; color: white; transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(226, 75, 89, 0.3);
-        }
+        .fav-feature-btn { background-color: var(--card-bg); color: #e24b59; border-color: #e24b59; }
+        .fav-feature-btn:hover, .fav-feature-btn.active { background-color: #e24b59; color: white; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(226, 75, 89, 0.3); }
 
-        .teaser-feature-btn {
-            background-color: var(--card-bg); color: #d97706; border-color: #f59e0b;
-        }
-        .teaser-feature-btn:hover, .teaser-feature-btn.active {
-            background-color: #f59e0b; color: white; transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(245, 158, 11, 0.3);
-        }
+        .teaser-feature-btn { background-color: var(--card-bg); color: #d97706; border-color: #f59e0b; }
+        .teaser-feature-btn:hover, .teaser-feature-btn.active { background-color: #f59e0b; color: white; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(245, 158, 11, 0.3); }
+
+        .wish-feature-btn { background-color: var(--card-bg); color: #8b5cf6; border-color: #8b5cf6; }
+        .wish-feature-btn:hover, .wish-feature-btn.active { background-color: #8b5cf6; color: white; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(139, 92, 246, 0.3); }
 
         .tags-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
         .tag-btn { 
@@ -189,12 +183,8 @@
         }
         .teaser-container.active { display: block; }
         
-        /* Lưới hiển thị nhiều Teaser Card */
         .teaser-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px;
         }
 
         .teaser-card { 
@@ -216,6 +206,36 @@
             box-shadow: 0 5px 15px rgba(255, 75, 43, 0.25); transition: 0.3s; margin-top: auto;
         }
         .teaser-hype-btn:hover { transform: scale(1.05); }
+
+        /* ================= KHUNG BẢNG UỚC NGUYỆN CẦU XIN GU CHỒNG (WISHLIST BOARD) ================= */
+        .wishlist-board {
+            display: none; background: var(--card-bg); border-radius: 20px; padding: 30px 20px;
+            max-width: 750px; margin: 0 auto 40px auto; border: 2px solid #8b5cf6;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.1); animation: fadeIn 0.5s ease;
+        }
+        .wishlist-board.active { display: block; }
+        .wish-board-header { text-align: center; margin-bottom: 25px; }
+        .wish-board-title { font-family: var(--font-serif); font-size: 1.8rem; color: #8b5cf6; font-weight: bold; margin-bottom: 5px; }
+        
+        .wish-form { display: flex; gap: 10px; margin-bottom: 25px; }
+        .wish-form-input { flex: 1; padding: 12px 20px; border: 1.5px solid var(--border-color); border-radius: 30px; outline: none; font-size: 0.95rem; background: var(--bg-color); color: var(--text-dark); transition: 0.3s; }
+        .wish-form-input:focus { border-color: #8b5cf6; }
+        .wish-form-btn { background: #8b5cf6; color: white; border: none; padding: 0 24px; border-radius: 30px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .wish-form-btn:hover { background: #7c3aed; }
+
+        .wish-list-grid { display: flex; flex-direction: column; gap: 12px; }
+        .wish-card { background: var(--bg-color); border: 1px solid var(--border-color); padding: 14px 18px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        .wish-card-content { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .wish-card-text { font-size: 0.98rem; color: var(--text-dark); font-weight: 500; }
+        .wish-card-edit-box { display: flex; gap: 8px; margin-top: 5px; }
+        .wish-card-edit-input { flex: 1; padding: 6px 12px; border-radius: 15px; border: 1px solid #8b5cf6; outline: none; font-size: 0.9rem; }
+
+        .wish-card-actions { display: flex; align-items: center; gap: 8px; }
+        .wish-action-btn { background: none; border: none; cursor: pointer; font-size: 0.82rem; font-weight: bold; padding: 4px 8px; border-radius: 6px; transition: 0.2s; }
+        .edit-btn { color: #2563eb; } .edit-btn:hover { background: rgba(37, 99, 235, 0.1); }
+        .delete-btn { color: #dc2626; } .delete-btn:hover { background: rgba(220, 38, 38, 0.1); }
+        .like-wish-btn { background: rgba(139, 92, 246, 0.15); border: 1px solid #8b5cf6; color: #8b5cf6; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+        .like-wish-btn:hover { background: #8b5cf6; color: white; }
 
         /* --- Gallery Grid --- */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
@@ -265,29 +285,17 @@
         .music-btn.playing { animation: spinMusic 3s linear infinite; background-color: #e24b59 !important; }
         @keyframes spinMusic { 100% { transform: rotate(360deg); } }
 
-        .help-window, .chat-window, .wishlist-window {
+        .help-window, .chat-window {
             position: fixed; bottom: 90px; right: 25px; background: var(--card-bg); color: var(--text-dark); border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.25); display: none; flex-direction: column; overflow: hidden;
             z-index: 1001; border: 1px solid var(--border-color); animation: slideUp 0.3s ease;
         }
         .help-window { width: 320px; }
         .chat-window { width: 350px; }
-        .wishlist-window { width: 360px; max-height: 480px; }
-        .help-window.active, .chat-window.active, .wishlist-window.active { display: flex; }
+        .help-window.active, .chat-window.active { display: flex; }
 
-        .help-header, .chat-header, .wishlist-header { background-color: var(--primary-color); color: white; padding: 15px; font-family: var(--font-serif); font-weight: bold; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center; }
+        .help-header, .chat-header { background-color: var(--primary-color); color: white; padding: 15px; font-family: var(--font-serif); font-weight: bold; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center; }
         .close-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; padding: 0 5px; }
-
-        /* CSS Bảng Cầu Xin Gu Chồng (Wishlist) */
-        .wishlist-body { padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background-color: var(--bg-color); height: 320px; }
-        .wish-item { background: var(--card-bg); border: 1px solid var(--border-color); padding: 10px 12px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .wish-text { font-size: 0.9rem; color: var(--text-dark); flex: 1; padding-right: 10px; }
-        .wish-vote-btn { background: rgba(226, 128, 138, 0.15); border: 1px solid var(--primary-color); color: var(--primary-color); padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: 0.2s; white-space: nowrap; }
-        .wish-vote-btn:hover { background: var(--primary-color); color: white; }
-
-        .wishlist-footer { padding: 10px; background: var(--card-bg); border-top: 1px solid var(--border-color); display: flex; gap: 8px; }
-        .wish-input { flex: 1; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 20px; outline: none; font-size: 0.88rem; background: var(--bg-color); color: var(--text-dark); }
-        .wish-send-btn { background: var(--primary-color); color: white; border: none; padding: 8px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
 
         .help-body { padding: 20px 15px; display: flex; flex-direction: column; gap: 12px; background-color: var(--bg-color); }
         .help-guide-btn {
@@ -359,12 +367,7 @@
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: none;
             display: flex; align-items: center; gap: 8px; text-align: center; white-space: nowrap;
         }
-        .toast-notification.show {
-            transform: translateX(-50%) translateY(0); opacity: 1;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .toast-notification.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         /* ================= RESPONSIVE ĐIỆN THOẠI ================= */
         @media (max-width: 768px) {
@@ -380,12 +383,14 @@
             .badge-rank { font-size: 0.65rem; padding: 2px 6px; margin-bottom: 4px; }
             .crown-icon { font-size: 1.5rem; top: -18px; }
 
-            .feature-bar { gap: 10px; }
-            .feature-btn { padding: 8px 15px; font-size: 0.85rem; }
+            .feature-bar { gap: 8px; }
+            .feature-btn { padding: 8px 12px; font-size: 0.8rem; }
 
-            /* Fix Responsive Teaser Grid Mobile */
             .teaser-grid { grid-template-columns: 1fr; gap: 15px; }
             .teaser-img-wrapper { width: 150px; height: 180px; }
+
+            .wish-form { flex-direction: column; }
+            .wish-form-btn { padding: 10px 0; border-radius: 20px; }
 
             .floating-container { bottom: 20px; right: 15px; gap: 8px; }
             .main-menu-btn { display: flex; width: 48px; height: 48px; }
@@ -395,7 +400,7 @@
 
             .action-circle-btn { width: 44px; height: 44px; font-size: 1.1rem; }
 
-            .chat-window, .help-window, .wishlist-window { width: calc(100% - 30px); right: 15px; bottom: 80px; }
+            .chat-window, .help-window { width: calc(100% - 30px); right: 15px; bottom: 80px; }
 
             .popup-card { padding: 15px; max-height: 90vh; }
             .popup-items-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -438,11 +443,26 @@
             </div>
         </div>
 
-        <!-- TEASER SẮP LÊN SÓNG (HỖ TRỢ HIỂN THỊ NHIỀU CHAR) -->
+        <!-- TEASER SẮP LÊN SÓNG -->
         <div class="teaser-container" id="teaserContainer">
             <h2 class="top-title" style="margin-bottom: 15px;">⏳ Chồng Mới Sắp Ra Mắt ⏳</h2>
-            <div class="teaser-grid" id="teaserGrid">
-                <!-- Danh sách các Teaser Card sẽ tự động load ra đây -->
+            <div class="teaser-grid" id="teaserGrid"></div>
+        </div>
+
+        <!-- BẢNG ƯỚC NGUYỆN CẦU XIN GU CHỒNG -->
+        <div class="wishlist-board" id="wishlistBoard">
+            <div class="wish-board-header">
+                <div class="wish-board-title">💌 Bảng Ước Nguyện Gu Chồng 💌</div>
+                <p style="font-size:0.9rem; color:var(--text-light);">Bạn thèm khát gu nhân vật nào? Gửi ước nguyện và cùng thả tim ý tưởng nhé!</p>
+            </div>
+            
+            <div class="wish-form">
+                <input type="text" id="wishBoardInput" class="wish-form-input" placeholder="Nhập gu nhân vật bạn muốn có..." onkeypress="handleWishBoardEnter(event)">
+                <button class="wish-form-btn" onclick="sendWishFromBoard()">Gửi ngay 🚀</button>
+            </div>
+
+            <div class="wish-list-grid" id="wishBoardGrid">
+                <div style="text-align: center; color: var(--text-light);">Đang tải danh sách ước nguyện...</div>
             </div>
         </div>
 
@@ -453,13 +473,16 @@
             <!-- 1. Thanh tìm kiếm -->
             <input type="text" id="searchInput" class="search-bar" placeholder="Nhập tên nhân vật bạn muốn tìm...">
 
-            <!-- 2. Nút Tính Năng Nổi Bật Nằm Tách Biệt -->
+            <!-- 2. Nút Tính Năng Nổi Bật Tách Biệt -->
             <div class="feature-bar">
                 <button class="feature-btn fav-feature-btn" id="favFeatureBtn" onclick="toggleFavFilter()">
                     💖 Đã thả tim (<span id="favCount">0</span>)
                 </button>
                 <button class="feature-btn teaser-feature-btn" id="teaserFeatureBtn" onclick="toggleTeaserTab()">
                     ⏳ Sắp lên sóng 🔥
+                </button>
+                <button class="feature-btn wish-feature-btn" id="wishFeatureBtn" onclick="toggleWishlistTab()">
+                    💌 Cầu xin gu 💌
                 </button>
             </div>
 
@@ -479,7 +502,6 @@
 <!-- ================= CỤM NÚT TÁC VỤ SPEED DIAL ================= -->
 <div class="floating-container">
     <div class="sub-buttons-container" id="subButtons">
-        <button class="action-circle-btn" onclick="toggleWishlist()" title="Cầu xin gu chồng mới">💌</button>
         <button class="action-circle-btn music-btn" id="bgmToggleBtn" onclick="toggleBGM()" title="Bật/Tắt Nhạc Nền Chill">🎵</button>
         <button class="action-circle-btn" id="themeToggleBtn" onclick="toggleDarkMode()" title="Đổi chế độ Sáng / Tối">🌙</button>
         <button class="action-circle-btn" onclick="toggleHelp()" title="Hướng dẫn & Hỗ trợ">❓</button>
@@ -487,21 +509,6 @@
     </div>
 
     <button class="action-circle-btn main-menu-btn" id="mainMenuBtn" onclick="toggleSpeedDial()" title="Menu Tác Vụ">⚡</button>
-</div>
-
-<!-- BẢNG CẦU XIN GU CHỒNG (WISHLIST) -->
-<div class="wishlist-window" id="wishlistWindow">
-    <div class="wishlist-header">
-        💌 Bảng Ước Nguyện Gu Chồng 
-        <button class="close-btn" onclick="toggleWishlist()">✖</button>
-    </div>
-    <div class="wishlist-body" id="wishlistBody">
-        <div style="text-align: center; color: var(--text-light);">Đang tải danh sách ước nguyện...</div>
-    </div>
-    <div class="wishlist-footer">
-        <input type="text" id="wishInput" class="wish-input" placeholder="Nhập gu bạn thèm khát..." onkeypress="handleWishEnter(event)">
-        <button class="wish-send-btn" onclick="sendWish()">Gửi 🚀</button>
-    </div>
 </div>
 
 <!-- KHUNG THÔNG BÁO CHỮ NỔI (TOAST NOTIFICATION) -->
@@ -573,7 +580,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // ================= DANH SÁCH CÁC CHAR SẮP RA MẮT (BỒ THÊM NHIỀU CHAR VÀO MẢNG NÀY ĐƯỢC NHA) =================
+    // ================= DANH SÁCH TEASER =================
     const upcomingOCs = [
         {
             id: "reneus",
@@ -583,7 +590,6 @@
             image: "https://i.postimg.cc/NFBqb7bC/fa1e955338d4b98ae0c5.jpg",
             hypeKey: "hype_reneussterling"
         }
-        // Nếu có thêm char mới nữa bồ chỉ cần thêm tiếp vào đây nhé!
     ];
 
     const ocData = [
@@ -836,6 +842,7 @@
     let searchQuery = "";
     let showOnlyLiked = false;
     let isTeaserTab = false;
+    let isWishlistTab = false;
     let isExpandedTags = false;
     const MAX_VISIBLE_TAGS = 10;
 
@@ -852,7 +859,7 @@
         listenAndRenderPodium();
         updateFavCount();
         initTeaserData();
-        listenWishlist();
+        listenWishlistBoard();
         
         searchInput.addEventListener("input", (e) => {
             searchQuery = e.target.value.toLowerCase();
@@ -860,7 +867,7 @@
         });
     }
 
-    // ================= HÀM HIỂN THỊ TOAST NOTIFICATION =================
+    // ================= TOAST NOTIFICATION =================
     let toastTimer;
     function showToast(message) {
         const toastBox = document.getElementById("toastBox");
@@ -870,12 +877,10 @@
         toastBox.classList.add("show");
 
         clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => {
-            toastBox.classList.remove("show");
-        }, 2500);
+        toastTimer = setTimeout(() => { toastBox.classList.remove("show"); }, 2500);
     }
 
-    // ================= XỬ LÝ TEASER CHO NHIỀU CHAR =================
+    // ================= TEASER SẮP LÊN SÓNG =================
     function initTeaserData() {
         const teaserGrid = document.getElementById("teaserGrid");
         teaserGrid.innerHTML = "";
@@ -898,7 +903,6 @@
             `;
             teaserGrid.appendChild(card);
 
-            // Đọc số lượt hóng Realtime từ Firebase cho từng char
             db.ref(`hypes/${item.hypeKey}`).on('value', (snapshot) => {
                 const countSpan = document.getElementById(`hypeCount_${item.hypeKey}`);
                 if (countSpan) countSpan.innerText = snapshot.val() || 0;
@@ -919,15 +923,134 @@
         });
     }
 
-    // ================= XỬ LÝ BẢNG CẦU XIN GU CHỒNG (WISHLIST) =================
-    const wishlistWindow = document.getElementById("wishlistWindow");
+    // ================= BẢNG UỚC NGUYỆN CẦU XIN GU CHỒNG (BOARD MỚI) =================
+    // Tạo User Token bí mật để định danh tác giả tạo cmt
+    function getMyUserToken() {
+        let token = localStorage.getItem("user_secret_token");
+        if (!token) {
+            token = "user_" + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem("user_secret_token", token);
+        }
+        return token;
+    }
+
+    function listenWishlistBoard() {
+        const myToken = getMyUserToken();
+        db.ref('wishlist').on('value', (snapshot) => {
+            const data = snapshot.val() || {};
+            const grid = document.getElementById("wishBoardGrid");
+            grid.innerHTML = "";
+
+            let wishes = [];
+            for (let key in data) {
+                wishes.push({ id: key, ...data[key] });
+            }
+
+            wishes.sort((a, b) => (b.votes || 0) - (a.votes || 0));
+
+            if (wishes.length === 0) {
+                grid.innerHTML = `<div style="text-align: center; color: var(--text-light); padding: 20px 0;">Chưa có ước nguyện nào. Hãy gửi gu đầu tiên bạn nhé! 🥰</div>`;
+                return;
+            }
+
+            wishes.forEach(item => {
+                const isMine = item.authorToken === myToken;
+                const card = document.createElement("div");
+                card.className = "wish-card";
+
+                card.innerHTML = `
+                    <div class="wish-card-content" id="wish_content_${item.id}">
+                        <div class="wish-card-text">✨ ${item.text}</div>
+                    </div>
+                    <div class="wish-card-actions">
+                        ${isMine ? `
+                            <button class="wish-action-btn edit-btn" onclick="enableEditWish('${item.id}', '${encodeURIComponent(item.text)}')">✏️ Sửa</button>
+                            <button class="wish-action-btn delete-btn" onclick="deleteWish('${item.id}')">🗑️ Xóa</button>
+                        ` : ''}
+                        <button class="like-wish-btn" onclick="voteWish('${item.id}')">❤️ ${item.votes || 0}</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        });
+    }
+
+    function handleWishBoardEnter(e) { if(e.key === "Enter") sendWishFromBoard(); }
+
+    function sendWishFromBoard() {
+        const input = document.getElementById("wishBoardInput");
+        const text = input.value.trim();
+        if (!text) return;
+
+        const myToken = getMyUserToken();
+
+        db.ref('wishlist').push({
+            text: text,
+            votes: 1,
+            authorToken: myToken,
+            timestamp: Date.now()
+        }).then(() => {
+            input.value = "";
+            showToast("Đã gửi ước nguyện gu chồng thành công! 🚀");
+        });
+    }
+
+    function voteWish(wishId) {
+        const hasVoted = localStorage.getItem(`voted_wish_${wishId}`);
+        if (hasVoted) {
+            showToast("Bạn đã thả tim ước nguyện này rồi nha! ❤️");
+            return;
+        }
+
+        db.ref(`wishlist/${wishId}/votes`).transaction(curr => (curr || 0) + 1).then(() => {
+            localStorage.setItem(`voted_wish_${wishId}`, 'true');
+            showToast("Đã thả tim đồng ý với ước nguyện này! 🥰");
+        });
+    }
+
+    function enableEditWish(wishId, encodedText) {
+        const text = decodeURIComponent(encodedText);
+        const container = document.getElementById(`wish_content_${wishId}`);
+        container.innerHTML = `
+            <div class="wish-card-edit-box">
+                <input type="text" id="edit_input_${wishId}" class="wish-card-edit-input" value="${text}">
+                <button class="wish-action-btn edit-btn" onclick="saveEditWish('${wishId}')">Lưu</button>
+            </div>
+        `;
+    }
+
+    function saveEditWish(wishId) {
+        const newText = document.getElementById(`edit_input_${wishId}`).value.trim();
+        if (!newText) return;
+
+        db.ref(`wishlist/${wishId}/text`).set(newText).then(() => {
+            showToast("Đã cập nhật chỉnh sửa ước nguyện! ✏️");
+        });
+    }
+
+    function deleteWish(wishId) {
+        if (confirm("Bạn có chắc muốn xóa ước nguyện này không?")) {
+            db.ref(`wishlist/${wishId}`).remove().then(() => {
+                showToast("Đã xóa ước nguyện! 🗑️");
+            });
+        }
+    }
+
+    // ================= SPEED DIAL & WIDGETS =================
     const helpWindow = document.getElementById("helpWindow");
     const chatWindow = document.getElementById("chatWindow");
 
-    function toggleWishlist() {
-        const wasActive = wishlistWindow.classList.contains("active");
-        closeAllFloatingWindows();
-        if (!wasActive) wishlistWindow.classList.add("active");
+    function toggleSpeedDial() {
+        const subBtnContainer = document.getElementById("subButtons");
+        const mainBtn = document.getElementById("mainMenuBtn");
+        subBtnContainer.classList.toggle("active");
+        if (subBtnContainer.classList.contains("active")) {
+            mainBtn.innerText = "✖";
+            mainBtn.style.backgroundColor = "var(--primary-hover)";
+        } else {
+            mainBtn.innerText = "⚡";
+            mainBtn.style.backgroundColor = "var(--primary-color)";
+        }
     }
 
     function toggleHelp() {
@@ -948,81 +1071,6 @@
     function closeAllFloatingWindows() {
         chatWindow.classList.remove("active");
         helpWindow.classList.remove("active");
-        wishlistWindow.classList.remove("active");
-    }
-
-    function listenWishlist() {
-        db.ref('wishlist').on('value', (snapshot) => {
-            const data = snapshot.val() || {};
-            const listBody = document.getElementById("wishlistBody");
-            listBody.innerHTML = "";
-
-            let wishes = [];
-            for (let key in data) {
-                wishes.push({ id: key, ...data[key] });
-            }
-
-            wishes.sort((a, b) => (b.votes || 0) - (a.votes || 0));
-
-            if (wishes.length === 0) {
-                listBody.innerHTML = `<div style="text-align: center; color: var(--text-light); margin-top: 30px;">Chưa có ước nguyện nào. Hãy là người đầu tiên gửi gu bạn thích nhé! 🥰</div>`;
-                return;
-            }
-
-            wishes.forEach(item => {
-                const div = document.createElement("div");
-                div.className = "wish-item";
-                div.innerHTML = `
-                    <div class="wish-text">✨ ${item.text}</div>
-                    <button class="wish-vote-btn" onclick="voteWish('${item.id}')">❤️ ${item.votes || 0}</button>
-                `;
-                listBody.appendChild(div);
-            });
-        });
-    }
-
-    function handleWishEnter(e) { if(e.key === "Enter") sendWish(); }
-
-    function sendWish() {
-        const input = document.getElementById("wishInput");
-        const text = input.value.trim();
-        if (!text) return;
-
-        db.ref('wishlist').push({
-            text: text,
-            votes: 1,
-            timestamp: Date.now()
-        }).then(() => {
-            input.value = "";
-            showToast("Đã gửi ước nguyện gu chồng thành công! 🚀");
-        });
-    }
-
-    function voteWish(wishId) {
-        const hasVoted = localStorage.getItem(`voted_wish_${wishId}`);
-        if (hasVoted) {
-            showToast("Bạn đã bấm thả tim cho ước nguyện này rồi nha! ❤️");
-            return;
-        }
-
-        db.ref(`wishlist/${wishId}/votes`).transaction(curr => (curr || 0) + 1).then(() => {
-            localStorage.setItem(`voted_wish_${wishId}`, 'true');
-            showToast("Đã thả tim đồng ý với ước nguyện này! 🥰");
-        });
-    }
-
-    // ================= SPEED DIAL MENU =================
-    function toggleSpeedDial() {
-        const subBtnContainer = document.getElementById("subButtons");
-        const mainBtn = document.getElementById("mainMenuBtn");
-        subBtnContainer.classList.toggle("active");
-        if (subBtnContainer.classList.contains("active")) {
-            mainBtn.innerText = "✖";
-            mainBtn.style.backgroundColor = "var(--primary-hover)";
-        } else {
-            mainBtn.innerText = "⚡";
-            mainBtn.style.backgroundColor = "var(--primary-color)";
-        }
     }
 
     // ================= BGM PLAYER =================
@@ -1106,11 +1154,12 @@
 
         visibleTags.forEach(tag => {
             const btn = document.createElement("button");
-            btn.className = `tag-btn ${!showOnlyLiked && !isTeaserTab && tag === currentTag ? 'active' : ''}`;
+            btn.className = `tag-btn ${!showOnlyLiked && !isTeaserTab && !isWishlistTab && tag === currentTag ? 'active' : ''}`;
             btn.textContent = tag;
             btn.onclick = () => { 
                 showOnlyLiked = false; 
                 isTeaserTab = false;
+                isWishlistTab = false;
                 currentTag = tag; 
                 updateFeatureButtonsState();
                 renderTags(); 
@@ -1138,6 +1187,7 @@
     function toggleFavFilter() {
         showOnlyLiked = !showOnlyLiked;
         isTeaserTab = false;
+        isWishlistTab = false;
         updateFeatureButtonsState();
         renderTags();
         filterData();
@@ -1146,6 +1196,16 @@
     function toggleTeaserTab() {
         isTeaserTab = !isTeaserTab;
         showOnlyLiked = false;
+        isWishlistTab = false;
+        updateFeatureButtonsState();
+        renderTags();
+        filterData();
+    }
+
+    function toggleWishlistTab() {
+        isWishlistTab = !isWishlistTab;
+        showOnlyLiked = false;
+        isTeaserTab = false;
         updateFeatureButtonsState();
         renderTags();
         filterData();
@@ -1154,12 +1214,11 @@
     function updateFeatureButtonsState() {
         const favBtn = document.getElementById("favFeatureBtn");
         const teaserBtn = document.getElementById("teaserFeatureBtn");
+        const wishBtn = document.getElementById("wishFeatureBtn");
 
-        if (showOnlyLiked) favBtn.classList.add("active");
-        else favBtn.classList.remove("active");
-
-        if (isTeaserTab) teaserBtn.classList.add("active");
-        else teaserBtn.classList.remove("active");
+        if (showOnlyLiked) favBtn.classList.add("active"); else favBtn.classList.remove("active");
+        if (isTeaserTab) teaserBtn.classList.add("active"); else teaserBtn.classList.remove("active");
+        if (isWishlistTab) wishBtn.classList.add("active"); else wishBtn.classList.remove("active");
     }
 
     function updateFavCount() {
@@ -1174,17 +1233,28 @@
     function filterData() {
         const topSection = document.getElementById("topSection");
         const teaserContainer = document.getElementById("teaserContainer");
+        const wishlistBoard = document.getElementById("wishlistBoard");
 
+        // Ẩn/Hiện chuyển đổi giữa các Tab
         if (isTeaserTab) {
             topSection.style.display = "none";
             galleryGrid.style.display = "none";
+            wishlistBoard.classList.remove("active");
             teaserContainer.classList.add("active");
+            noResult.style.display = "none";
+            return;
+        } else if (isWishlistTab) {
+            topSection.style.display = "none";
+            galleryGrid.style.display = "none";
+            teaserContainer.classList.remove("active");
+            wishlistBoard.classList.add("active");
             noResult.style.display = "none";
             return;
         } else {
             topSection.style.display = "block";
             galleryGrid.style.display = "grid";
             teaserContainer.classList.remove("active");
+            wishlistBoard.classList.remove("active");
         }
 
         let filtered = ocData;
