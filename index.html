@@ -145,7 +145,6 @@
         }
         .search-bar:focus { border-color: var(--primary-color); box-shadow: 0 0 8px rgba(226, 128, 138, 0.3); }
 
-        /* THANH 2 NÚT TÍNH NĂNG TÁCH BIỆT RIÊNG */
         .feature-bar {
             display: flex; justify-content: center; gap: 15px; width: 100%; flex-wrap: wrap; margin-bottom: 5px;
         }
@@ -182,25 +181,39 @@
         .toggle-tag-btn { border-style: dashed !important; font-weight: 600; background-color: rgba(114, 47, 55, 0.05); }
         .toggle-tag-btn:hover { background-color: var(--primary-color) !important; color: #fff !important; }
 
-        /* ================= KHUNG TEASER SẮP LÊN SÓNG ================= */
+        /* ================= KHUNG TEASER TỔNG HỢP NHIỀU CHAR SẮP LÊN SÓNG ================= */
         .teaser-container {
             display: none; background: var(--card-bg); border-radius: 20px; padding: 30px 20px;
-            max-width: 650px; margin: 0 auto 40px auto; border: 2px dashed var(--primary-color);
+            max-width: 900px; margin: 0 auto 40px auto; border: 2px dashed var(--primary-color);
             text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); animation: fadeIn 0.5s ease;
         }
         .teaser-container.active { display: block; }
-        .teaser-card { display: flex; flex-direction: column; align-items: center; gap: 15px; }
         
-        .teaser-img-wrapper { position: relative; width: 220px; height: 220px; border-radius: 16px; overflow: hidden; border: 2px solid var(--primary-color); }
-        .teaser-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0) contrast(100%) blur(2px); transition: 0.3s; }
-        .teaser-overlay-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; color: #fff; font-weight: bold; text-shadow: 0 0 10px rgba(0,0,0,0.8); }
+        /* Lưới hiển thị nhiều Teaser Card */
+        .teaser-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
 
-        .teaser-name { font-family: var(--font-serif); font-size: 1.8rem; font-weight: bold; color: var(--primary-color); }
-        .teaser-desc { font-style: italic; color: var(--text-light); max-width: 450px; }
+        .teaser-card { 
+            background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 16px;
+            padding: 20px 15px; display: flex; flex-direction: column; align-items: center; gap: 12px; 
+            transition: all 0.3s ease;
+        }
+        .teaser-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+        
+        .teaser-img-wrapper { position: relative; width: 180px; height: 180px; border-radius: 16px; overflow: hidden; border: 2px solid var(--primary-color); }
+        .teaser-img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0) contrast(100%) blur(2px); transition: 0.3s; }
+        .teaser-overlay-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2.5rem; color: #fff; font-weight: bold; text-shadow: 0 0 10px rgba(0,0,0,0.8); }
+
+        .teaser-name { font-family: var(--font-serif); font-size: 1.5rem; font-weight: bold; color: var(--primary-color); }
+        .teaser-desc { font-style: italic; color: var(--text-light); font-size: 0.9rem; line-height: 1.4; }
         .teaser-hype-btn {
             background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; border: none;
-            padding: 10px 24px; border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.3); transition: 0.3s;
+            padding: 8px 20px; border-radius: 30px; font-weight: bold; font-size: 0.9rem; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.25); transition: 0.3s; margin-top: auto;
         }
         .teaser-hype-btn:hover { transform: scale(1.05); }
 
@@ -263,7 +276,7 @@
         .help-window.active, .chat-window.active, .wishlist-window.active { display: flex; }
 
         .help-header, .chat-header, .wishlist-header { background-color: var(--primary-color); color: white; padding: 15px; font-family: var(--font-serif); font-weight: bold; font-size: 1.05rem; display: flex; justify-content: space-between; align-items: center; }
-        .close-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
+        .close-btn { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; padding: 0 5px; }
 
         /* CSS Bảng Cầu Xin Gu Chồng (Wishlist) */
         .wishlist-body { padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background-color: var(--bg-color); height: 320px; }
@@ -294,7 +307,7 @@
         .chat-input { flex: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 20px; outline: none; font-family: var(--font-body); background: var(--bg-color); color: var(--text-dark); }
         .chat-send { background: none; border: none; color: var(--primary-color); font-weight: bold; padding: 0 15px; cursor: pointer; font-size: 1rem; }
 
-        /* ================= POPUP THÔNG BÁO NHÂN VẬT MỚI ================= */
+        /* ================= POPUP NHÂN VẬT MỚI ================= */
         .popup-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
@@ -370,6 +383,10 @@
             .feature-bar { gap: 10px; }
             .feature-btn { padding: 8px 15px; font-size: 0.85rem; }
 
+            /* Fix Responsive Teaser Grid Mobile */
+            .teaser-grid { grid-template-columns: 1fr; gap: 15px; }
+            .teaser-img-wrapper { width: 150px; height: 180px; }
+
             .floating-container { bottom: 20px; right: 15px; gap: 8px; }
             .main-menu-btn { display: flex; width: 48px; height: 48px; }
             
@@ -421,21 +438,11 @@
             </div>
         </div>
 
-        <!-- TEASER SẮP LÊN SÓNG -->
+        <!-- TEASER SẮP LÊN SÓNG (HỖ TRỢ HIỂN THỊ NHIỀU CHAR) -->
         <div class="teaser-container" id="teaserContainer">
             <h2 class="top-title" style="margin-bottom: 15px;">⏳ Chồng Mới Sắp Ra Mắt ⏳</h2>
-            <div class="teaser-card">
-                <div class="teaser-img-wrapper">
-                    <img src="https://i.postimg.cc/NFBqb7bC/fa1e955338d4b98ae0c5.jpg" alt="Teaser OC" class="teaser-img">
-                    <div class="teaser-overlay-text">? ? ?</div>
-                </div>
-                <div class="teaser-name" id="teaserName">Reneus Sterling</div>
-                <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center;" id="teaserTags"></div>
-                <p class="teaser-desc" id="teaserSlogan">"Ta không muốn làm lợn biển đâu..."</p>
-                
-                <button class="teaser-hype-btn" onclick="addHypeCount()">
-                    🔥 Đặt lịch hóng (<span id="hypeCount">0</span>)
-                </button>
+            <div class="teaser-grid" id="teaserGrid">
+                <!-- Danh sách các Teaser Card sẽ tự động load ra đây -->
             </div>
         </div>
 
@@ -566,14 +573,18 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // ================= DỮ LIỆU NHÂN VẬT SẮP LÊN SÓNG (TEASER) =================
-    const upcomingOC = {
-        name: "Reneus Sterling",
-        slogan: "Ta không muốn làm lợn biển đâu...",
-        tags: ["Thú nhân", "Nhân ngư", "fantasy", "Nũng nịu", "BL", "BG"],
-        image: "https://i.postimg.cc/NFBqb7bC/fa1e955338d4b98ae0c5.jpg",
-        hypeKey: "hype_reneussterling"
-    };
+    // ================= DANH SÁCH CÁC CHAR SẮP RA MẮT (BỒ THÊM NHIỀU CHAR VÀO MẢNG NÀY ĐƯỢC NHA) =================
+    const upcomingOCs = [
+        {
+            id: "reneus",
+            name: "Reneus Sterling",
+            slogan: "Ta không muốn làm lợn biển đâu...",
+            tags: ["Thú nhân", "Nhân ngư", "fantasy", "Nũng nịu", "BL", "BG"],
+            image: "https://i.postimg.cc/NFBqb7bC/fa1e955338d4b98ae0c5.jpg",
+            hypeKey: "hype_reneussterling"
+        }
+        // Nếu có thêm char mới nữa bồ chỉ cần thêm tiếp vào đây nhé!
+    ];
 
     const ocData = [
         {
@@ -849,7 +860,7 @@
         });
     }
 
-    // ================= HÀM HIỂN THỊ TOAST NOTIFICATION CHỮ NỔI =================
+    // ================= HÀM HIỂN THỊ TOAST NOTIFICATION =================
     let toastTimer;
     function showToast(message) {
         const toastBox = document.getElementById("toastBox");
@@ -864,36 +875,80 @@
         }, 2500);
     }
 
-    // ================= XỬ LÝ TEASER SẮP LÊN SÓNG =================
+    // ================= XỬ LÝ TEASER CHO NHIỀU CHAR =================
     function initTeaserData() {
-        document.getElementById("teaserName").innerText = upcomingOC.name;
-        document.getElementById("teaserSlogan").innerText = `"${upcomingOC.slogan}"`;
-        document.getElementById("teaserTags").innerHTML = upcomingOC.tags.map(t => `<span class="card-tag-mini">${t}</span>`).join('');
-        
-        db.ref(`hypes/${upcomingOC.hypeKey}`).on('value', (snapshot) => {
-            document.getElementById("hypeCount").innerText = snapshot.val() || 0;
+        const teaserGrid = document.getElementById("teaserGrid");
+        teaserGrid.innerHTML = "";
+
+        upcomingOCs.forEach(item => {
+            const tagsHTML = item.tags.map(t => `<span class="card-tag-mini">${t}</span>`).join('');
+            const card = document.createElement("div");
+            card.className = "teaser-card";
+            card.innerHTML = `
+                <div class="teaser-img-wrapper">
+                    <img src="${item.image}" alt="${item.name}" class="teaser-img">
+                    <div class="teaser-overlay-text">? ? ?</div>
+                </div>
+                <div class="teaser-name">${item.name}</div>
+                <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center;">${tagsHTML}</div>
+                <p class="teaser-desc">"${item.slogan}"</p>
+                <button class="teaser-hype-btn" onclick="addHypeCount('${item.hypeKey}', '${item.name}')">
+                    🔥 Đặt lịch hóng (<span id="hypeCount_${item.hypeKey}">0</span>)
+                </button>
+            `;
+            teaserGrid.appendChild(card);
+
+            // Đọc số lượt hóng Realtime từ Firebase cho từng char
+            db.ref(`hypes/${item.hypeKey}`).on('value', (snapshot) => {
+                const countSpan = document.getElementById(`hypeCount_${item.hypeKey}`);
+                if (countSpan) countSpan.innerText = snapshot.val() || 0;
+            });
         });
     }
 
-    function addHypeCount() {
-        const isHyped = localStorage.getItem(`isHyped_${upcomingOC.hypeKey}`);
+    function addHypeCount(hypeKey, charName) {
+        const isHyped = localStorage.getItem(`isHyped_${hypeKey}`);
         if (isHyped === 'true') {
-            showToast("Bạn đã đặt lịch hóng anh này rồi nè! 🥰");
+            showToast(`Bạn đã đặt lịch hóng ${charName} rồi nè! 🥰`);
             return;
         }
 
-        db.ref(`hypes/${upcomingOC.hypeKey}`).transaction(curr => (curr || 0) + 1).then(() => {
-            localStorage.setItem(`isHyped_${upcomingOC.hypeKey}`, 'true');
-            showToast("Cảm ơn bạn đã đặt lịch hóng! Anh ấy sẽ sớm lên sóng thôi 🔥");
+        db.ref(`hypes/${hypeKey}`).transaction(curr => (curr || 0) + 1).then(() => {
+            localStorage.setItem(`isHyped_${hypeKey}`, 'true');
+            showToast(`Cảm ơn bạn đã đặt lịch hóng ${charName}! 🔥`);
         });
     }
 
     // ================= XỬ LÝ BẢNG CẦU XIN GU CHỒNG (WISHLIST) =================
     const wishlistWindow = document.getElementById("wishlistWindow");
+    const helpWindow = document.getElementById("helpWindow");
+    const chatWindow = document.getElementById("chatWindow");
 
     function toggleWishlist() {
+        const wasActive = wishlistWindow.classList.contains("active");
         closeAllFloatingWindows();
-        wishlistWindow.classList.toggle("active");
+        if (!wasActive) wishlistWindow.classList.add("active");
+    }
+
+    function toggleHelp() {
+        const wasActive = helpWindow.classList.contains("active");
+        closeAllFloatingWindows();
+        if (!wasActive) helpWindow.classList.add("active");
+    }
+
+    function toggleChat() {
+        const wasActive = chatWindow.classList.contains("active");
+        closeAllFloatingWindows();
+        if (!wasActive) {
+            chatWindow.classList.add("active");
+            document.getElementById("chatInput").focus();
+        }
+    }
+
+    function closeAllFloatingWindows() {
+        chatWindow.classList.remove("active");
+        helpWindow.classList.remove("active");
+        wishlistWindow.classList.remove("active");
     }
 
     function listenWishlist() {
@@ -968,12 +1023,6 @@
             mainBtn.innerText = "⚡";
             mainBtn.style.backgroundColor = "var(--primary-color)";
         }
-    }
-
-    function closeAllFloatingWindows() {
-        chatWindow.classList.remove("active");
-        helpWindow.classList.remove("active");
-        wishlistWindow.classList.remove("active");
     }
 
     // ================= BGM PLAYER =================
@@ -1268,21 +1317,7 @@
         }
     }
 
-    // ================= WIDGETS =================
-    const helpWindow = document.getElementById("helpWindow");
-    const chatWindow = document.getElementById("chatWindow");
-
-    function toggleHelp() {
-        closeAllFloatingWindows();
-        helpWindow.classList.toggle("active");
-    }
-
-    function toggleChat() {
-        closeAllFloatingWindows();
-        chatWindow.classList.toggle("active");
-        if(chatWindow.classList.contains("active")) document.getElementById("chatInput").focus();
-    }
-
+    // ================= CHATBOT LOGIC =================
     function handleEnter(e) { if(e.key === "Enter") sendMessage(); }
 
     function sendMessage() {
