@@ -106,6 +106,7 @@
             font-family: var(--font-body);
             transition: 0.3s;
             box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+            display: inline-block;
         }
         .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
 
@@ -233,8 +234,8 @@
             </div>
 
             <div class="external-links">
-                <!-- NÍ CHÈN LINK GOOGLE AI STUDIO CỦA UẤT ĐÀM KIÊN VÀO TRONG DẤU # Ở DƯỚI NHA -->
-                <a href="https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%2216Bmkwo4BTpEMtCNOsGdoiTpt87f6Sbeg%22%5D,%22action%22:%22open%22,%22userId%22:%22108161815635416619104%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing" class="ext-link-btn" target="_blank">
+                <!-- LINK ĐÃ ĐƯỢC FIX CHUẨN MÃ HÓA URL 100% BẤM ĂN NGAY -->
+                <a href="https://aistudio.google.com/app/prompts?state=%7B%22ids%22%3A%5B%2216Bmkwo4BTpEMtCNOsGdoiTpt87f6Sbeg%22%5D%2C%22action%22%3A%22open%22%2C%22userId%22%3A%22108161815635416619104%22%2C%22resourceKeys%22%3A%7B%7D%7D&usp=sharing" class="ext-link-btn" target="_blank" rel="noopener noreferrer">
                     🔗 Trò chuyện cùng Uất Đàm Kiên (Google AI Studio)
                 </a>
             </div>
@@ -286,10 +287,8 @@
     const likeText = document.getElementById("likeText");
     const likeCountSpan = document.getElementById("likeCount");
     
-    // Kiểm tra LocalStorage xem user đã từng bấm tim chưa
     let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
     
-    // Hàm cập nhật giao diện nút
     function updateButtonUI(isLiked) {
         if (isLiked) {
             likeText.innerText = "💖 Đã thả tim";
@@ -300,7 +299,6 @@
         }
     }
 
-    // Set giao diện ban đầu
     updateButtonUI(isLikedLocally);
 
     // 3. LẮNG NGHE SỐ TIM REALTIME TỪ FIREBASE
@@ -312,30 +310,24 @@
     // 4. XỬ LÝ KHI NGƯỜI DÙNG BẤM NÚT TIM
     likeBtn.addEventListener("click", () => {
         likeBtn.disabled = true;
-        
         const likeRef = db.ref(`likes/${key}`);
         
         if (isLikedLocally) {
-            // ĐÃ LIKE -> BẤM ĐỂ UNLIKE
             isLikedLocally = false;
             localStorage.setItem(`isLiked_${key}`, 'false');
             updateButtonUI(false);
 
-            likeRef.transaction(current => {
-                return Math.max(0, (current || 0) - 1);
-            }).then(() => likeBtn.disabled = false)
-              .catch(() => likeBtn.disabled = false);
-
+            likeRef.transaction(current => Math.max(0, (current || 0) - 1))
+                   .then(() => likeBtn.disabled = false)
+                   .catch(() => likeBtn.disabled = false);
         } else {
-            // CHƯA LIKE -> BẤM ĐỂ LIKE
             isLikedLocally = true;
             localStorage.setItem(`isLiked_${key}`, 'true');
             updateButtonUI(true);
 
-            likeRef.transaction(current => {
-                return (current || 0) + 1;
-            }).then(() => likeBtn.disabled = false)
-              .catch(() => likeBtn.disabled = false);
+            likeRef.transaction(current => (current || 0) + 1)
+                   .then(() => likeBtn.disabled = false)
+                   .catch(() => likeBtn.disabled = false);
         }
     });
 
@@ -348,12 +340,10 @@
     const commentText = document.getElementById("commentText");
     const submitCommentBtn = document.getElementById("submitCommentBtn");
 
-    // Hàm mã hóa chống hack (XSS)
     const escapeHTML = str => str.replace(/[&<>'"]/g, tag => ({
         '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
     }[tag]));
 
-    // LẮNG NGHE BÌNH LUẬN LIVE TỪ FIREBASE
     db.ref(commentKey).on('value', (snapshot) => {
         commentList.innerHTML = ""; 
         const data = snapshot.val();
@@ -383,7 +373,6 @@
         });
     });
 
-    // XỬ LÝ GỬI BÌNH LUẬN
     submitCommentBtn.addEventListener("click", () => {
         const nameVal = commentName.value.trim();
         const textVal = commentText.value.trim();
