@@ -193,17 +193,35 @@
         }
         .card-likes:hover { background-color: rgba(226, 128, 138, 0.1); border-color: var(--primary-color); }
 
-        /* ================= CỤM NÚT TÁC VỤ (CÓ BGM MUSIC PLAYER) ================= */
-        .floating-container { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        /* ================= CỤM NÚT TÁC VỤ SPEED DIAL THÔNG MINH ================= */
+        .floating-container { 
+            position: fixed; bottom: 30px; right: 25px; 
+            display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 1000; 
+        }
 
         .action-circle-btn {
-            width: 55px; height: 55px; background-color: var(--primary-color); color: white; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25); border: none; transition: 0.3s; font-family: var(--font-serif); font-weight: bold;
+            width: 50px; height: 50px; background-color: var(--primary-color); color: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 1.3rem; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); border: none; transition: all 0.3s ease; font-family: var(--font-serif); font-weight: bold;
         }
-        .action-circle-btn:hover { transform: scale(1.1); background-color: var(--primary-hover); }
+        .action-circle-btn:hover { transform: scale(1.08); background-color: var(--primary-hover); }
 
-        /* Hiệu ứng xoay tròn đĩa nhạc khi đang phát BGM */
+        /* Nút Menu Tác Vụ Chính (Chỉ hiện trên Mobile) */
+        .main-menu-btn {
+            display: none;
+            background-color: var(--primary-color);
+            font-size: 1.4rem;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Khung chứa các nút con */
+        .sub-buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
         .music-btn.playing {
             animation: spinMusic 3s linear infinite;
             background-color: #e24b59 !important;
@@ -211,7 +229,7 @@
         @keyframes spinMusic { 100% { transform: rotate(360deg); } }
 
         .help-window, .chat-window {
-            position: fixed; bottom: 100px; right: 30px; background: var(--card-bg); color: var(--text-dark); border-radius: 16px;
+            position: fixed; bottom: 90px; right: 25px; background: var(--card-bg); color: var(--text-dark); border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.25); display: none; flex-direction: column; overflow: hidden;
             z-index: 1001; border: 1px solid var(--border-color); animation: slideUp 0.3s ease;
         }
@@ -286,7 +304,7 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ================= RESPONSIVE ĐIỆN THOẠI ================= */
+        /* ================= RESPONSIVE ĐIỆN THOẠI (SPEED DIAL VỚI NÚT GỘP) ================= */
         @media (max-width: 768px) {
             h1 { font-size: 2.2rem; }
             header { padding: 35px 15px; min-height: 220px; }
@@ -300,8 +318,24 @@
             .badge-rank { font-size: 0.65rem; padding: 2px 6px; margin-bottom: 4px; }
             .crown-icon { font-size: 1.5rem; top: -18px; }
 
-            .floating-container { bottom: 20px; right: 20px; }
-            .chat-window, .help-window { width: calc(100% - 40px); right: 20px; bottom: 270px; }
+            /* BẬT NÚT GỘP THÔNG MINH TRÊN MOBILE */
+            .floating-container { bottom: 20px; right: 15px; gap: 8px; }
+            .main-menu-btn { display: flex; width: 48px; height: 48px; }
+            
+            /* Thu gọn 4 nút con lại, chỉ hiện khi bấm vào nút chính */
+            .sub-buttons-container {
+                display: none;
+                flex-direction: column;
+                gap: 8px;
+                animation: slideUp 0.2s ease;
+            }
+            .sub-buttons-container.active {
+                display: flex;
+            }
+
+            .action-circle-btn { width: 44px; height: 44px; font-size: 1.1rem; }
+
+            .chat-window, .help-window { width: calc(100% - 30px); right: 15px; bottom: 80px; }
 
             .popup-card { padding: 15px; max-height: 90vh; }
             .popup-items-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -360,21 +394,22 @@
     </div>
 </div>
 
-<!-- ================= CỤM NÚT TÁC VỤ (BGM PLAYER + DARK MODE + HỖ TRỢ + CHATBOT) ================= -->
+<!-- ================= CỤM NÚT TÁC VỤ SPEED DIAL THÔNG MINH ================= -->
 <div class="floating-container">
-    <!-- Nút Bật/Tắt Nhạc Nền (BGM) -->
-    <button class="action-circle-btn music-btn" id="bgmToggleBtn" onclick="toggleBGM()" title="Bật/Tắt Nhạc Nền Chill">🎵</button>
-    <!-- Nút Bật/Tắt Chế Độ Ban Đêm -->
-    <button class="action-circle-btn" id="themeToggleBtn" onclick="toggleDarkMode()" title="Đổi chế độ Sáng / Tối">🌙</button>
-    <!-- Nút ? Hỗ trợ -->
-    <button class="action-circle-btn" onclick="toggleHelp()" title="Hướng dẫn & Hỗ trợ">❓</button>
-    <!-- Nút Chatbot -->
-    <button class="action-circle-btn" onclick="toggleChat()" title="Trợ lý Cún Bự">💬</button>
+    <!-- Khung chứa 4 nút tác vụ con -->
+    <div class="sub-buttons-container" id="subButtons">
+        <button class="action-circle-btn music-btn" id="bgmToggleBtn" onclick="toggleBGM()" title="Bật/Tắt Nhạc Nền Chill">🎵</button>
+        <button class="action-circle-btn" id="themeToggleBtn" onclick="toggleDarkMode()" title="Đổi chế độ Sáng / Tối">🌙</button>
+        <button class="action-circle-btn" onclick="toggleHelp()" title="Hướng dẫn & Hỗ trợ">❓</button>
+        <button class="action-circle-btn" onclick="toggleChat()" title="Trợ lý Cún Bự">💬</button>
+    </div>
+
+    <!-- Nút Tác Vụ Chính (Hiện ra ở màn hình Điện thoại) -->
+    <button class="action-circle-btn main-menu-btn" id="mainMenuBtn" onclick="toggleSpeedDial()" title="Menu Tác Vụ">⚡</button>
 </div>
 
 <!-- THẺ ÂM THANH PHÁT BGM NHẠC NỀN -->
 <audio id="bgmAudio" loop preload="auto">
-    <!-- Nhạc Piano LofiChill Thơ Mộng -->
     <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
 </audio>
 
@@ -719,7 +754,23 @@
         });
     }
 
-    // ================= XỬ LÝ BGM PLAYER (NHẠC NỀN) =================
+    // ================= XỬ LÝ MENU SPEED DIAL TRÊN MOBILE =================
+    function toggleSpeedDial() {
+        const subBtnContainer = document.getElementById("subButtons");
+        const mainBtn = document.getElementById("mainMenuBtn");
+        
+        subBtnContainer.classList.toggle("active");
+        
+        if (subBtnContainer.classList.contains("active")) {
+            mainBtn.innerText = "✖";
+            mainBtn.style.backgroundColor = "var(--primary-hover)";
+        } else {
+            mainBtn.innerText = "⚡";
+            mainBtn.style.backgroundColor = "var(--primary-color)";
+        }
+    }
+
+    // ================= XỬ LÝ BGM PLAYER =================
     let isBgmPlaying = false;
     function toggleBGM() {
         const audio = document.getElementById("bgmAudio");
@@ -753,7 +804,7 @@
         document.getElementById("themeToggleBtn").innerText = isDark ? "☀️" : "🌙";
     }
 
-    // ================= DỰNG PODIUM BỤC VINH QUANG TOP 3 =================
+    // ================= DỰNG PODIUM TOP 3 =================
     function listenAndRenderPodium() {
         db.ref('likes').on('value', (snapshot) => {
             const likesData = snapshot.val() || {};
