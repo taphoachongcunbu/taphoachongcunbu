@@ -294,7 +294,7 @@
         .chat-input { flex: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 20px; outline: none; font-family: var(--font-body); background: var(--bg-color); color: var(--text-dark); }
         .chat-send { background: none; border: none; color: var(--primary-color); font-weight: bold; padding: 0 15px; cursor: pointer; font-size: 1rem; }
 
-        /* ================= POPUP NHÂN VẬT MỚI ================= */
+        /* ================= POPUP THÔNG BÁO NHÂN VẬT MỚI ================= */
         .popup-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
@@ -337,6 +337,19 @@
         .popup-footer-action { display: block; font-size: 0.85rem; color: var(--text-light); cursor: pointer; text-decoration: underline; padding: 8px 0; }
         .popup-footer-action:hover { color: var(--primary-color); }
 
+        /* ================= TOAST NOTIFICATION (THÔNG BÁO CHỮ NỔI XỊN XÒ) ================= */
+        .toast-notification {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: var(--card-bg); color: var(--text-dark); border: 2px solid var(--primary-color);
+            padding: 12px 24px; border-radius: 50px; font-weight: bold; font-size: 0.95rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25); z-index: 10000; opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: none;
+            display: flex; align-items: center; gap: 8px; text-align: center; white-space: nowrap;
+        }
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0); opacity: 1;
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -371,6 +384,7 @@
             .popup-items-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
             .popup-item img { max-height: 120px; }
             .popup-title { font-size: 1.3rem; }
+            .toast-notification { font-size: 0.85rem; padding: 10px 18px; }
         }
     </style>
 </head>
@@ -409,15 +423,15 @@
 
         <!-- TEASER SẮP LÊN SÓNG -->
         <div class="teaser-container" id="teaserContainer">
-            <h2 class="top-title" style="margin-bottom: 15px;">⏳ Tân Binh Sắp Lên Sóng ⏳</h2>
+            <h2 class="top-title" style="margin-bottom: 15px;">⏳ Chồng Mới Sắp Ra Mắt ⏳</h2>
             <div class="teaser-card">
                 <div class="teaser-img-wrapper">
                     <img src="https://i.postimg.cc/NFBqb7bC/fa1e955338d4b98ae0c5.jpg" alt="Teaser OC" class="teaser-img">
                     <div class="teaser-overlay-text">? ? ?</div>
                 </div>
-                <div class="teaser-name" id="teaserName">Tên Nhân Vật Mới</div>
+                <div class="teaser-name" id="teaserName">Reneus Sterling</div>
                 <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center;" id="teaserTags"></div>
-                <p class="teaser-desc" id="teaserSlogan">"Cập nhật hé lộ thông tin..."</p>
+                <p class="teaser-desc" id="teaserSlogan">"Ta không muốn làm lợn biển đâu..."</p>
                 
                 <button class="teaser-hype-btn" onclick="addHypeCount()">
                     🔥 Đặt lịch hóng (<span id="hypeCount">0</span>)
@@ -481,6 +495,11 @@
         <input type="text" id="wishInput" class="wish-input" placeholder="Nhập gu bạn thèm khát..." onkeypress="handleWishEnter(event)">
         <button class="wish-send-btn" onclick="sendWish()">Gửi 🚀</button>
     </div>
+</div>
+
+<!-- KHUNG THÔNG BÁO CHỮ NỔI (TOAST NOTIFICATION) -->
+<div class="toast-notification" id="toastBox">
+    <span id="toastMsg">Thông báo</span>
 </div>
 
 <!-- THẺ ÂM THANH PHÁT BGM NHẠC NỀN -->
@@ -830,6 +849,21 @@
         });
     }
 
+    // ================= HÀM HIỂN THỊ TOAST NOTIFICATION CHỮ NỔI =================
+    let toastTimer;
+    function showToast(message) {
+        const toastBox = document.getElementById("toastBox");
+        const toastMsg = document.getElementById("toastMsg");
+        
+        toastMsg.innerHTML = message;
+        toastBox.classList.add("show");
+
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+            toastBox.classList.remove("show");
+        }, 2500);
+    }
+
     // ================= XỬ LÝ TEASER SẮP LÊN SÓNG =================
     function initTeaserData() {
         document.getElementById("teaserName").innerText = upcomingOC.name;
@@ -844,13 +878,13 @@
     function addHypeCount() {
         const isHyped = localStorage.getItem(`isHyped_${upcomingOC.hypeKey}`);
         if (isHyped === 'true') {
-            alert("Bạn đã đặt lịch hóng anh này rồi nè! 🥰");
+            showToast("Bạn đã đặt lịch hóng anh này rồi nè! 🥰");
             return;
         }
 
         db.ref(`hypes/${upcomingOC.hypeKey}`).transaction(curr => (curr || 0) + 1).then(() => {
             localStorage.setItem(`isHyped_${upcomingOC.hypeKey}`, 'true');
-            alert("Cảm ơn bạn đã đặt lịch hóng! Anh ấy sẽ sớm lên sóng thôi 🔥");
+            showToast("Cảm ơn bạn đã đặt lịch hóng! Anh ấy sẽ sớm lên sóng thôi 🔥");
         });
     }
 
@@ -885,7 +919,7 @@
                 div.className = "wish-item";
                 div.innerHTML = `
                     <div class="wish-text">✨ ${item.text}</div>
-                    <button class="wish-vote-btn" onclick="voteWish('${item.id}')">+1 (${item.votes || 0})</button>
+                    <button class="wish-vote-btn" onclick="voteWish('${item.id}')">❤️ ${item.votes || 0}</button>
                 `;
                 listBody.appendChild(div);
             });
@@ -905,18 +939,20 @@
             timestamp: Date.now()
         }).then(() => {
             input.value = "";
+            showToast("Đã gửi ước nguyện gu chồng thành công! 🚀");
         });
     }
 
     function voteWish(wishId) {
         const hasVoted = localStorage.getItem(`voted_wish_${wishId}`);
         if (hasVoted) {
-            alert("Bạn đã bấm +1 cho ước nguyện này rồi nha!");
+            showToast("Bạn đã bấm thả tim cho ước nguyện này rồi nha! ❤️");
             return;
         }
 
         db.ref(`wishlist/${wishId}/votes`).transaction(curr => (curr || 0) + 1).then(() => {
             localStorage.setItem(`voted_wish_${wishId}`, 'true');
+            showToast("Đã thả tim đồng ý với ước nguyện này! 🥰");
         });
     }
 
