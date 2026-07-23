@@ -25,7 +25,6 @@
             --font-body: 'Lora', serif; 
         }
 
-        /* Tông màu Ban Đêm (Dark Mode) chuẩn Otome sang chảnh */
         body.dark-mode {
             --bg-color: #1a1415;
             --primary-color: #e2808a;
@@ -52,62 +51,39 @@
         header { 
             position: relative; 
             width: 100vw;
-            left: 50%;
-            right: 50%;
-            margin-left: -50vw;
-            margin-right: -50vw;
+            left: 50%; right: 50%;
+            margin-left: -50vw; margin-right: -50vw;
             margin-bottom: 40px; 
             background-image: url('https://i.ibb.co/Vkx6c8F/1784736706948-2078060217096962491-3928943315332758507-cd9bcc4e361a6acaa0223e91bba074e8.jpg'); 
             background-size: cover;
             background-position: center 35%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 55px 20px;
-            min-height: 300px;
+            display: flex; justify-content: center; align-items: center;
+            padding: 55px 20px; min-height: 300px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             animation: fadeIn 0.8s ease; 
         }
 
         header::before {
-            content: '';
-            position: absolute;
+            content: ''; position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background: var(--header-overlay); 
-            backdrop-filter: blur(2.5px); 
-            -webkit-backdrop-filter: blur(2.5px);
-            z-index: 1;
-            transition: background 0.3s ease;
+            backdrop-filter: blur(2.5px); -webkit-backdrop-filter: blur(2.5px);
+            z-index: 1; transition: background 0.3s ease;
         }
 
-        .header-box {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            max-width: 800px;
-            width: 100%;
-        }
+        .header-box { position: relative; z-index: 2; text-align: center; max-width: 800px; width: 100%; }
 
         h1 { 
-            font-family: var(--font-serif); 
-            font-size: 3.5rem; 
-            color: var(--primary-color); 
-            margin-bottom: 8px; 
-            font-weight: 700; 
-            line-height: 1.2; 
+            font-family: var(--font-serif); font-size: 3.5rem; color: var(--primary-color); 
+            margin-bottom: 8px; font-weight: 700; line-height: 1.2; 
             text-shadow: 0 0 12px rgba(255, 255, 255, 0.95), 0 0 22px rgba(255, 255, 255, 0.85);
             transition: color 0.3s ease;
         }
 
-        body.dark-mode h1 {
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
-        }
+        body.dark-mode h1 { text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9); }
 
         header p { 
-            color: #FFFFFF; 
-            font-size: 1.1rem; 
-            font-weight: 500; 
-            letter-spacing: 0.5px;
+            color: #FFFFFF; font-size: 1.1rem; font-weight: 500; letter-spacing: 0.5px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 6px rgba(0, 0, 0, 0.7);
         }
 
@@ -175,7 +151,6 @@
         }
         .tag-btn:hover, .tag-btn.active { background-color: var(--primary-color); color: #fff; }
 
-        /* Nút Lọc "Đã Thả Tim" Xịn Xò */
         .fav-filter-btn {
             background-color: rgba(226, 128, 138, 0.1) !important;
             border: 1.5px solid var(--primary-color) !important;
@@ -218,7 +193,7 @@
         }
         .card-likes:hover { background-color: rgba(226, 128, 138, 0.1); border-color: var(--primary-color); }
 
-        /* ================= CHATBOT, NÚT TRỢ GIÚP & NIGHT MODE WIDGET ================= */
+        /* ================= CỤM NÚT TÁC VỤ (CÓ BGM MUSIC PLAYER) ================= */
         .floating-container { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
 
         .action-circle-btn {
@@ -227,6 +202,13 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25); border: none; transition: 0.3s; font-family: var(--font-serif); font-weight: bold;
         }
         .action-circle-btn:hover { transform: scale(1.1); background-color: var(--primary-hover); }
+
+        /* Hiệu ứng xoay tròn đĩa nhạc khi đang phát BGM */
+        .music-btn.playing {
+            animation: spinMusic 3s linear infinite;
+            background-color: #e24b59 !important;
+        }
+        @keyframes spinMusic { 100% { transform: rotate(360deg); } }
 
         .help-window, .chat-window {
             position: fixed; bottom: 100px; right: 30px; background: var(--card-bg); color: var(--text-dark); border-radius: 16px;
@@ -258,7 +240,7 @@
         .chat-input { flex: 1; padding: 10px; border: 1px solid var(--border-color); border-radius: 20px; outline: none; font-family: var(--font-body); background: var(--bg-color); color: var(--text-dark); }
         .chat-send { background: none; border: none; color: var(--primary-color); font-weight: bold; padding: 0 15px; cursor: pointer; font-size: 1rem; }
 
-        /* ================= POPUP NHÂN VẬT MỚI (NEW) ================= */
+        /* ================= POPUP NHÂN VẬT MỚI ================= */
         .popup-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
@@ -311,7 +293,6 @@
             .container { padding: 0 10px 40px 10px; }
             .top-title { font-size: 1.6rem; margin-bottom: 20px; }
             
-            /* Bục Top 3 NẰM NGANG chuẩn đẹp trên Mobile */
             .podium-container { gap: 6px; padding: 5px 0; }
             .podium-card { padding: 8px 5px; border-radius: 12px; }
             .podium-name { font-size: 0.85rem !important; }
@@ -320,9 +301,8 @@
             .crown-icon { font-size: 1.5rem; top: -18px; }
 
             .floating-container { bottom: 20px; right: 20px; }
-            .chat-window, .help-window { width: calc(100% - 40px); right: 20px; bottom: 210px; }
+            .chat-window, .help-window { width: calc(100% - 40px); right: 20px; bottom: 270px; }
 
-            /* Fix Popup Mobile */
             .popup-card { padding: 15px; max-height: 90vh; }
             .popup-items-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
             .popup-item img { max-height: 120px; }
@@ -368,7 +348,6 @@
         <!-- BỘ LỌC VÀ TÌM KIẾM -->
         <div class="controls">
             <input type="text" id="searchInput" class="search-bar" placeholder="Nhập tên nhân vật bạn muốn tìm...">
-            
             <div class="tags-container" id="tagsContainer"></div>
         </div>
 
@@ -381,8 +360,10 @@
     </div>
 </div>
 
-<!-- ================= CỤM NÚT TÁC VỤ (DARK MODE + HỖ TRỢ + CHATBOT) ================= -->
+<!-- ================= CỤM NÚT TÁC VỤ (BGM PLAYER + DARK MODE + HỖ TRỢ + CHATBOT) ================= -->
 <div class="floating-container">
+    <!-- Nút Bật/Tắt Nhạc Nền (BGM) -->
+    <button class="action-circle-btn music-btn" id="bgmToggleBtn" onclick="toggleBGM()" title="Bật/Tắt Nhạc Nền Chill">🎵</button>
     <!-- Nút Bật/Tắt Chế Độ Ban Đêm -->
     <button class="action-circle-btn" id="themeToggleBtn" onclick="toggleDarkMode()" title="Đổi chế độ Sáng / Tối">🌙</button>
     <!-- Nút ? Hỗ trợ -->
@@ -390,6 +371,12 @@
     <!-- Nút Chatbot -->
     <button class="action-circle-btn" onclick="toggleChat()" title="Trợ lý Cún Bự">💬</button>
 </div>
+
+<!-- THẺ ÂM THANH PHÁT BGM NHẠC NỀN -->
+<audio id="bgmAudio" loop preload="auto">
+    <!-- Nhạc Piano LofiChill Thơ Mộng -->
+    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
+</audio>
 
 <!-- BẢNG HƯỚNG DẪN -->
 <div class="help-window" id="helpWindow">
@@ -709,7 +696,7 @@
     const allTags = ["Tất cả", ...new Set(ocData.flatMap(oc => oc.tags))];
     let currentTag = "Tất cả";
     let searchQuery = "";
-    let showOnlyLiked = false; // Trạng thái lọc chỉ xem ảnh đã thả tim
+    let showOnlyLiked = false;
     let isExpandedTags = false;
     const MAX_VISIBLE_TAGS = 10;
 
@@ -732,7 +719,25 @@
         });
     }
 
-    // ================= XỬ LÝ DARK MODE (CHẾ ĐỘ BAN ĐÊM) =================
+    // ================= XỬ LÝ BGM PLAYER (NHẠC NỀN) =================
+    let isBgmPlaying = false;
+    function toggleBGM() {
+        const audio = document.getElementById("bgmAudio");
+        const btn = document.getElementById("bgmToggleBtn");
+
+        if (isBgmPlaying) {
+            audio.pause();
+            btn.classList.remove("playing");
+            isBgmPlaying = false;
+        } else {
+            audio.play().then(() => {
+                btn.classList.add("playing");
+                isBgmPlaying = true;
+            }).catch(err => console.log("Lỗi mở nhạc: ", err));
+        }
+    }
+
+    // ================= XỬ LÝ DARK MODE =================
     function initTheme() {
         const savedTheme = localStorage.getItem("theme");
         if (savedTheme === "dark") {
@@ -790,11 +795,10 @@
         });
     }
 
-    // ================= RENDER TAGS & NÚT ĐÃ THẢ TIM =================
+    // ================= RENDER TAGS & ĐÃ THẢ TIM =================
     function renderTags() {
         tagsContainer.innerHTML = "";
 
-        // Nút Đã Thả Tim Cá Nhân
         const favBtn = document.createElement("button");
         favBtn.className = `tag-btn fav-filter-btn ${showOnlyLiked ? 'active' : ''}`;
         favBtn.id = "favFilterBtn";
