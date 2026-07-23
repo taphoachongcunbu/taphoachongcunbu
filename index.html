@@ -213,43 +213,47 @@
         .chat-input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 20px; outline: none; font-family: var(--font-body); }
         .chat-send { background: none; border: none; color: var(--primary-color); font-weight: bold; padding: 0 15px; cursor: pointer; font-size: 1rem; }
 
-        /* ================= POPUP NHÂN VẬT MỚI (NEW) ================= */
+        /* ================= FIX LỖI POPUP TRÊN ĐIỆN THOẠI (FIXED) ================= */
         .popup-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(5px);
             display: flex; justify-content: center; align-items: center;
-            z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+            z-index: 9999; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+            padding: 15px;
         }
         .popup-overlay.show { opacity: 1; visibility: visible; }
 
         .popup-card {
-            background: white; border-radius: 20px; width: 90%; max-width: 520px; padding: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2); text-align: center; position: relative;
-            transform: scale(0.8); transition: all 0.3s ease; border: 2px solid rgba(114, 47, 55, 0.15);
+            background: white; border-radius: 20px; width: 100%; max-width: 500px;
+            max-height: 85vh; overflow-y: auto; padding: 25px 20px 20px 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3); text-align: center; position: relative;
+            transform: scale(0.85); transition: all 0.3s ease; border: 2px solid rgba(114, 47, 55, 0.15);
         }
         .popup-overlay.show .popup-card { transform: scale(1); }
 
         .popup-close {
-            position: absolute; top: 12px; right: 15px; background: none; border: none;
-            font-size: 1.5rem; color: #888; cursor: pointer; transition: 0.2s;
+            position: sticky; top: 0; float: right; margin-top: -10px; margin-right: -5px;
+            background: rgba(240, 240, 240, 0.9); border: none; font-size: 1.2rem;
+            color: #555; cursor: pointer; width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; z-index: 10;
         }
-        .popup-close:hover { color: var(--primary-color); }
+        .popup-close:hover { background: var(--primary-color); color: white; }
 
-        .popup-title { font-family: var(--font-serif); color: var(--primary-color); font-size: 1.6rem; margin-bottom: 5px; font-weight: 700; }
-        .popup-subtitle { font-size: 0.9rem; color: var(--text-light); margin-bottom: 20px; font-style: italic; }
+        .popup-title { font-family: var(--font-serif); color: var(--primary-color); font-size: 1.5rem; margin-bottom: 5px; font-weight: 700; clear: both; }
+        .popup-subtitle { font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px; font-style: italic; }
 
-        .popup-items-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .popup-item { background: #faf9f7; border-radius: 12px; padding: 12px; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; }
-        .popup-item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
-        .popup-item-name { font-family: var(--font-serif); font-weight: bold; color: var(--primary-color); font-size: 1.1rem; margin-bottom: 8px; }
+        .popup-items-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        .popup-item { background: #faf9f7; border-radius: 12px; padding: 10px; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; }
+        .popup-item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
+        .popup-item-name { font-family: var(--font-serif); font-weight: bold; color: var(--primary-color); font-size: 1rem; margin-bottom: 6px; }
         
         .popup-btn {
-            background-color: var(--primary-color); color: white; text-decoration: none; padding: 6px 14px;
-            border-radius: 20px; font-size: 0.85rem; font-weight: bold; transition: 0.3s;
+            background-color: var(--primary-color); color: white; text-decoration: none; padding: 6px 12px;
+            border-radius: 20px; font-size: 0.8rem; font-weight: bold; transition: 0.3s; display: inline-block;
         }
-        .popup-btn:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .popup-btn:hover { background-color: var(--primary-hover); }
 
-        .popup-footer-action { font-size: 0.85rem; color: #777; cursor: pointer; text-decoration: underline; }
+        .popup-footer-action { display: block; font-size: 0.85rem; color: #666; cursor: pointer; text-decoration: underline; padding: 8px 0; }
         .popup-footer-action:hover { color: var(--primary-color); }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -260,12 +264,17 @@
             header { padding: 35px 15px; min-height: 220px; }
             .floating-container { bottom: 20px; right: 20px; }
             .chat-window, .help-window { width: calc(100% - 40px); right: 20px; bottom: 150px; }
-            .popup-items-grid { grid-template-columns: 1fr; }
             
             /* Responsive Bục Top 3 trên điện thoại */
             .podium-container { flex-direction: column; align-items: center; gap: 15px; }
             .podium-rank-1, .podium-rank-2, .podium-rank-3 { order: unset; width: 100%; max-width: 320px; }
             .crown-icon { top: -20px; }
+
+            /* Fix Popup Mobile */
+            .popup-card { padding: 15px; max-height: 90vh; }
+            .popup-items-grid { grid-template-columns: 1fr 1fr; gap: 10px; } /* Giữ 2 cột nhưng thu nhỏ hình */
+            .popup-item img { max-height: 120px; }
+            .popup-title { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -294,7 +303,7 @@
 <div class="container">
     <div id="home-view" class="view active">
         
-        <!-- ================= BỤC VINH QUANG TOP 3 NHIỀU TIM NHẤT ================= -->
+        <!-- BỤC VINH QUANG TOP 3 NHIỀU TIM NHẤT -->
         <div class="top-section">
             <h2 class="top-title">👑 Bảng Vàng Chồng Cún Bự 👑</h2>
             <div class="podium-container" id="podiumContainer">
@@ -353,7 +362,7 @@
     </div>
 </div>
 
-<!-- ================= POPUP THÔNG BÁO NHÂN VẬT MỚI ================= -->
+<!-- ================= POPUP THÔNG BÁO NHÂN VẬT MỚI (FIX LỖI TẮT) ================= -->
 <div class="popup-overlay" id="newOcPopup">
     <div class="popup-card">
         <button class="popup-close" onclick="closePopup()">✖</button>
@@ -668,13 +677,11 @@
         db.ref('likes').on('value', (snapshot) => {
             const likesData = snapshot.val() || {};
             
-            // Tính tim thực tế
             let ocWithLikes = ocData.map(oc => {
                 const count = likesData[oc.likeKey] || 0;
                 return { ...oc, likes: count };
             });
 
-            // Sắp xếp tim từ cao xuống thấp
             ocWithLikes.sort((a, b) => b.likes - a.likes);
 
             const top3 = ocWithLikes.slice(0, 3);
@@ -683,7 +690,6 @@
 
             podiumContainer.innerHTML = "";
 
-            // Thứ tự hiển thị: Hạng 2 (Trái) -> Hạng 1 (Giữa) -> Hạng 3 (Phải)
             const podiumOrder = [
                 { oc: top3[1], class: "podium-rank-2", badge: "badge-2", label: "TOP 2 🥈" },
                 { oc: top3[0], class: "podium-rank-1", badge: "badge-1", label: "TOP 1 🥇", crown: "👑" },
@@ -747,8 +753,6 @@
             noResult.style.display = "block";
         } else {
             noResult.style.display = "none";
-            
-            // ĐẢO NGƯỢC DANH SÁCH: Cho nhân vật mới nhất (id lớn nhất) bay lên đầu!
             const sortedData = [...data].sort((a, b) => b.id - a.id);
 
             sortedData.forEach(oc => {
@@ -785,7 +789,7 @@
         }
     }
 
-    // ================= POPUP AUTOMATION (BẮT TỰ ĐỘNG 2 NHÂN VẬT MỚI NHẤT) =================
+    // ================= POPUP AUTOMATION =================
     function checkAndShowNewPopup() {
         const hideUntil = localStorage.getItem("hideNewPopupUntil");
         const today = new Date().toDateString();
