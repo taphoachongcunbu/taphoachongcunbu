@@ -96,6 +96,44 @@
         .social-btn svg { width: 20px; height: 20px; fill: currentColor; }
         .social-btn:hover { background-color: var(--primary-color); color: white; transform: translateY(-3px); }
 
+        /* ================= BỤC VINH QUANG TOP 3 ================= */
+        .top-section { margin-bottom: 45px; text-align: center; }
+        .top-title { font-family: var(--font-serif); color: var(--primary-color); font-size: 2.2rem; font-weight: 700; margin-bottom: 30px; }
+
+        .podium-container {
+            display: flex; justify-content: center; align-items: flex-end; gap: 20px;
+            max-width: 900px; margin: 0 auto; padding: 10px;
+        }
+
+        .podium-card {
+            background: var(--card-bg); border-radius: 16px; padding: 16px; text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06); text-decoration: none; color: inherit;
+            position: relative; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center;
+        }
+        .podium-card:hover { transform: translateY(-8px); box-shadow: 0 12px 30px rgba(114, 47, 55, 0.2); }
+
+        .podium-rank-1 { order: 2; width: 36%; border: 2px solid #FFD700; background: linear-gradient(180deg, #FFFDF0 0%, #FFFFFF 100%); }
+        .podium-rank-2 { order: 1; width: 30%; border: 1px solid #D0D0D0; }
+        .podium-rank-3 { order: 3; width: 30%; border: 1px solid #CD7F32; }
+
+        .podium-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; margin-bottom: 10px; }
+        .podium-rank-1 img { border: 2px solid #FFD700; }
+
+        .crown-icon { font-size: 2.2rem; position: absolute; top: -28px; left: 50%; transform: translateX(-50%); animation: floatCrown 2s infinite ease-in-out; }
+        @keyframes floatCrown { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-5px); } }
+
+        .badge-rank {
+            padding: 4px 14px; border-radius: 20px; font-weight: bold; font-size: 0.8rem;
+            color: white; margin-bottom: 8px; display: inline-block;
+        }
+        .badge-1 { background: linear-gradient(45deg, #FFD700, #FFA500); color: #5a3e00; }
+        .badge-2 { background: linear-gradient(45deg, #C0C0C0, #808080); }
+        .badge-3 { background: linear-gradient(45deg, #CD7F32, #8B4513); }
+
+        .podium-name { font-family: var(--font-serif); font-weight: 700; color: var(--primary-color); font-size: 1.2rem; margin-bottom: 4px; }
+        .podium-rank-1 .podium-name { font-size: 1.4rem; }
+        .podium-likes-count { font-size: 0.9rem; color: var(--text-light); font-weight: 600; }
+
         /* --- Controls: Search & Tags --- */
         .controls { display: flex; flex-direction: column; align-items: center; gap: 20px; margin-bottom: 40px; }
         .search-bar { width: 100%; max-width: 500px; padding: 12px 20px; border: 1px solid #ddd; border-radius: 50px; font-family: var(--font-body); font-size: 1rem; outline: none; transition: 0.3s; }
@@ -200,7 +238,6 @@
         .popup-title { font-family: var(--font-serif); color: var(--primary-color); font-size: 1.6rem; margin-bottom: 5px; font-weight: 700; }
         .popup-subtitle { font-size: 0.9rem; color: var(--text-light); margin-bottom: 20px; font-style: italic; }
 
-        /* Khung chứa 2 nhân vật mới nằm ngang */
         .popup-items-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .popup-item { background: #faf9f7; border-radius: 12px; padding: 12px; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; }
         .popup-item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
@@ -223,7 +260,12 @@
             header { padding: 35px 15px; min-height: 220px; }
             .floating-container { bottom: 20px; right: 20px; }
             .chat-window, .help-window { width: calc(100% - 40px); right: 20px; bottom: 150px; }
-            .popup-items-grid { grid-template-columns: 1fr; } /* Trên điện thoại xếp dọc lại cho dễ nhìn */
+            .popup-items-grid { grid-template-columns: 1fr; }
+            
+            /* Responsive Bục Top 3 trên điện thoại */
+            .podium-container { flex-direction: column; align-items: center; gap: 15px; }
+            .podium-rank-1, .podium-rank-2, .podium-rank-3 { order: unset; width: 100%; max-width: 320px; }
+            .crown-icon { top: -20px; }
         }
     </style>
 </head>
@@ -251,11 +293,24 @@
 
 <div class="container">
     <div id="home-view" class="view active">
+        
+        <!-- ================= BỤC VINH QUANG TOP 3 NHIỀU TIM NHẤT ================= -->
+        <div class="top-section">
+            <h2 class="top-title">👑 Bảng Vàng Chồng Cún Bự 👑</h2>
+            <div class="podium-container" id="podiumContainer">
+                <div style="text-align: center; color: #888; width: 100%;">Đang tính toán bảng xếp hạng...</div>
+            </div>
+        </div>
+
+        <hr style="border: none; border-top: 1px dashed #ddd; margin: 40px 0;">
+
+        <!-- BỘ LỌC VÀ TÌM KIẾM -->
         <div class="controls">
             <input type="text" id="searchInput" class="search-bar" placeholder="Nhập tên nhân vật bạn muốn tìm...">
             <div class="tags-container" id="tagsContainer"></div>
         </div>
 
+        <!-- DANH SÁCH TOÀN BỘ NHÂN VẬT -->
         <div class="gallery-grid" id="galleryGrid"></div>
         
         <div id="no-result" style="display:none; text-align:center; color: var(--text-light); width: 100%;">
@@ -305,9 +360,7 @@
         <div class="popup-title">✨ Chồng Iu Mới Lên Sóng!</div>
         <div class="popup-subtitle">Ghé thăm & trải nghiệm ngay những anh chồng mới nhất nè:</div>
         
-        <div class="popup-items-grid" id="popupItemsGrid">
-            <!-- 2 nhân vật mới sẽ tự động hiển thị ở đây -->
-        </div>
+        <div class="popup-items-grid" id="popupItemsGrid"></div>
 
         <span class="popup-footer-action" onclick="closePopupAndSave()">Đã hiểu (Không hiện lại hôm nay)</span>
     </div>
@@ -602,10 +655,56 @@
         renderTags();
         renderGallery(ocData);
         checkAndShowNewPopup();
+        listenAndRenderPodium();
         
         searchInput.addEventListener("input", (e) => {
             searchQuery = e.target.value.toLowerCase();
             filterData();
+        });
+    }
+
+    // ================= DỰNG PODIUM BỤC VINH QUANG TOP 3 =================
+    function listenAndRenderPodium() {
+        db.ref('likes').on('value', (snapshot) => {
+            const likesData = snapshot.val() || {};
+            
+            // Tính tim thực tế
+            let ocWithLikes = ocData.map(oc => {
+                const count = likesData[oc.likeKey] || 0;
+                return { ...oc, likes: count };
+            });
+
+            // Sắp xếp tim từ cao xuống thấp
+            ocWithLikes.sort((a, b) => b.likes - a.likes);
+
+            const top3 = ocWithLikes.slice(0, 3);
+            const podiumContainer = document.getElementById("podiumContainer");
+            if (!podiumContainer || top3.length < 3) return;
+
+            podiumContainer.innerHTML = "";
+
+            // Thứ tự hiển thị: Hạng 2 (Trái) -> Hạng 1 (Giữa) -> Hạng 3 (Phải)
+            const podiumOrder = [
+                { oc: top3[1], class: "podium-rank-2", badge: "badge-2", label: "TOP 2 🥈" },
+                { oc: top3[0], class: "podium-rank-1", badge: "badge-1", label: "TOP 1 🥇", crown: "👑" },
+                { oc: top3[2], class: "podium-rank-3", badge: "badge-3", label: "TOP 3 🥉" }
+            ];
+
+            podiumOrder.forEach(item => {
+                const oc = item.oc;
+                const card = document.createElement("a");
+                card.className = `podium-card ${item.class}`;
+                card.href = oc.slug;
+
+                card.innerHTML = `
+                    ${item.crown ? `<div class="crown-icon">${item.crown}</div>` : ''}
+                    <span class="badge-rank ${item.badge}">${item.label}</span>
+                    <img src="${oc.image}" alt="${oc.name}">
+                    <div class="podium-name">${oc.name}</div>
+                    <div class="podium-likes-count">❤️ ${oc.likes} tim</div>
+                `;
+                podiumContainer.appendChild(card);
+            });
         });
     }
 
@@ -691,10 +790,8 @@
         const hideUntil = localStorage.getItem("hideNewPopupUntil");
         const today = new Date().toDateString();
 
-        // Nếu người dùng chọn "Không hiện lại hôm nay", tạm ẩn Pop-up
         if (hideUntil === today) return;
 
-        // Tự động sắp xếp để bốc ra 2 nhân vật có ID lớn nhất
         const latestTwo = [...ocData].sort((a, b) => b.id - a.id).slice(0, 2);
         const popupGrid = document.getElementById("popupItemsGrid");
         popupGrid.innerHTML = "";
@@ -710,7 +807,6 @@
             popupGrid.appendChild(div);
         });
 
-        // Bật Pop-up sau 0.8s khi vào trang
         setTimeout(() => {
             document.getElementById("newOcPopup").classList.add("show");
         }, 800);
