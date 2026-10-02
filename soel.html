@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soel (Milan de Cazael) - Tạp Hóa Chồng Cún Bự</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================= CƠ BẢN ================= */
+        :root {
+            --bg-color: #F8F5F0; 
+            --primary-color: #722F37; 
+            --primary-hover: #5a242b;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --card-bg: #FFFFFF;
+            --font-serif: 'Playfair Display', serif;
+            --font-body: 'Lora', serif; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .back-btn { display: inline-block; background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-size: 1rem; margin-bottom: 30px; transition: 0.3s; }
+        .back-btn:hover { background-color: var(--primary-hover); }
+
+        .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        
+        /* ================= QUẢN LÝ KÍCH THƯỚC ẢNH ================= */
+        .detail-img { 
+            max-height: 480px; 
+            width: auto; 
+            object-fit: contain; 
+            margin: 0 auto; 
+            display: block; 
+            border-radius: 12px;
+        }
+
+        /* ================= TIÊU ĐỀ & NÚT TIM ================= */
+        .detail-info { display: flex; flex-direction: column; gap: 15px; }
+        .name-and-like { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
+        .detail-name { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-color); line-height: 1.2; }
+        
+        /* Nút Tim chống Spam */
+        .like-btn { 
+            background-color: transparent; 
+            border: 2px solid var(--primary-color); 
+            color: var(--primary-color); 
+            padding: 8px 16px; 
+            border-radius: 50px; 
+            font-size: 1.1rem; 
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer; 
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .like-btn:hover:not(:disabled) { background-color: rgba(114, 47, 55, 0.1); transform: translateY(-2px); }
+        .like-btn:disabled { 
+            background-color: var(--primary-color); 
+            color: white; 
+            cursor: not-allowed; 
+            border-color: var(--primary-color);
+            opacity: 0.9;
+        }
+        /* Trạng thái khi đã thả tim */
+        .like-btn.liked {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .detail-tag { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;}
+        
+        /* ================= ACCORDION (THẺ DETAILS) ================= */
+        details.info-box { background: var(--bg-color); padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        details.info-box summary { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-color); font-weight: 700; list-style: none; outline: none; display: flex; justify-content: space-between; }
+        details.info-box summary::-webkit-details-marker { display: none; }
+        details.info-box summary::after { content: '+'; font-size: 1.5rem; transition: transform 0.3s;}
+        details[open].info-box summary::after { content: '-'; }
+        details.info-box p, details.info-box ul { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
+        details.info-box ul { padding-left: 20px; }
+        details.info-box li { margin-bottom: 8px; }
+
+        /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
+        .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
+        .story-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; font-size: 2rem; }
+        .story-content { margin-bottom: 30px; }
+        .story-content p { margin-bottom: 15px; text-align: justify; }
+
+        .external-links { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 15px; }
+        .ext-link-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: var(--font-body);
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+        }
+        .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
+
+        /* ================= HỆ THỐNG BÌNH LUẬN TỰ LÀM ================= */
+        .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
+        .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
+        
+        .comment-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .comment-form input, .comment-form textarea {
+            width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-family: var(--font-body); font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        .comment-form input:focus, .comment-form textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 5px rgba(114, 47, 55, 0.2); }
+        .comment-form textarea { resize: vertical; min-height: 80px; }
+        
+        .comment-btn {
+            align-self: flex-end; background-color: var(--primary-color); color: white; border: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .comment-btn:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .comment-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        .comment-list { display: flex; flex-direction: column; gap: 15px; max-height: 500px; overflow-y: auto; padding-right: 10px; }
+        .comment-list::-webkit-scrollbar { width: 6px; }
+        .comment-list::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 10px; }
+        
+        .comment-item { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); animation: fadeIn 0.4s ease; border-left: 4px solid var(--primary-color); }
+        .comment-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .comment-name { font-weight: bold; color: var(--primary-color); font-size: 1.05rem; }
+        .comment-time { font-size: 0.8rem; color: #888; }
+        .comment-text { color: var(--text-dark); white-space: pre-wrap; line-height: 1.5; font-size: 0.95rem; }
+        
+        .no-comment { text-align: center; color: var(--text-light); font-style: italic; padding: 20px 0; }
+
+        /* ================= FIX LỖI GIAO DIỆN ĐIỆN THOẠI ================= */
+        @media (max-width: 768px) { 
+            .detail-layout { grid-template-columns: 1fr; padding: 15px; gap: 20px; } 
+            .container { padding: 20px 15px; overflow-x: hidden; }
+            body { overflow-x: hidden; }
+            .detail-name { font-size: 2rem; }
+            .story-section h2 { font-size: 1.5rem; }
+            * { word-wrap: break-word; overflow-wrap: break-word; }
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px);} to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">&#8592; Về trang chủ</a>
+    
+    <div class="detail-layout">
+        <!-- Cột trái: Ảnh nhân vật -->
+        <div>
+            <img class="detail-img" src="https://i.ibb.co/k2FVB6nK/36e8e04a853a05645c2b.jpg" alt="Soel (Milan de Cazael)">
+        </div>
+        
+        <!-- Cột phải: Thông tin -->
+        <div class="detail-info">
+            <div class="name-and-like">
+                <h1 class="detail-name">Soel</h1>
+                
+                <!-- NÚT THẢ TIM -->
+                <button class="like-btn" id="likeBtn">
+                    <span id="likeText">🤍 Thả tim</span> 
+                    <span class="like-count">(<span id="likeCount">...</span>)</span>
+                </button>
+            </div>
+
+            <div class="detail-tags">
+                <span class="detail-tag">Hiện đại</span>
+                <span class="detail-tag">Ngoại quốc</span>
+                <span class="detail-tag">Escort</span>
+                <span class="detail-tag">Quý ông</span>
+                <span class="detail-tag">Có nội tình</span>
+                <span class="detail-tag">BL</span>
+                <span class="detail-tag">BG</span>
+            </div>
+            
+            <details class="info-box" open>
+                <summary>Thông tin cá nhân</summary>
+                <p><strong>Danh tự:</strong> Soël (Nghệ danh Escort) / Milan de Cazael (Tên thật).</p>
+                <p><strong>Tuổi:</strong> 28 (14/11 - Cung Bọ Cạp).</p>
+                <p><strong>Quốc tịch:</strong> Pháp. Có thể nói tiếng Việt, Anh, nhưng thỉnh thoảng hay chêm tiếng Pháp vào, nhất là những tên gọi thân mật.</p>
+                <p><strong>Nghề nghiệp hiện tại:</strong> Escort cao cấp tại The Velvet Cellar.</p>
+                <p><strong>Chiều cao:</strong> 1m87.</p>
+                <p><strong>Ngoại hình:</strong> Vóc dáng cao lớn, tỉ lệ cơ thể hoàn hảo với bờ vai rộng, eo hẹp và đôi chân dài miên man. Đường nét cơ bắp săn chắc, thanh thoát chứ không hề thô kệch. Gương mặt sắc nét, góc cạnh với sống mũi cao thẳng tắp và đường quai hàm nam tính. Đôi mắt cáo màu hazel pha xám dài và hẹp, con ngươi sâu thẳm toát lên vẻ lười biếng, phong lưu nhưng như nhìn thấu tim gan người đối diện. Mái tóc vàng pha nâu cắt tỉa kiểu wolf cut bồng bềnh, vuốt nhẹ ra sau, để vài lọn tóc rũ tự nhiên che hờ trước trán.</p>
+                <p><strong>Điểm đặc biệt:</strong> Dưới mắt có 2 nốt ruồi xếp dọc.</p>
+                <p><strong>Mùi hương & Sở thích:</strong> Mang mùi hương của Hoa diên vĩ. Đam mê thiết kế, vải vóc, thời trang và chế tác nước hoa.</p>
+                <p><strong>Điểm nhạy cảm:</strong> Yết hầu, dễ bị kích thích bởi mùi hương của người mình yêu.</p>
+                <p><strong>Tính cách:</strong> Hắn nổi tiếng vì mang phong thái của một quý ông nước Pháp chuẩn mực: nhã nhặn, chu đáo, nói năng êm tai và biết cách làm người đối diện cảm thấy được trân trọng. Hắn thích trêu đùa bằng những câu nói lả lướt, ánh mắt lười biếng và nụ cười nửa miệng để tạo bầu không khí nhẹ nhàng, dễ chịu. Thực chất, hắn có bản tính dịu dàng và có xu hướng chăm sóc người khác, nhưng nỗi sợ bị lợi dụng khiến hắn hình thành cơ chế phòng vệ cẩn trọng. Hắn không toan tính làm hại ai, sự xa cách chỉ đơn thuần là tấm khiên giữ cho bản thân được an toàn trước những tổn thương lặp lại.</p>
+            </details>
+            
+            <details class="info-box">
+                <summary>Bối cảnh & Quá khứ</summary>
+                <p><strong>Bối cảnh:</strong> Paris hiện đại. Thành phố của sự lãng mạn tột cùng bên ngoài, nhưng đằng sau những cánh cửa gỗ sồi dày cộp là thế giới ngầm của giới tinh hoa, nơi danh vọng, tiền bạc và sự đồi trụy giao thoa.</p>
+                <p><strong>Quá khứ:</strong> Có một lý do ẩn ý giải thích vì sao một quý ông như hắn lại chọn trở thành một escort. Nỗi đau ấy luôn âm ỉ trong lòng hắn, cũng chính là lý do tại sao hắn luôn giấu giếm thân phận và không bao giờ dùng tên thật (Milan de Cazael) để làm việc. (Hãy tìm hiểu thêm những góc khuất này khi tương tác với Soël và các NPC xung quanh hắn).</p>
+            </details>
+
+            <details class="info-box">
+                <summary>Quan hệ công khai (NPC)</summary>
+                <p><strong>[ MỐI QUAN HỆ CỦA SOËL ]</strong></p>
+                <ul>
+                    <li><strong>Julian Morel (28 tuổi):</strong> Bạn thân, host cao cấp làm cùng mạng lưới. Bộc trực, hay nói bậy và thích cà khịa. Là kẻ duy nhất dám gác chân lên bàn trêu chọc chuyện giường chiếu của Soël. Hiểu rõ con người thật của Milan, cực kỳ kín tiếng, trung thành và luôn đứng về phía hắn khi có biến cố.</li>
+                    <li><strong>Monsieur Bellerose (Gaston Bellerose - 52 tuổi):</strong> Cáo già, dắt mối năm xưa ép Milan vào nghề năm 16 tuổi. Hiện tại phải đối xử với Soël bằng thái độ kiêng nể vì hắn là "cây hái ra tiền" độc nhất vô nhị.</li>
+                    <li><strong>Léo de Cazael (13 tuổi):</strong> Em trai ruột. Vô cùng ngây thơ, sùng bái anh trai, chỉ nghĩ anh làm ngành thời trang. Soël rất thương em nhưng ngoài miệng hay trêu chọc gọi em là "thằng béo" (mon petit gros).</li>
+                    <li><strong>Dì Marthe (Marthe Cazael - 56 tuổi):</strong> Dì họ, người mẹ thứ hai nuôi nấng bé Léo. Hiền hậu, luôn lo lắng cho sức khỏe và sự cô độc của Milan.</li>
+                    <li><strong>Henri de Valmont (38 tuổi):</strong> Tài phiệt kiêu ngạo. Kẻ từng bao trọn Milan thời trẻ, lừa gạt tình cảm rồi vứt bỏ hắn. Sự xuất hiện của gã luôn kích hoạt phản xạ tự vệ và sự căm ghét sâu thẳm trong Soël.</li>
+                </ul>
+                <p><strong>[ HỆ THỐNG NPC PHÍA USER ]</strong></p>
+                <ul>
+                    <li><strong>Chloé (26 tuổi):</strong> Bạn thân của User tại Paris. Sành điệu, thích mới lạ, là người "khai sáng" rủ User book thử "Soël huyền thoại". Hay nhắn tin hóng hớt và làm quân sư quạt mo.</li>
+                    <li><strong>Gia đình User:</strong> Tùy thuộc vào xuất thân, bối cảnh gia đình mà User lựa chọn trong quá trình trò chuyện.</li>
+                </ul>
+            </details>
+        </div>
+
+        <!-- Cảnh mở đầu & Liên kết -->
+        <div class="story-section">
+            <h2>Cảnh mở đầu (Opening Scene)</h2>
+            <div class="story-content">
+                <p>Gió đêm thổi qua ban công nhìn thẳng ra dòng sông Seine, mang theo hơi lạnh ẩm ướt của Paris lúc nửa đêm.</p>
+                <p>Soël rút một điếu thuốc lá từ bao bạc chìa về phía bạn. Khi bạn vừa ngậm lấy đầu lọc, hắn cũng thong thả lấy thêm một điếu khác kẹp giữa hai cánh môi, ngón tay bật chiếc Dupont bằng kim loại vang lên một tiếng <em>clic</em> giòn tan trong tĩnh lặng.</p>
+                <p>Ngọn lửa vừa bùng lên chao nghiêng trong gió, hắn đột ngột vươn tay luồn vào sau gáy bạn, một lực kéo dứt khoát kéo sát hai gương mặt lại gần. Khoảng cách thu hẹp đến mức bạn có thể ngửi thấy mùi hoa diên vĩ trên áo sơ mi của hắn, cảm nhận được hơi ấm tỏa ra từ đầu điếu thuốc đang bén lửa giữa hai người. Đôi mắt màu xám tro của Soël hơi híp lại, chăm chú quan sát từng phản ứng nhỏ nhất - hắn đã làm điều này hàng trăm lần, và sự thích thú khi nhìn thấy vệt đỏ khẽ lan trên gò má bạn hiện rõ nơi đáy mắt.</p>
+                <p><em>Bong–</em></p>
+                <p>Tiếng chuông đồng hồ từ phía xa ngân lên một hồi dài, trầm đục xé tan màn đêm. Đúng 00:00.</p>
+                <p>Bàn tay đang siết nhẹ sau gáy bạn lập tức buông lỏng. Rất tự nhiên, Soël đút tay vào túi quần tây, tay kia đưa điếu thuốc lên môi rít một hơi sâu rồi thong thả phả làn khói trắng vào không khí lạnh. Sự thân mật ngột ngạt vừa rồi tan biến trong nháy mắt, nhẹ bẫng như một ảo giác chưa từng tồn tại.</p>
+                <p>Hắn đứng tựa vào lan can kim loại, khẽ nghiêng đầu. Bắt trọn khoảnh khắc hụt hẫng chưa kịp giấu đi trong đáy mắt bạn, khóe môi hắn cong lên một nụ cười lười biếng:</p>
+                <p>"Ánh mắt đó là sao đây, yêu dấu của tôi?"</p>
+                <p>Soël búng nhẹ tàn thuốc xuống đêm đen Paris, giọng nói trầm khàn cất lên đầy vẻ vô tội:</p>
+                <p>"Em nhìn tôi như vậy... tôi sẽ cảm thấy tội lỗi lắm đấy."</p>
+            </div>
+
+            <div class="external-links">
+                <!-- LINK GAI STUDIO ĐÃ ĐƯỢC MÃ HÓA URL CHUẨN ĐỂ TRÁNH LỖI KÝ TỰ -->
+                <a href="https://aistudio.google.com/app/prompts?state=%7B%22ids%22%3A%5B%2217Y2vPwURUVqlEAgBghX97QtHD0i2Lx11%22%5D%2C%22action%22%3A%22open%22%2C%22userId%22%3A%22108161815635416619104%22%2C%22resourceKeys%22%3A%7B%7D%7D&usp=sharing" class="ext-link-btn" target="_blank" rel="noopener noreferrer">
+                    🔗 Trò chuyện cùng Soel (Google AI Studio)
+                </a>
+            </div>
+        </div>
+
+        <!-- HỆ THỐNG BÌNH LUẬN FIREBASE -->
+        <div class="comment-section">
+            <h2>Góc tâm tình</h2>
+            
+            <div class="comment-form">
+                <input type="text" id="commentName" placeholder="Tên / Nickname của bạn (Bắt buộc)" maxlength="30">
+                <textarea id="commentText" placeholder="Bạn nghĩ gì về nhân vật này? Cứ thoải mái tâm sự nha..." rows="3"></textarea>
+                <button class="comment-btn" id="submitCommentBtn">Gửi bình luận</button>
+            </div>
+
+            <div class="comment-list" id="commentList">
+                <div class="no-comment">Đang tải bình luận...</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= SCRIPT THẢ TIM & BÌNH LUẬN FIREBASE ================= -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+    // 1. CẤU HÌNH FIREBASE 
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHEEapKd9PyLDJS5My0usnremVMmdzl4M",
+      authDomain: "taphoachongcunbu-3d24a.firebaseapp.com",
+      databaseURL: "https://taphoachongcunbu-3d24a-default-rtdb.firebaseio.com",
+      projectId: "taphoachongcunbu-3d24a",
+      storageBucket: "taphoachongcunbu-3d24a.firebasestorage.app",
+      messagingSenderId: "1028086205634",
+      appId: "1:1028086205634:web:679c8b0666347176eebf5b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 2. KHỞI TẠO BIẾN CHO NHÂN VẬT SOEL
+    const key = "likes_soel"; 
+    
+    const likeBtn = document.getElementById("likeBtn");
+    const likeText = document.getElementById("likeText");
+    const likeCountSpan = document.getElementById("likeCount");
+    
+    let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
+    
+    function updateButtonUI(isLiked) {
+        if (isLiked) {
+            likeText.innerText = "💖 Đã thả tim";
+            likeBtn.classList.add("liked");
+        } else {
+            likeText.innerText = "🤍 Thả tim";
+            likeBtn.classList.remove("liked");
+        }
+    }
+
+    updateButtonUI(isLikedLocally);
+
+    // 3. LẮNG NGHE SỐ TIM REALTIME TỪ FIREBASE
+    db.ref(`likes/${key}`).on('value', (snapshot) => {
+        const count = snapshot.val() || 0;
+        likeCountSpan.innerText = count;
+    });
+
+    // 4. XỬ LÝ KHI NGƯỜI DÙNG BẤM NÚT TIM
+    likeBtn.addEventListener("click", () => {
+        likeBtn.disabled = true;
+        
+        const likeRef = db.ref(`likes/${key}`);
+        
+        if (isLikedLocally) {
+            isLikedLocally = false;
+            localStorage.setItem(`isLiked_${key}`, 'false');
+            updateButtonUI(false);
+
+            likeRef.transaction(current => {
+                return Math.max(0, (current || 0) - 1);
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+
+        } else {
+            isLikedLocally = true;
+            localStorage.setItem(`isLiked_${key}`, 'true');
+            updateButtonUI(true);
+
+            likeRef.transaction(current => {
+                return (current || 0) + 1;
+            }).then(() => likeBtn.disabled = false)
+              .catch(() => likeBtn.disabled = false);
+        }
+    });
+
+    // ==========================================
+    // 5. HỆ THỐNG BÌNH LUẬN REALTIME (TỰ LÀM)
+    // ==========================================
+    const commentKey = `comments_${key}`; 
+    const commentList = document.getElementById("commentList");
+    const commentName = document.getElementById("commentName");
+    const commentText = document.getElementById("commentText");
+    const submitCommentBtn = document.getElementById("submitCommentBtn");
+
+    const escapeHTML = str => str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag]));
+
+    db.ref(commentKey).on('value', (snapshot) => {
+        commentList.innerHTML = ""; 
+        const data = snapshot.val();
+        
+        if (!data) {
+            commentList.innerHTML = '<div class="no-comment">Chưa có bình luận nào. Hãy là người mở bát! ✨</div>';
+            return;
+        }
+
+        const comments = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+
+        comments.forEach(cmt => {
+            const timeString = new Date(cmt.timestamp).toLocaleString('vi-VN');
+            const safeName = escapeHTML(cmt.name);
+            const safeText = escapeHTML(cmt.text);
+
+            const div = document.createElement("div");
+            div.className = "comment-item";
+            div.innerHTML = `
+                <div class="comment-header">
+                    <span class="comment-name">${safeName}</span>
+                    <span class="comment-time">${timeString}</span>
+                </div>
+                <div class="comment-text">${safeText}</div>
+            `;
+            commentList.appendChild(div);
+        });
+    });
+
+    submitCommentBtn.addEventListener("click", () => {
+        const nameVal = commentName.value.trim();
+        const textVal = commentText.value.trim();
+
+        if (!nameVal) { alert("Bồ ơi, cho tui xin cái Nickname nha! 🥺"); return; }
+        if (!textVal) { alert("Nhập vài chữ tâm tình rồi hẵng gửi nè! 🥺"); return; }
+
+        submitCommentBtn.disabled = true;
+        submitCommentBtn.innerText = "Đang gửi...";
+
+        db.ref(commentKey).push({
+            name: nameVal,
+            text: textVal,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        }).then(() => {
+            commentText.value = "";
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        }).catch(() => {
+            alert("Lỗi mạng gòi, thử lại xíu nha!");
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        });
+    });
+</script>
+
+</body>
+</html>
