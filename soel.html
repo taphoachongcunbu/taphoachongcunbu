@@ -70,7 +70,6 @@
             border-color: var(--primary-color);
             opacity: 0.9;
         }
-        /* Trạng thái khi đã thả tim */
         .like-btn.liked {
             background-color: var(--primary-color);
             color: white;
@@ -106,10 +105,11 @@
             font-family: var(--font-body);
             transition: 0.3s;
             box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+            display: inline-block;
         }
         .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
 
-        /* ================= HỆ THỐNG BÌNH LUẬN TỰ LÀM ================= */
+        /* ================= HỆ THỐNG BÌNH LUẬN ================= */
         .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
         .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
         
@@ -221,8 +221,20 @@
             </details>
         </div>
 
-        <!-- Cảnh mở đầu & Liên kết -->
+        <!-- Cốt truyện & Cảnh mở đầu & Liên kết -->
         <div class="story-section">
+            <h2>Cốt truyện (Storyline)</h2>
+            <div class="story-content">
+                <p>Bạn đến Paris và bị người bạn thân Chloé lôi kéo thử một dịch vụ "đặc sản" chốn phồn hoa: thuê Soël - một escort độc lập nổi tiếng và đắt đỏ bậc nhất. Ban đầu bạn ngần ngại, nhưng sự cuốn hút của hắn đã nhanh chóng phá tan mọi e dè.</p>
+                <p>Suốt 120 phút hẹn hò, Soël biến bạn thành tâm điểm của vũ trụ. Hắn đưa bạn qua những con phố lát đá mờ sương, chăm sóc bạn từng chút, trêu chọc duyên dáng và trao cho bạn những cử chỉ thân mật ngỡ như một người tình thật lòng. Bạn gần như quên mất đây chỉ là một cuộc trao đổi tiền bạc.</p>
+                <p>Thế nhưng, sự dịu dàng ấy có hạn định.</p>
+                <p>Đúng 00:00, tiếng chuông đêm vang lên. Ngay tức khắc, bàn tay đang khẽ chạm vào bạn buông lơi. Nụ cười trên môi Soël vẫn lịch thiệp, hoàn hảo, nhưng ánh mắt đã lùi về khoảng cách xa xăm của một người lạ:</p>
+                <p>"Đêm nay rất vui, nhưng mon chéri... đã hết giờ rồi."</p>
+                <p>Hắn đứng trước mặt bạn, sòng phẳng đến nghẹt thở. Bạn sẽ rời đi, hay tìm cách bóc trần người đàn ông này?</p>
+            </div>
+
+            <hr style="border: 1px dashed #ccc; margin: 30px 0;">
+
             <h2>Cảnh mở đầu (Opening Scene)</h2>
             <div class="story-content">
                 <p>Gió đêm thổi qua ban công nhìn thẳng ra dòng sông Seine, mang theo hơi lạnh ẩm ướt của Paris lúc nửa đêm.</p>
@@ -238,7 +250,6 @@
             </div>
 
             <div class="external-links">
-                <!-- LINK GAI STUDIO ĐÃ ĐƯỢC MÃ HÓA URL CHUẨN ĐỂ TRÁNH LỖI KÝ TỰ -->
                 <a href="https://aistudio.google.com/app/prompts?state=%7B%22ids%22%3A%5B%2217Y2vPwURUVqlEAgBghX97QtHD0i2Lx11%22%5D%2C%22action%22%3A%22open%22%2C%22userId%22%3A%22108161815635416619104%22%2C%22resourceKeys%22%3A%7B%7D%7D&usp=sharing" class="ext-link-btn" target="_blank" rel="noopener noreferrer">
                     🔗 Trò chuyện cùng Soel (Google AI Studio)
                 </a>
