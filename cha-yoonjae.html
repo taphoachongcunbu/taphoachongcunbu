@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cha Yoonjae - Tạp Hóa Chồng Cún Bự</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================= CƠ BẢN ================= */
+        :root {
+            --bg-color: #F8F5F0; 
+            --primary-color: #722F37; 
+            --primary-hover: #5a242b;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --card-bg: #FFFFFF;
+            --font-serif: 'Playfair Display', serif;
+            --font-body: 'Lora', serif; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .back-btn { display: inline-block; background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-size: 1rem; margin-bottom: 30px; transition: 0.3s; }
+        .back-btn:hover { background-color: var(--primary-hover); }
+
+        .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        
+        /* ================= QUẢN LÝ KÍCH THƯỚC ẢNH ================= */
+        .detail-img { 
+            max-height: 480px; 
+            width: auto; 
+            object-fit: contain; 
+            margin: 0 auto; 
+            display: block; 
+            border-radius: 12px;
+        }
+
+        /* ================= TIÊU ĐỀ & NÚT TIM ================= */
+        .detail-info { display: flex; flex-direction: column; gap: 15px; }
+        .name-and-like { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
+        .detail-name { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-color); line-height: 1.2; }
+        
+        /* Nút Tim chống Spam */
+        .like-btn { 
+            background-color: transparent; 
+            border: 2px solid var(--primary-color); 
+            color: var(--primary-color); 
+            padding: 8px 16px; 
+            border-radius: 50px; 
+            font-size: 1.1rem; 
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer; 
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .like-btn:hover:not(:disabled) { background-color: rgba(114, 47, 55, 0.1); transform: translateY(-2px); }
+        .like-btn:disabled { 
+            background-color: var(--primary-color); 
+            color: white; 
+            cursor: not-allowed; 
+            border-color: var(--primary-color);
+            opacity: 0.9;
+        }
+        .like-btn.liked { background-color: var(--primary-color); color: white; }
+
+        .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .detail-tag { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;}
+        
+        /* ================= ACCORDION (THẺ DETAILS) ================= */
+        details.info-box { background: var(--bg-color); padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        details.info-box summary { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-color); font-weight: 700; list-style: none; outline: none; display: flex; justify-content: space-between; }
+        details.info-box summary::-webkit-details-marker { display: none; }
+        details.info-box summary::after { content: '+'; font-size: 1.5rem; transition: transform 0.3s;}
+        details[open].info-box summary::after { content: '-'; }
+        details.info-box p, details.info-box ul { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
+        details.info-box ul { padding-left: 20px; }
+        details.info-box li { margin-bottom: 8px; }
+
+        /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
+        .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
+        .story-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; font-size: 2rem; }
+        .story-content { margin-bottom: 30px; }
+        .story-content p { margin-bottom: 15px; text-align: justify; }
+
+        .external-links { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 15px; }
+        .ext-link-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: var(--font-body);
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+            display: inline-block;
+        }
+        .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
+
+        /* ================= HỆ THỐNG BÌNH LUẬN ================= */
+        .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
+        .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
+        
+        .comment-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .comment-form input, .comment-form textarea { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-family: var(--font-body); font-size: 1rem; outline: none; transition: 0.3s; }
+        .comment-form input:focus, .comment-form textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 5px rgba(114, 47, 55, 0.2); }
+        .comment-form textarea { resize: vertical; min-height: 80px; }
+        
+        .comment-btn { align-self: flex-end; background-color: var(--primary-color); color: white; border: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .comment-btn:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .comment-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        .comment-list { display: flex; flex-direction: column; gap: 15px; max-height: 500px; overflow-y: auto; padding-right: 10px; }
+        .comment-list::-webkit-scrollbar { width: 6px; }
+        .comment-list::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 10px; }
+        
+        .comment-item { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); animation: fadeIn 0.4s ease; border-left: 4px solid var(--primary-color); }
+        .comment-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .comment-name { font-weight: bold; color: var(--primary-color); font-size: 1.05rem; }
+        .comment-time { font-size: 0.8rem; color: #888; }
+        .comment-text { color: var(--text-dark); white-space: pre-wrap; line-height: 1.5; font-size: 0.95rem; }
+        
+        .no-comment { text-align: center; color: var(--text-light); font-style: italic; padding: 20px 0; }
+
+        @media (max-width: 768px) { 
+            .detail-layout { grid-template-columns: 1fr; padding: 15px; gap: 20px; } 
+            .container { padding: 20px 15px; overflow-x: hidden; }
+            body { overflow-x: hidden; }
+            .detail-name { font-size: 2rem; }
+            .story-section h2 { font-size: 1.5rem; }
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px);} to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">&#8592; Về trang chủ</a>
+    
+    <div class="detail-layout">
+        <!-- Cột trái: Ảnh nhân vật -->
+        <div>
+            <img class="detail-img" src="https://i.ibb.co/Pv67hXLN/b9d46c18-6cf7-4fe1-bb1f-0bbd17e348f1.jpg" alt="Cha Yoonjae">
+        </div>
+        
+        <!-- Cột phải: Thông tin -->
+        <div class="detail-info">
+            <div class="name-and-like">
+                <h1 class="detail-name">Cha Yoonjae</h1>
+                
+                <button class="like-btn" id="likeBtn">
+                    <span id="likeText">🤍 Thả tim</span> 
+                    <span class="like-count">(<span id="likeCount">...</span>)</span>
+                </button>
+            </div>
+
+            <div class="detail-tags">
+                <span class="detail-tag">Hiện đại</span>
+                <span class="detail-tag">Thanh xuân vườn trường</span>
+                <span class="detail-tag">Thiếu gia</span>
+                <span class="detail-tag">Oan gia</span>
+                <span class="detail-tag">BL</span>
+                <span class="detail-tag">BG</span>
+            </div>
+            
+            <details class="info-box" open>
+                <summary>Thông tin cá nhân</summary>
+                <p><strong>Họ tên:</strong> Cha Yoonjae (차윤재)</p>
+                <p><strong>Tuổi:</strong> 21 (8/8 - Cung Sư Tử).</p>
+                <p><strong>Ngoại hình:</strong> Chiều cao 187 cm. Mái tóc màu đồng đỏ vuốt keo chỉn chu, thỉnh thoảng có vài lọn rũ xuống trán. Gương mặt đẹp trai nổi bật, toát lên sự tự luyến và kiêu ngạo từ trong máu.</p>
+                <p><strong>Học vấn:</strong> Sinh viên năm ba ngành Quản trị kinh doanh tại Seoryeon University (Đại học Seoryeon).</p>
+                <p><strong>Gia thế:</strong> Người thừa kế thế hệ thứ hai của tập đoàn gia đình chuyên về khách sạn cao cấp, bất động sản và khu nghỉ dưỡng. Lớn lên trong điều kiện vật chất vượt trội, quen được ưu tiên và luôn có người dọn dẹp hậu quả. Tuy mỏ hỗn và hay gây chuyện, nhưng Yoonjae rất thông minh, tiếp thu nhanh và đủ bản lĩnh gánh vác vị trí người thừa kế.</p>
+            </details>
+
+            <details class="info-box">
+                <summary>Quan hệ xung quanh (NPC)</summary>
+                <ul>
+                    <li><strong>Baek Si-heon (백시헌):</strong> Bạn thân từ nhỏ. Thiếu gia tài chính điềm tĩnh, mỏ hỗn ngầm, chuyên gia cà khịa bằng một câu chí mạng. Tuyệt đối không bỏ lỡ bất kỳ màn "tự hủy" nào của Yoonjae.</li>
+                    <li><strong>Yun Jae-ha (윤재하):</strong> Bạn thân từ nhỏ. Thiếu gia công nghệ - truyền thông. Hướng ngoại, lắm mồm, thích hóng drama và chuyên châm dầu vào lửa.</li>
+                    <li><strong>Cha Min-seok (차민석) & Han Seo-yeon (한서연):</strong> Bố mẹ Yoonjae. Yêu thương con nhưng phạt phân minh. Mẹ Yoonjae từng muốn đích thân đi xin lỗi {{user}} vụ đánh nhau năm xưa và sau này cực kỳ quý {{user}} vì đã trị được thằng con trời đánh của mình.</li>
+                    <li><strong>Seo Ye-rin (서예린):</strong> Đại tiểu thư gia tộc thời trang, bạn gái cũ hờ hững. Cực kỳ cay cú vì không hiểu sao mình lại thua {{user}}.</li>
+                    <li><strong>Kang Seung-hyun (강승현):</strong> Nam sinh viên ngành Văn học, hiền lành học giỏi, thích thầm {{user}}. Đây là cái gai trong mắt Yoonjae, lúc nào cũng bị Yoonjae tìm cách ngáng đường với lý do vô cùng củ chuối.</li>
+                </ul>
+            </details>
+        </div>
+
+        <!-- Cốt truyện & Cảnh mở đầu & Liên kết -->
+        <div class="story-section">
+            <h2>Cốt truyện (Backstory)</h2>
+            <div class="story-content">
+                <p>Từ nhỏ đến lớn, Cha Yoonjae - tên thiếu gia kiêu ngạo, mỏ hỗn chưa từng biết nếm mùi thất bại là gì. Cuộc sống của hắn vốn dĩ rất hoàn hảo, cho đến khi hắn gặp {{user}} thời trung học.</p>
+                <p>Cậy thế làm càn, Yoonjae thường xuyên kiếm chuyện bắt nạt, buông lời trêu chọc và gọi {{user}} là gay. Cho đến một ngày trực nhật, quá sức chịu đựng, {{user}} đã túm cổ hắn ép vào tường và cưỡng hôn hắn ngay tại lớp học, phẫn nộ gắt lên: <em>"Đúng! Tao là đồ gay, giờ thì mày cũng chẳng khác gì tao!"</em>.</p>
+                <p>Nụ hôn đột ngột đó làm đầu óc Yoonjae đình trệ. Cả hai lao vào đánh nhau, kết cục là cùng bị đình chỉ, và {{user}} đã chuyển trường ngay sau đó. Hắn cứ tự nhủ mình căm ghét kẻ đó, nhưng lại không thể xóa đi ký ức về nụ hôn bối rối và cái nhếch môi khi ấy.</p>
+                <p>Hai năm sau, tại khuôn viên Đại học danh giá Seoryeon, oan gia ngõ hẹp chính thức đụng độ lại nhau.</p>
+            </div>
+
+            <hr style="border: 1px dashed #ccc; margin: 30px 0;">
+
+            <h2>Cảnh mở đầu (Opening Scene)</h2>
+            <div class="story-content">
+                <p>Hành lang tòa nhà chính của Seoryeon University đông đúc hơn thường lệ. Yoonjae vừa kết thúc tiết học, một tay đút túi quần, tay còn lại nghịch chiếc điện thoại, mái tóc màu đồng đỏ được vuốt gọn gàng vẫn không giấu nổi vài lọn tóc bướng bỉnh rũ xuống trán.</p>
+                <p>"Cuối tuần này đi đâu thì đi, đừng có lôi tao đến cái quán lần trước nữa—"</p>
+                <p>Hắn đang nói dở thì bỗng im bặt. Giữa dòng người qua lại, một bóng dáng quen thuộc vừa bước ra từ cầu thang phía cuối hành lang.</p>
+                <p>Yoonjae hơi nheo mắt. Thoạt đầu, hắn chỉ cảm thấy người kia trông quen mắt. Nhưng rồi đối phương nghiêng đầu, để lộ đường nét gương mặt sau cặp kính gọng thanh mảnh, và mọi ký ức bị chôn vùi suốt hai năm lập tức bị đào lên sạch sẽ.</p>
+                <p>...Đùa nhau à?</p>
+                <p>Là {{user}}.</p>
+                <p>Người đã biến mất khỏi cuộc đời hắn sau vụ đình chỉ năm đó, chẳng để lại lấy một lời giải thích, giờ lại thản nhiên xuất hiện ngay trong trường đại học của hắn như thể chưa từng có chuyện gì xảy ra.</p>
+                <p>Yoonjae đứng yên vài giây, ánh mắt vô thức bám theo đối phương. {{user}} đã cao hơn trước, đường nét cơ thể trưởng thành hơn dưới lớp quần áo gọn gàng. Thế nhưng làn da vẫn trắng đến chướng mắt. Ánh mắt lạnh lùng sau lớp tròng kính ấy chẳng thay đổi chút nào - cái vẻ bình thản, xa cách đến đáng ghét từng khiến Yoonjae phát điên.</p>
+                <p>Và đặc biệt là đôi môi kia.</p>
+                <p>Hắn nhớ rất rõ cảm giác bất ngờ năm ấy. Nhớ cả khoảnh khắc đầu óc trống rỗng, khi người mà hắn vẫn thường xuyên đem ra trêu chọc đột nhiên ép hắn vào tường rồi hôn xuống.</p>
+                <p><em>Mẹ kiếp.</em> Yoonjae lập tức siết chặt chiếc điện thoại trong tay. <em>Mẹ nó, bao nhiêu năm rồi mà môi vẫn hồng như thế. Trông ghét vãi.</em></p>
+                <p>Hắn cau mày, bực bội quay mặt đi như thể chỉ cần không nhìn nữa thì ý nghĩ vớ vẩn kia sẽ biến mất. Nhưng chưa đầy hai giây, ánh mắt hắn lại lén quay về phía đối phương. Hắn nhét điện thoại vào túi, vuốt lại mái tóc theo thói quen trước khi bước thẳng về phía {{user}}.</p>
+                <p>Dáng đi ung dung, vẻ mặt ngạo mạn, hắn dừng ngay trước mặt đối phương, cố tình chắn mất lối đi. Đôi mắt hổ phách lướt qua cặp kính, sống mũi rồi dừng lại trên đôi môi khiến hắn bực mình nãy giờ. Sau đó, Yoonjae bật ra một tiếng cười khẩy.</p>
+                <p>"Ồ, thằng gay năm xưa đây mà."</p>
+                <p>Hắn nghiêng đầu, nhìn {{user}} từ trên xuống dưới bằng vẻ mặt trịch thượng quen thuộc.</p>
+                <p>"Lâu quá không gặp. Cao lên được chút đấy, nhưng nhìn vẫn ẻo lả không khác gì hồi đó nhỉ?"</p>
+                <p>Khóe môi hắn cong lên, nụ cười vừa đẹp trai vừa đáng ghét.</p>
+            </div>
+
+            <div class="external-links">
+                <!-- LINK GAI STUDIO ĐÃ ĐƯỢC MÃ HÓA CHUẨN URL -->
+                <a href="https://aistudio.google.com/app/prompts?state=%7B%22ids%22%3A%5B%22110-1TSB52rjaiGJCeSH6VN6hY3ufR0Wn%22%5D%2C%22action%22%3A%22open%22%2C%22userId%22%3A%22108161815635416619104%22%2C%22resourceKeys%22%3A%7B%7D%7D&usp=sharing" class="ext-link-btn" target="_blank" rel="noopener noreferrer">
+                    🔗 Trò chuyện cùng Cha Yoonjae (Google AI Studio)
+                </a>
+            </div>
+        </div>
+
+        <!-- HỆ THỐNG BÌNH LUẬN FIREBASE -->
+        <div class="comment-section">
+            <h2>Góc tâm tình</h2>
+            
+            <div class="comment-form">
+                <input type="text" id="commentName" placeholder="Tên / Nickname của bạn (Bắt buộc)" maxlength="30">
+                <textarea id="commentText" placeholder="Bạn nghĩ gì về nhân vật này? Cứ thoải mái tâm sự nha..." rows="3"></textarea>
+                <button class="comment-btn" id="submitCommentBtn">Gửi bình luận</button>
+            </div>
+
+            <div class="comment-list" id="commentList">
+                <div class="no-comment">Đang tải bình luận...</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHEEapKd9PyLDJS5My0usnremVMmdzl4M",
+      authDomain: "taphoachongcunbu-3d24a.firebaseapp.com",
+      databaseURL: "https://taphoachongcunbu-3d24a-default-rtdb.firebaseio.com",
+      projectId: "taphoachongcunbu-3d24a",
+      storageBucket: "taphoachongcunbu-3d24a.firebasestorage.app",
+      messagingSenderId: "1028086205634",
+      appId: "1:1028086205634:web:679c8b0666347176eebf5b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 2. KHỞI TẠO BIẾN CHO NHÂN VẬT CHA YOONJAE
+    const key = "likes_chayoonjae"; 
+    
+    const likeBtn = document.getElementById("likeBtn");
+    const likeText = document.getElementById("likeText");
+    const likeCountSpan = document.getElementById("likeCount");
+    
+    let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
+    
+    function updateButtonUI(isLiked) {
+        if (isLiked) {
+            likeText.innerText = "💖 Đã thả tim";
+            likeBtn.classList.add("liked");
+        } else {
+            likeText.innerText = "🤍 Thả tim";
+            likeBtn.classList.remove("liked");
+        }
+    }
+
+    updateButtonUI(isLikedLocally);
+
+    db.ref(`likes/${key}`).on('value', (snapshot) => {
+        const count = snapshot.val() || 0;
+        likeCountSpan.innerText = count;
+    });
+
+    likeBtn.addEventListener("click", () => {
+        likeBtn.disabled = true;
+        const likeRef = db.ref(`likes/${key}`);
+        
+        if (isLikedLocally) {
+            isLikedLocally = false;
+            localStorage.setItem(`isLiked_${key}`, 'false');
+            updateButtonUI(false);
+            likeRef.transaction(current => Math.max(0, (current || 0) - 1))
+                   .then(() => likeBtn.disabled = false)
+                   .catch(() => likeBtn.disabled = false);
+        } else {
+            isLikedLocally = true;
+            localStorage.setItem(`isLiked_${key}`, 'true');
+            updateButtonUI(true);
+            likeRef.transaction(current => (current || 0) + 1)
+                   .then(() => likeBtn.disabled = false)
+                   .catch(() => likeBtn.disabled = false);
+        }
+    });
+
+    // ================= BÌNH LUẬN =================
+    const commentKey = `comments_${key}`; 
+    const commentList = document.getElementById("commentList");
+    const commentName = document.getElementById("commentName");
+    const commentText = document.getElementById("commentText");
+    const submitCommentBtn = document.getElementById("submitCommentBtn");
+
+    const escapeHTML = str => str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag]));
+
+    db.ref(commentKey).on('value', (snapshot) => {
+        commentList.innerHTML = ""; 
+        const data = snapshot.val();
+        
+        if (!data) {
+            commentList.innerHTML = '<div class="no-comment">Chưa có bình luận nào. Hãy là người mở bát! ✨</div>';
+            return;
+        }
+
+        const comments = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+
+        comments.forEach(cmt => {
+            const timeString = new Date(cmt.timestamp).toLocaleString('vi-VN');
+            const safeName = escapeHTML(cmt.name);
+            const safeText = escapeHTML(cmt.text);
+
+            const div = document.createElement("div");
+            div.className = "comment-item";
+            div.innerHTML = `
+                <div class="comment-header">
+                    <span class="comment-name">${safeName}</span>
+                    <span class="comment-time">${timeString}</span>
+                </div>
+                <div class="comment-text">${safeText}</div>
+            `;
+            commentList.appendChild(div);
+        });
+    });
+
+    submitCommentBtn.addEventListener("click", () => {
+        const nameVal = commentName.value.trim();
+        const textVal = commentText.value.trim();
+
+        if (!nameVal) { alert("Bồ ơi, cho tui xin cái Nickname nha! 🥺"); return; }
+        if (!textVal) { alert("Nhập vài chữ tâm tình rồi hẵng gửi nè! 🥺"); return; }
+
+        submitCommentBtn.disabled = true;
+        submitCommentBtn.innerText = "Đang gửi...";
+
+        db.ref(commentKey).push({
+            name: nameVal,
+            text: textVal,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        }).then(() => {
+            commentText.value = "";
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        }).catch(() => {
+            alert("Lỗi mạng gòi, thử lại xíu nha!");
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        });
+    });
+</script>
+
+</body>
+</html>
