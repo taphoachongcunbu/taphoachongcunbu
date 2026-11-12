@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Úc Gia Kiến - Tạp Hóa Chồng Cún Bự</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================= CƠ BẢN ================= */
+        :root {
+            --bg-color: #F8F5F0; 
+            --primary-color: #722F37; 
+            --primary-hover: #5a242b;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --card-bg: #FFFFFF;
+            --font-serif: 'Playfair Display', serif;
+            --font-body: 'Lora', serif; 
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-color); color: var(--text-dark); font-family: var(--font-body); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        .back-btn { display: inline-block; background-color: var(--primary-color); color: white; text-decoration: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-size: 1rem; margin-bottom: 30px; transition: 0.3s; }
+        .back-btn:hover { background-color: var(--primary-hover); }
+
+        .detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        
+        /* ================= QUẢN LÝ KÍCH THƯỚC ẢNH ================= */
+        .detail-img { 
+            max-height: 480px; 
+            width: auto; 
+            object-fit: contain; 
+            margin: 0 auto; 
+            display: block; 
+            border-radius: 12px;
+        }
+
+        /* ================= TIÊU ĐỀ & NÚT TIM ================= */
+        .detail-info { display: flex; flex-direction: column; gap: 15px; }
+        .name-and-like { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
+        .detail-name { font-family: var(--font-serif); font-size: 3rem; color: var(--primary-color); line-height: 1.2; }
+        
+        /* Nút Tim chống Spam */
+        .like-btn { 
+            background-color: transparent; 
+            border: 2px solid var(--primary-color); 
+            color: var(--primary-color); 
+            padding: 8px 16px; 
+            border-radius: 50px; 
+            font-size: 1.1rem; 
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer; 
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .like-btn:hover:not(:disabled) { background-color: rgba(114, 47, 55, 0.1); transform: translateY(-2px); }
+        .like-btn:disabled { 
+            background-color: var(--primary-color); 
+            color: white; 
+            cursor: not-allowed; 
+            border-color: var(--primary-color);
+            opacity: 0.9;
+        }
+        .like-btn.liked { background-color: var(--primary-color); color: white; }
+
+        .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .detail-tag { background: #f0f0f0; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;}
+        
+        /* ================= ACCORDION (THẺ DETAILS) ================= */
+        details.info-box { background: var(--bg-color); padding: 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        details.info-box summary { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-color); font-weight: 700; list-style: none; outline: none; display: flex; justify-content: space-between; }
+        details.info-box summary::-webkit-details-marker { display: none; }
+        details.info-box summary::after { content: '+'; font-size: 1.5rem; transition: transform 0.3s;}
+        details[open].info-box summary::after { content: '-'; }
+        details.info-box p, details.info-box ul { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
+        details.info-box ul { padding-left: 20px; }
+        details.info-box li { margin-bottom: 8px; }
+
+        /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
+        .story-section { margin-top: 40px; padding-top: 30px; border-top: 1px solid #ddd; grid-column: 1 / -1; }
+        .story-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; font-size: 2rem; }
+        .story-content { margin-bottom: 30px; }
+        .story-content p { margin-bottom: 15px; text-align: justify; }
+
+        .external-links { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 15px; }
+        .ext-link-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: var(--font-body);
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(114, 47, 55, 0.2);
+            display: inline-block;
+        }
+        .ext-link-btn:hover { background-color: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(114, 47, 55, 0.3); }
+
+        /* ================= HỆ THỐNG BÌNH LUẬN ================= */
+        .comment-section { margin-top: 40px; padding: 30px; background: var(--bg-color); border-radius: 12px; grid-column: 1 / -1; }
+        .comment-section h2 { font-family: var(--font-serif); color: var(--primary-color); margin-bottom: 20px; }
+        
+        .comment-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+        .comment-form input, .comment-form textarea { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-family: var(--font-body); font-size: 1rem; outline: none; transition: 0.3s; }
+        .comment-form input:focus, .comment-form textarea:focus { border-color: var(--primary-color); box-shadow: 0 0 5px rgba(114, 47, 55, 0.2); }
+        .comment-form textarea { resize: vertical; min-height: 80px; }
+        
+        .comment-btn { align-self: flex-end; background-color: var(--primary-color); color: white; border: none; padding: 10px 24px; border-radius: 50px; font-family: var(--font-body); font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .comment-btn:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .comment-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+
+        .comment-list { display: flex; flex-direction: column; gap: 15px; max-height: 500px; overflow-y: auto; padding-right: 10px; }
+        .comment-list::-webkit-scrollbar { width: 6px; }
+        .comment-list::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 10px; }
+        
+        .comment-item { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); animation: fadeIn 0.4s ease; border-left: 4px solid var(--primary-color); }
+        .comment-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .comment-name { font-weight: bold; color: var(--primary-color); font-size: 1.05rem; }
+        .comment-time { font-size: 0.8rem; color: #888; }
+        .comment-text { color: var(--text-dark); white-space: pre-wrap; line-height: 1.5; font-size: 0.95rem; }
+        
+        .no-comment { text-align: center; color: var(--text-light); font-style: italic; padding: 20px 0; }
+
+        @media (max-width: 768px) { 
+            .detail-layout { grid-template-columns: 1fr; padding: 15px; gap: 20px; } 
+            .container { padding: 20px 15px; overflow-x: hidden; }
+            body { overflow-x: hidden; }
+            .detail-name { font-size: 2rem; }
+            .story-section h2 { font-size: 1.5rem; }
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px);} to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-btn">&#8592; Về trang chủ</a>
+    
+    <div class="detail-layout">
+        <!-- Cột trái: Ảnh nhân vật -->
+        <div>
+            <img class="detail-img" src="https://i.ibb.co/MyjNsZ9P/2c7f67a2c77847261e69.jpg" alt="Úc Gia Kiến">
+        </div>
+        
+        <!-- Cột phải: Thông tin -->
+        <div class="detail-info">
+            <div class="name-and-like">
+                <h1 class="detail-name">Úc Gia Kiến</h1>
+                
+                <button class="like-btn" id="likeBtn">
+                    <span id="likeText">🤍 Thả tim</span> 
+                    <span class="like-count">(<span id="likeCount">...</span>)</span>
+                </button>
+            </div>
+
+            <div class="detail-tags">
+                <span class="detail-tag">Hồng Kông 1990</span>
+                <span class="detail-tag">Lao động tự do</span>
+                <span class="detail-tag">Cún bự hiền lành</span>
+                <span class="detail-tag">Hàng xóm</span>
+                <span class="detail-tag">BL</span>
+            </div>
+            
+            <details class="info-box" open>
+                <summary>Thông tin cá nhân</summary>
+                <p><strong>Họ tên:</strong> Úc Gia Kiến (郁家健)</p>
+                <p><strong>Tuổi:</strong> 26 (08/05 - Cung Kim Ngưu).</p>
+                <p><strong>Ngoại hình:</strong> Chiều cao 190 cm. Thân hình cao lớn, vai rộng lưng dày, cơ bắp rắn chắc do nhiều năm làm việc nặng. Gương mặt góc cạnh, xương hàm rõ, sống mũi cao, râu lún phún quai hàm. Tóc đen dày dài hơi rối che gần mắt, đôi mắt đen láy long lanh nhưng ít khi bị phát hiện vì hay cúi đầu. Vẻ ngoài thô ráp, mặc đồ cũ xuề xòa nhưng luôn sạch sẽ.</p>
+                <p><strong>Nghề nghiệp:</strong> Lao động chân tay tự do (khuân vác, bốc hàng, vận chuyển, sửa chữa, phụ việc). Thường bị người lạ nhầm tưởng là dân giang hồ hay đòi nợ thuê nhờ vóc dáng vạm vỡ và gương mặt dữ dằn.</p>
+                <p><strong>Tính cách:</strong> Trầm lặng, hiền lành, thật thà và vụng về. Rất ghét xung đột, không thích đánh nhau, ai mắng hay đánh thường chỉ nhẫn nhịn chịu đựng. Bướng bỉnh ngầm, có lòng tự trọng cao, không giỏi nói lời ngọt ngào mà dùng hành động để âm thầm quan tâm người khác.</p>
+            </details>
+
+            <details class="info-box">
+                <summary>Danh sách nhân vật phụ (NPC)</summary>
+                <ul>
+                    <li><strong>Lương Mỹ Phân (梁美芬 - 56 tuổi):</strong> Chủ nhà trọ. Thực tế, hay cằn nhằn nhưng tốt bụng, hiểu hoàn cảnh của Gia Kiến nên đôi khi cho khất tiền phòng hoặc nhờ hắn sửa chữa lặt vặt.</li>
+                    <li><strong>Trần Ngọc Lan (陳玉蘭 - 67 tuổi):</strong> Hàng xóm lớn tuổi. Hiền lành, quý Gia Kiến như con cháu, hay mang thức ăn sang cho hắn và biết rõ tuổi thơ của hắn.</li>
+                    <li><strong>Đặng Gia Lạc (鄧家樂 - 28 tuổi):</strong> Thợ sửa xe máy. Hoạt bát, thẳng tính, là bạn nhậu bình dân hiếm hoi có thể trêu chọc Gia Kiến về chuyện tình cảm.</li>
+                    <li><strong>Lưu Chí Cường (劉志強 - 43 tuổi):</strong> Chủ quán mì. Nhiệt tình, hài hước, hay thuê Gia Kiến bốc vác và cho thêm đồ ăn. Quán mì là trạm trung chuyển tin tức của khu phố.</li>
+                    <li><strong>Hà Tú Nghiên (何秀妍 - 24 tuổi):</strong> Nhân viên tiệm bánh gần khu trọ. Dịu dàng, chu đáo, có thiện cảm với Gia Kiến và thường để dành bánh mới ra lò cho hắn (tình địch tự nhiên).</li>
+                    <li><strong>Tạ Văn Kiệt (謝文傑 - 24 tuổi):</strong> Thanh niên côn đồ hay gây chuyện trong khu phố. Từng kiếm chuyện với Gia Kiến và bị dính xô nước từ cửa sổ tầng trên.</li>
+                    <li><strong>Tống Minh Hạo (宋明浩 - 27 tuổi):</strong> Nhân viên văn phòng lịch sự, có điều kiện kinh tế và giao tiếp tốt, có thể xuất hiện làm đối trọng tình cảm.</li>
+                </ul>
+            </details>
+        </div>
+
+        <!-- Cốt truyện & Cảnh mở đầu & Liên kết -->
+        <div class="story-section">
+            <h2>Bối cảnh & Cốt truyện (Backstory)</h2>
+            <div class="story-content">
+                <p>Hong Kong, năm 1990. Câu chuyện diễn ra tại một khu phố lao động hư cấu ở Cửu Long, nơi những khu nhà trọ cũ kỹ san sát nhau, hành lang chật hẹp, cầu thang ẩm thấp và những cửa tiệm nhỏ luôn tấp nập người qua lại. Đây không phải thế giới của giới thượng lưu hào nhoáng, mà là một Hong Kong bình dân, ồn ào và có phần xô bồ.</p>
+                <p>{{user}} sống trong cùng khu nhà trọ với Úc Gia Kiến, một người đàn ông 26 tuổi cao lớn, có vẻ ngoài thô ráp và dễ khiến người khác e dè. Gia Kiến là lao động tự do, thu nhập không ổn định, sống một mình trong căn phòng thuê nhỏ nhưng luôn giữ nó sạch sẽ và ngăn nắp.</p>
+                <p>Dù có vẻ ngoài dữ dằn, Gia Kiến thực chất là người hiền lành, thật thà và ít nói. {{user}} và Gia Kiến vốn không thân thiết, chỉ là hai người hàng xóm lướt qua nhau nơi cầu thang hay sân chung.</p>
+                <p>Cuộc gặp đầu tiên diễn ra trong một buổi gây sự tại sân chung của khu nhà. Gia Kiến đang bị một nhóm thanh niên địa phương kiếm chuyện nhưng chỉ im lặng chịu đựng. Từ bên trong, {{user}} chứng kiến cảnh tượng ấy và không nhịn được nữa — một xô nước bất ngờ đổ thẳng xuống đầu đám thanh niên, tiếp đó chiếc xô bị ném xuống sân khiến cả nhóm giật mình. Gia Kiến ngẩng đầu nhìn lên và bắt gặp {{user}}.</p>
+                <p>Đó là lần đầu tiên hắn thực sự chú ý đến người hàng xóm này. Vài ngày sau, hắn mua một túi bánh trứng và lặng lẽ đặt trước cửa nhà {{user}}, xem như lời cảm ơn vụng về mà bản thân không biết phải nói thế nào.</p>
+            </div>
+
+            <hr style="border: 1px dashed #ccc; margin: 30px 0;">
+
+            <h2>Cảnh mở đầu (Opening Scene)</h2>
+            <div class="story-content">
+                <!-- ẢNH PHỤ TRƯỚC OPENING SCENE -->
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <img src="https://i.ibb.co/1tsYsVVz/a6d7e51f45c5c59b9cd4.jpg" alt="Úc Gia Kiến Opening Scene" style="max-width: 100%; max-height: 380px; object-fit: contain; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                </div>
+
+                <p>Buổi chiều ở khu nhà trọ cũ tại Cửu Long vẫn ồn ào như mọi ngày. Tiếng người bán hàng rong vọng từ đầu ngõ, tiếng radio rè rè phát ra từ một cửa tiệm gần đó, xen lẫn tiếng trẻ con chạy nhảy trên hành lang chật hẹp.</p>
+                <p>Dưới khoảng sân chung của khu nhà, Úc Gia Kiến đang bị vài tên thanh niên chặn đường.</p>
+                <p>Hắn cao lớn hơn hẳn đám người kia, hai vai rộng, thân hình rắn chắc vì nhiều năm làm việc nặng. Mái tóc đen lòa xòa phủ gần hết mắt, bộ quần áo cũ dính chút bụi bẩn sau một ngày khuân vác. Nhìn từ xa, hắn chẳng khác nào một kẻ khó dây vào.</p>
+                <p>Nhưng lúc này, hắn chỉ im lặng đứng đó.</p>
+                <p>“Ê, thằng kia! Điếc à?”</p>
+                <p>Một tên trong nhóm đẩy mạnh vào vai hắn. Gia Kiến hơi lảo đảo, bàn tay chai sần siết lại rồi thả lỏng. Hắn không muốn gây chuyện. Mấy ngày nay công việc đã chẳng thuận lợi, nếu còn đánh nhau rồi bị thương thì ngày mai lấy gì kiếm tiền?</p>
+                <p>“Xin lỗi… Tôi còn phải về.”</p>
+                <p>Giọng hắn trầm thấp, hơi khàn. Hắn định vòng qua đám người kia, nhưng lại bị một tên khác túm lấy cổ áo.</p>
+                <p>“Vội cái gì? Nói chuyện với bọn tao một chút đã.”</p>
+                <p>Gia Kiến cúi đầu, mái tóc rũ xuống che kín đôi mắt. Hắn không đáp, chỉ lặng lẽ gỡ bàn tay đang nắm áo mình ra. Động tác không mạnh, nhưng cũng đủ khiến tên kia mất mặt.</p>
+                <p>“Con mẹ nó, mày—”</p>
+                <p>“Đụ má! Ồn ào vãi, có cho người ta yên ổn không?”</p>
+                <p>Một giọng nói bất ngờ vang lên từ tầng trên.</p>
+                <p>Đám thanh niên đồng loạt ngẩng đầu. Ở ô cửa sổ của một căn phòng, một người hàng xóm đang nhìn xuống với vẻ mặt đầy bực bội.</p>
+                <p>“Đông người bắt nạt một người, hay ho lắm à? Không có chuyện gì làm thì về nhà ngủ đi!”</p>
+                <p>Một tên trong nhóm lập tức nổi cáu, chỉ tay lên trên.</p>
+                <p>“Đứa nào đấy? Chuyện của bọn tao, liên quan đéo gì đến mày?”</p>
+                <p>“Không liên quan cái đầu buồi! Sân nhà người ta mà làm như nhà mình, ồn ào cả buổi chiều. Bộ tưởng ai cũng rảnh đứng xem mấy người diễn tuồng chắc?”</p>
+                <p><em>ÀO!</em></p>
+                <p>Một xô nước bất ngờ đổ thẳng xuống đầu đám thanh niên.</p>
+                <p>Cả khoảng sân lập tức im bặt.</p>
+                <p>Nước chảy ròng ròng trên tóc và quần áo chúng. Một tên há hốc miệng, tên khác tức tối phủi nước trên mặt. Ngay sau đó, chiếc xô cũng bị ném xuống sân, phát ra một tiếng <em>choang</em> chói tai.</p>
+                <p>“Đứa nào?! Muốn chết hả?!”</p>
+                <p>Đám thanh niên nhốn nháo nhìn lên những ô cửa xung quanh. Gia Kiến cũng vô thức ngẩng đầu theo.</p>
+                <p>Ở phía trên, người hàng xóm kia vẫn đứng bên cửa sổ. Gương mặt có vẻ nhỏ nhắn, xinh xắn, nhưng lúc này lại đang cau có chẳng khác gì một con mèo vừa xù lông.</p>
+                <p>Ánh mắt hai người chạm nhau.</p>
+                <p>Gia Kiến hơi khựng lại.</p>
+                <p>Người trên kia dường như cũng vừa nhận ra mình đã bị hắn nhìn thấy. Vẻ hùng hổ ban nãy thoáng chốc cứng lại, như thể bây giờ mới nhớ ra dưới sân còn có một người đàn ông cao lớn đang ngước nhìn mình.</p>
+                <p>Hắn chớp mắt.</p>
+                <p><em>Người đó… vừa giúp mình sao?</em></p>
+            </div>
+
+            <div class="external-links">
+                <a href="https://aistudio.google.com/app/prompts?state=%7B%22ids%22%3A%5B%221z0ehUyNS38cR1DpaBDJYNlvf0QUte3KJ%22%5D%2C%22action%22%3A%22open%22%2C%22userId%22%3A%22108161815635416619104%22%2C%22resourceKeys%22%3A%7B%7D%7D&usp=sharing" class="ext-link-btn" target="_blank" rel="noopener noreferrer">
+                    🔗 Trò chuyện cùng Úc Gia Kiến (Google AI Studio)
+                </a>
+            </div>
+        </div>
+
+        <!-- HỆ THỐNG BÌNH LUẬN FIREBASE -->
+        <div class="comment-section">
+            <h2>Góc tâm tình</h2>
+            
+            <div class="comment-form">
+                <input type="text" id="commentName" placeholder="Tên / Nickname của bạn (Bắt buộc)" maxlength="30">
+                <textarea id="commentText" placeholder="Bạn nghĩ gì về nhân vật này? Cứ thoải mái tâm sự nha..." rows="3"></textarea>
+                <button class="comment-btn" id="submitCommentBtn">Gửi bình luận</button>
+            </div>
+
+            <div class="comment-list" id="commentList">
+                <div class="no-comment">Đang tải bình luận...</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHEEapKd9PyLDJS5My0usnremVMmdzl4M",
+      authDomain: "taphoachongcunbu-3d24a.firebaseapp.com",
+      databaseURL: "https://taphoachongcunbu-3d24a-default-rtdb.firebaseio.com",
+      projectId: "taphoachongcunbu-3d24a",
+      storageBucket: "taphoachongcunbu-3d24a.firebasestorage.app",
+      messagingSenderId: "1028086205634",
+      appId: "1:1028086205634:web:679c8b0666347176eebf5b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 2. KHỞI TẠO BIẾN CHO NHÂN VẬT ÚC GIA KIẾN
+    const key = "likes_ucgiakien"; 
+    
+    const likeBtn = document.getElementById("likeBtn");
+    const likeText = document.getElementById("likeText");
+    const likeCountSpan = document.getElementById("likeCount");
+    
+    let isLikedLocally = localStorage.getItem(`isLiked_${key}`) === 'true';
+    
+    function updateButtonUI(isLiked) {
+        if (isLiked) {
+            likeText.innerText = "💖 Đã thả tim";
+            likeBtn.classList.add("liked");
+        } else {
+            likeText.innerText = "🤍 Thả tim";
+            likeBtn.classList.remove("liked");
+        }
+    }
+
+    updateButtonUI(isLikedLocally);
+
+    db.ref(`likes/${key}`).on('value', (snapshot) => {
+        const count = snapshot.val() || 0;
+        likeCountSpan.innerText = count;
+    });
+
+    likeBtn.addEventListener("click", () => {
+        likeBtn.disabled = true;
+        const likeRef = db.ref(`likes/${key}`);
+        
+        if (isLikedLocally) {
+            isLikedLocally = false;
+            localStorage.setItem(`isLiked_${key}`, 'false');
+            updateButtonUI(false);
+            likeRef.transaction(current => Math.max(0, (current || 0) - 1))
+                   .then(() => likeBtn.disabled = false)
+                   .catch(() => likeBtn.disabled = false);
+        } else {
+            isLikedLocally = true;
+            localStorage.setItem(`isLiked_${key}`, 'true');
+            updateButtonUI(true);
+            likeRef.transaction(current => (current || 0) + 1)
+                   .then(() => likeBtn.disabled = false)
+                   .catch(() => likeBtn.disabled = false);
+        }
+    });
+
+    // ================= BÌNH LUẬN =================
+    const commentKey = `comments_${key}`; 
+    const commentList = document.getElementById("commentList");
+    const commentName = document.getElementById("commentName");
+    const commentText = document.getElementById("commentText");
+    const submitCommentBtn = document.getElementById("submitCommentBtn");
+
+    const escapeHTML = str => str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag]));
+
+    db.ref(commentKey).on('value', (snapshot) => {
+        commentList.innerHTML = ""; 
+        const data = snapshot.val();
+        
+        if (!data) {
+            commentList.innerHTML = '<div class="no-comment">Chưa có bình luận nào. Hãy là người mở bát! ✨</div>';
+            return;
+        }
+
+        const comments = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+
+        comments.forEach(cmt => {
+            const timeString = new Date(cmt.timestamp).toLocaleString('vi-VN');
+            const safeName = escapeHTML(cmt.name);
+            const safeText = escapeHTML(cmt.text);
+
+            const div = document.createElement("div");
+            div.className = "comment-item";
+            div.innerHTML = `
+                <div class="comment-header">
+                    <span class="comment-name">${safeName}</span>
+                    <span class="comment-time">${timeString}</span>
+                </div>
+                <div class="comment-text">${safeText}</div>
+            `;
+            commentList.appendChild(div);
+        });
+    });
+
+    submitCommentBtn.addEventListener("click", () => {
+        const nameVal = commentName.value.trim();
+        const textVal = commentText.value.trim();
+
+        if (!nameVal) { alert("Bồ ơi, cho tui xin cái Nickname nha! 🥺"); return; }
+        if (!textVal) { alert("Nhập vài chữ tâm tình rồi hẵng gửi nè! 🥺"); return; }
+
+        submitCommentBtn.disabled = true;
+        submitCommentBtn.innerText = "Đang gửi...";
+
+        db.ref(commentKey).push({
+            name: nameVal,
+            text: textVal,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        }).then(() => {
+            commentText.value = "";
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        }).catch(() => {
+            alert("Lỗi mạng gòi, thử lại xíu nha!");
+            submitCommentBtn.disabled = false;
+            submitCommentBtn.innerText = "Gửi bình luận";
+        });
+    });
+</script>
+
+</body>
+</html>
