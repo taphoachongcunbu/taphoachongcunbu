@@ -36,6 +36,16 @@
             --header-overlay: rgba(20, 15, 16, 0.65);
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
             background-color: var(--bg-color); 
@@ -418,14 +428,16 @@
         <p>Nơi lưu giữ những đứa con tinh thần</p>
         
         <div class="social-links">
-            <a href="https://www.facebook.com/profile.php?id=61592031838939" target="_blank" class="social-btn" title="Ghé thăm Facebook của tui">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                    <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>
-                </svg>
-            </a>
+            <!-- Nút TikTok -->
             <a href="https://www.tiktok.com/@taphoachongcunbu?_r=1&_t=ZS-98Ei6ZPv5s2" target="_blank" class="social-btn" title="Ghé thăm TikTok của tui">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/>
+                </svg>
+            </a>
+            <!-- Nút Facebook -->
+            <a href="https://web.facebook.com/profile.php?id=61596338825988" target="_blank" class="social-btn" title="Ghé thăm Facebook của tui">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                    <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/>
                 </svg>
             </a>
         </div>
@@ -846,7 +858,7 @@
             personality: "bỗ bã, mặt dày, thực tế, kiên nhẫn, lưu manh",
             story: "Tên giang hồ mặt dày mượn cớ bị mèo cào để ăn vạ bác sĩ thú y."
         },
-    {
+        {
             id: 25,
             name: "Soel (Milan de Cazael)",
             slug: "soel.html",
@@ -991,7 +1003,6 @@
     }
 
     // ================= BẢNG UỚC NGUYỆN CẦU XIN GU CHỒNG (BOARD MỚI) =================
-    // Tạo User Token bí mật để định danh tác giả tạo cmt
     function getMyUserToken() {
         let token = localStorage.getItem("user_secret_token");
         if (!token) {
