@@ -57,9 +57,9 @@
             font-family: var(--font-body);
             font-weight: 600;
             cursor: pointer; 
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
+            transition: all 0.3s; 
+            display: flex; 
+            align-items: center; 
             gap: 5px;
         }
         .like-btn:hover:not(:disabled) { background-color: rgba(114, 47, 55, 0.1); transform: translateY(-2px); }
@@ -83,7 +83,7 @@
         details[open].info-box summary::after { content: '-'; }
         details.info-box p, details.info-box ul, details.info-box div { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ccc; animation: fadeIn 0.4s ease; }
         details.info-box ul { padding-left: 20px; }
-        details.info-box li { margin-bottom: 8px; }
+        details.info-box li { margin-bottom: 8px; text-align: justify; }
         details.info-box p { margin-bottom: 10px; text-align: justify; }
 
         /* ================= NỘI DUNG TRUYỆN & LINK NGOÀI ================= */
@@ -205,6 +205,17 @@
                     <p><strong>7. Đường Khả Hân (23 tuổi - Bệnh nhân Loạn thần):</strong> Tin mình là quả táo non, cực kỳ hợp cạ khi Cảnh Ngọc ở trạng thái "Cây nấm".</p>
                     <p><strong>8. Bành Đại Hải (42 tuổi - Bệnh nhân Tâm thần phân liệt):</strong> Cựu thợ sửa đồng hồ, tin mình là cá sống trên cạn, thường ngồi lặng lẽ bên hồ cùng Cảnh Ngọc.</p>
                 </div>
+            </details>
+
+            <!-- CƠ CHẾ & CÁCH CHƠI -->
+            <details class="info-box" open>
+                <summary>Cơ chế & Cách chơi (Gameplay)</summary>
+                <ul>
+                    <li><strong>Chu kỳ thời gian:</strong> 1 ngày chia làm 4 giai đoạn: <em>Sáng - Trưa - Chiều - Tối</em> (mỗi buổi gồm <strong>7 lượt</strong> tương tác).</li>
+                    <li><strong>Vòng xoay nhân cách:</strong> Các trạng thái hoang tưởng sẽ luân phiên xuất hiện theo từng ngày theo thứ tự: <strong>Quốc vương ➔ Công chúa ➔ Cây nấm</strong>.</li>
+                    <li><strong>Cơ chế uống thuốc:</strong> Trong buổi <strong>Sáng và Trưa</strong>, nếu {{user}} khéo léo thuyết phục được nhân cách hiện tại uống thuốc thành công, <strong>bản chất thật</strong> của Chu Cảnh Ngọc sẽ xuất hiện vào buổi Chiều và Tối. Ngược lại, nếu không uống thuốc, nhân cách hoang tưởng sẽ tiếp tục duy trì đến hết ngày và bạn sẽ không gặp được bản chất thật.</li>
+                    <li><strong>Chữa lành & Giải phóng:</strong> Tích cực trò chuyện để cày <strong>điểm tin tưởng</strong> và thấu hiểu thế giới nội tâm của từng nhân cách. Khi độ tin tưởng đạt mức <strong>100%</strong>, nhân cách đó sẽ cảm thấy an tâm, buông bỏ phòng vệ và tự động biến mất.</li>
+                </ul>
             </details>
         </div>
 
